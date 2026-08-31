@@ -1,0 +1,59 @@
+group_id,tier,category,template,scheme_ids,w_bits,a_bits,k_bits,v_bits,format,sig_width,exp_width,ieee_compliance,acc_terms,acc_width,lanes,rows,cols,in_bits,out_bits,asymmetric,with_requant,mapping_scope,notes
+INT_MAC_W2_A4_N64,L2,scalar_int_mac,int_mac,,2,4,,,signed_integer,,,,64,13,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W2_A8_N64,L2,scalar_int_mac,int_mac,,2,8,,,signed_integer,,,,64,17,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W2_A16_N64,L2,scalar_int_mac,int_mac,,2,16,,,signed_integer,,,,64,25,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W3_A4_N64,L2,scalar_int_mac,int_mac,,3,4,,,signed_integer,,,,64,14,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W3_A8_N64,L2,scalar_int_mac,int_mac,,3,8,,,signed_integer,,,,64,18,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W3_A16_N64,L2,scalar_int_mac,int_mac,,3,16,,,signed_integer,,,,64,26,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W4_A4_N64,L1,scalar_int_mac,int_mac,,4,4,,,signed_integer,,,,64,15,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W4_A8_N64,L1,scalar_int_mac,int_mac,,4,8,,,signed_integer,,,,64,19,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W4_A16_N64,L1,scalar_int_mac,int_mac,,4,16,,,signed_integer,,,,64,27,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W6_A4_N64,L2,scalar_int_mac,int_mac,,6,4,,,signed_integer,,,,64,17,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W6_A8_N64,L2,scalar_int_mac,int_mac,,6,8,,,signed_integer,,,,64,21,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W6_A16_N64,L2,scalar_int_mac,int_mac,,6,16,,,signed_integer,,,,64,29,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W8_A4_N64,L2,scalar_int_mac,int_mac,,8,4,,,signed_integer,,,,64,19,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W8_A8_N64,L1,scalar_int_mac,int_mac,,8,8,,,signed_integer,,,,64,23,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W8_A16_N64,L2,scalar_int_mac,int_mac,,8,16,,,signed_integer,,,,64,31,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W16_A4_N64,L2,scalar_int_mac,int_mac,,16,4,,,signed_integer,,,,64,27,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W16_A8_N64,L2,scalar_int_mac,int_mac,,16,8,,,signed_integer,,,,64,31,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W16_A16_N64,L2,scalar_int_mac,int_mac,,16,16,,,signed_integer,,,,64,39,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W5_A5_N64,L1,scalar_int_mac,int_mac,,5,5,,,signed_integer,,,,64,17,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+INT_MAC_W4_A6_N64,L1,scalar_int_mac,int_mac,,4,6,,,signed_integer,,,,64,17,,,,,,,,arithmetic_kernel,"One signed product per cycle plus registered accumulator. N controls accumulator guard width, not unrolled multiplier count."
+FP_MAC_FP4_E2M1,L1,scalar_fp_mac,fp4_dw_surrogate,,,,,,FP4_E2M1,1,2,0,1,,,,,,,,,converted_minimum_dw_fp6_surrogate,"DW_fp_mac does not support E2M1 or E2M2 in X-2025.06-SP3. Inputs are converted from E2M1 to the minimum supported E3M2, MAC is performed in E3M2, and output is truncated/saturated to E2M1. Area upper-bound surrogate including conversion logic; not bit-exact FP4."
+FP_MAC_FP6_E3M2,L1,scalar_fp_mac,fp_mac_dw,,,,,,FP6_E3M2,2,3,0,1,,,,,,,,,same_format_dw_fp_mac,DW_fp_mac with product and add in the same floating format. It is not an FP32-accumulation surrogate.
+FP_MAC_FP8_E4M3,L1,scalar_fp_mac,fp_mac_dw,,,,,,FP8_E4M3,3,4,0,1,,,,,,,,,same_format_dw_fp_mac,DW_fp_mac with product and add in the same floating format. It is not an FP32-accumulation surrogate.
+FP_MAC_FP8_E5M2,L1,scalar_fp_mac,fp_mac_dw,,,,,,FP8_E5M2,2,5,0,1,,,,,,,,,same_format_dw_fp_mac,DW_fp_mac with product and add in the same floating format. It is not an FP32-accumulation surrogate.
+FP_MAC_BF16_E8M7,L1,scalar_fp_mac,fp_mac_dw,,,,,,BF16_E8M7,7,8,0,1,,,,,,,,,same_format_dw_fp_mac,DW_fp_mac with product and add in the same floating format. It is not an FP32-accumulation surrogate.
+FP_MAC_FP16_E5M10,L1,scalar_fp_mac,fp_mac_dw,,,,,,FP16_E5M10,10,5,1,1,,,,,,,,,same_format_dw_fp_mac,DW_fp_mac with product and add in the same floating format. It is not an FP32-accumulation surrogate.
+INT_MAC_W4_A4_N256,L1,accumulator_anchor,int_mac,,4,4,,,signed_integer,,,,256,17,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+INT_MAC_W4_A4_N16,L2,accumulator_anchor,int_mac,,4,4,,,signed_integer,,,,16,13,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+INT_MAC_W4_A8_N256,L1,accumulator_anchor,int_mac,,4,8,,,signed_integer,,,,256,21,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+INT_MAC_W4_A8_N16,L2,accumulator_anchor,int_mac,,4,8,,,signed_integer,,,,16,17,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+INT_MAC_W8_A8_N256,L1,accumulator_anchor,int_mac,,8,8,,,signed_integer,,,,256,25,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+INT_MAC_W8_A8_N16,L2,accumulator_anchor,int_mac,,8,8,,,signed_integer,,,,16,21,,,,,,,,accumulator_sensitivity,Anchor used to separate multiplier area from accumulator-width area.
+PE_W4A4_L8,L1,deployable_pe,packed_dot,,4,4,,,signed_integer,,,,,40,8,,,,,,0,deployable_pe,Dedicated 8-lane packed dot-product PE.
+PE_W4A8_L4,L1,deployable_pe,packed_dot,,4,8,,,signed_integer,,,,,40,4,,,,,,0,deployable_pe,Dedicated 4-lane W4A8 packed dot-product PE.
+PE_W8A8_L4,L1,deployable_pe,packed_dot,,8,8,,,signed_integer,,,,,40,4,,,,,,0,deployable_pe,Dedicated 4-lane W8A8 packed dot-product PE.
+PE_W4A16_L2,L1,deployable_pe,packed_dot,,4,16,,,signed_integer,,,,,48,2,,,,,,0,deployable_pe,Dedicated 2-lane W4A16 integer payload PE; not a floating A16 PE.
+PE_RECONFIG_W4A4_W4A8_W8A8,L1,deployable_pe,mixed_mode,,,,,,signed_integer_mixed,,,,,40,,,,,,,0,deployable_pe,"One PE supporting W4A4, W4A8 and W8A8 modes."
+PE_RECONFIG_W4A8_W8A8_SCALE,L1,deployable_pe,mixed_mode,,,,,,signed_integer_mixed,,,,,40,,,,,,,1,deployable_pe,Reconfigurable PE plus fixed-point post-accumulation scale/requant path.
+ARRAY_W4A4_4X4,L2,array_scaling,array_int,,4,4,,,signed_integer,,,,,20,,4,4,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W4A4_8X8,L2,array_scaling,array_int,,4,4,,,signed_integer,,,,,20,,8,8,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W4A4_16X16,L2,array_scaling,array_int,,4,4,,,signed_integer,,,,,20,,16,16,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W4A8_4X4,L1,array_scaling,array_int,,4,8,,,signed_integer,,,,,24,,4,4,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W4A8_8X8,L1,array_scaling,array_int,,4,8,,,signed_integer,,,,,24,,8,8,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W4A8_16X16,L1,array_scaling,array_int,,4,8,,,signed_integer,,,,,24,,16,16,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W8A8_4X4,L2,array_scaling,array_int,,8,8,,,signed_integer,,,,,28,,4,4,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W8A8_8X8,L2,array_scaling,array_int,,8,8,,,signed_integer,,,,,28,,8,8,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_W8A8_16X16,L2,array_scaling,array_int,,8,8,,,signed_integer,,,,,28,,16,16,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_BF16_4X4,L2,array_scaling,array_fp,,,,,,BF16_E8M7,7,8,0,,,,4,4,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_BF16_8X8,L2,array_scaling,array_fp,,,,,,BF16_E8M7,7,8,0,,,,8,8,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+ARRAY_BF16_16X16,L2,array_scaling,array_fp,,,,,,BF16_E8M7,7,8,0,,,,16,16,,,,,registered_systolic_array,Includes operand forwarding registers and per-PE accumulator. DC cell area only; no placement/CTS/routing area.
+REQUANT_I32_TO_I8,L1,quant_kv_logic,requant,,,,,,fixed_point,,,,,,1,,,32,8,0,,quant_dequant_logic,Symmetric fixed-point requant with round and saturation.
+REQUANT_I32_TO_I4,L1,quant_kv_logic,requant,,,,,,fixed_point,,,,,,1,,,32,4,0,,quant_dequant_logic,Symmetric fixed-point requant with round and saturation.
+KV_DEQ_I4_TO_I8_L16,L1,quant_kv_logic,kv_dequant,,,,4,4,fixed_point,,,,,,16,,,4,8,0,,quant_dequant_logic,16-lane fixed-point KV4 dequant reference.
+KV_DEQ_MIXED_2_4_8_TO_I8_L16,L1,quant_kv_logic,kv_dequant_mixed,,,,,,fixed_point,,,,,,16,,,,8,1,,quant_dequant_logic,Runtime-selectable 2/4/8-bit KV dequant mux.
+KV_DEQ_I2_TO_I8_L16,L2,quant_kv_logic,kv_dequant,,,,2,2,fixed_point,,,,,,16,,,2,8,0,,quant_dequant_logic,16-lane KV2 dequant reference.
+KV_DEQ_I3_TO_I8_L16,L2,quant_kv_logic,kv_dequant,,,,3,3,fixed_point,,,,,,16,,,3,8,0,,quant_dequant_logic,16-lane KV3 dequant reference.
+KV_DEQ_I8_BYPASS_L16,L2,quant_kv_logic,kv_dequant,,,,8,8,fixed_point,,,,,,16,,,8,8,0,,quant_dequant_logic,Registered KV8 bypass/reference path.
+ASYM_ZP_SCALE_I4_L16,L2,quant_kv_logic,kv_dequant,,,,4,4,fixed_point,,,,,,16,,,4,8,1,,quant_dequant_logic,16-lane asymmetric zero-point plus scale path.

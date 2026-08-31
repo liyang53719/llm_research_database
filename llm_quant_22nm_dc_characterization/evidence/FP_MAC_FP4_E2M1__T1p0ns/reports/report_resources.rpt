@@ -1,0 +1,183 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Sun Aug 30 20:56:50 2026
+****************************************
+
+
+Resource Report for this hierarchy in file
+        <PROJECT_ROOT>/rtl/fp4_e2m1_mac_dw_surrogate.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| u_dut/u_dw_fp_mac               |            |                            |
+|                | DW_fp_mac      | sig_width=2 | u_dut/u_dw_fp_mac (fp4_e2m1_mac_dw_surrogate.sv:52) |
+        | exp_width=3 |                           |
+|                |                | ieee_compliance=0 |                     |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_dw_fp_mac in file
+        ./DW_fp_mac__str.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| eq_x_5         | DW_cmp         | width=4    | eq_473                     |
+| sub_x_6        | DW01_sub       | width=5    | sub_473_2                  |
+| eq_x_7         | DW_cmp         | width=32   | eq_473_2                   |
+| add_x_8        | DW01_inc       | width=5    | add_473_2                  |
+| sub_x_9        | DW01_dec       | width=5    | sub_473_8                  |
+| ashr_18        | DW_rightsh     | A_width=12 | srl_547                    |
+|                |                | SH_width=4 |                            |
+| eq_x_22        | DW_cmp         | width=3    | eq_560                     |
+| ash_24         | DW_leftsh      | A_width=11 | sll_574                    |
+|                |                | SH_width=4 |                            |
+| add_x_25       | DW01_add       | width=5    | add_592_aco                |
+| eq_x_26        | DW_cmp         | width=7    | eq_633                     |
+| eq_x_34        | DW_cmp         | width=2    | eq_667                     |
+| eq_x_44        | DW_cmp         | width=5    | eq_741                     |
+| eq_x_47        | DW_cmp         | width=2    | eq_822                     |
+| UM1            | DW02_multp     | a_width=3  | UM1                        |
+|                |                | b_width=3  |                            |
+|                |                | out_width=8 |                           |
+|                |                | verif_en=1 |                            |
+| ULSD           | DW_lsd         | a_width=11 | ULSD                       |
+| add_x_50       | DW01_add       | width=2    | add_665                    |
+| DP_OP_170_136_5125              |            |                            |
+|                | DP_OP_170_136_5125 |        |                            |
+| DP_OP_171_137_6653              |            |                            |
+|                | DP_OP_171_137_6653 |        |                            |
+| DP_OP_172_138_9345              |            |                            |
+|                | DP_OP_172_138_9345 |        |                            |
+| DP_OP_173_139_6283              |            |                            |
+|                | DP_OP_173_139_6283 |        |                            |
+| add_x_51       | DW01_add       | width=2    | add_669_2 add_669_ni       |
+| add_x_52       | DW01_add       | width=3    | add_669_2 add_669_ni       |
+=============================================================================
+
+Datapath Report for DP_OP_170_136_5125
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_170_136_5125   | add_403_4 add_433_5 sub_433_4 sub_433_5 add_433_6   |
+|                      | sub_403_2 sub_416_4 sub_416_5 add_416_6 sub_469_4   |
+|                      | add_469_6                                           |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 3     |                                          |
+| I2    | PI   | Unsigned | 3     |                                          |
+| I3    | PI   | Unsigned | 3     |                                          |
+| I4    | PI   | Unsigned | 4     |                                          |
+| T167  | IFO  | Signed   | 4     | O1[3:0]                                  |
+| O1    | PO   | Unsigned | 5     | I1 + I2                                  |
+| O2    | PO   | Signed   | 5     | O1 - $unsigned(2'b11)                    |
+| O3    | PO   | Signed   | 5     | O1 - I3 + $unsigned(5'b11111)            |
+| O4    | PO   | Signed   | 5     | O1 - I4                                  |
+| O5    | PO   | Signed   | 4     | -I3 + $unsigned(4'b0100) + T167          |
+==============================================================================
+
+Datapath Report for DP_OP_171_137_6653
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_171_137_6653   | sub_443_5 sub_443_6 sub_443_7 add_450_6             |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 3     |                                          |
+| I2    | PI   | Signed   | 5     |                                          |
+| T164  | IFO  | Signed   | 6     | -I1 + I2                                 |
+| O1    | PO   | Unsigned | 6     | $unsigned(6'b110101) + T164              |
+| O2    | PO   | Unsigned | 6     | $unsigned(6'b000010) + T164              |
+==============================================================================
+
+Datapath Report for DP_OP_172_138_9345
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_172_138_9345   | add_557 add_557_2 add_557_3 sub_add_563 add_563_ni  |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 14    |                                          |
+| I2    | PI   | Unsigned | 14    |                                          |
+| I3    | PI   | Unsigned | 12    |                                          |
+| I4    | PI   | Unsigned | 2     |                                          |
+| I5    | PI   | Unsigned | 1     |                                          |
+| T168  | IFO  | Unsigned | 11    | O1[13:3]                                 |
+| O1    | PO   | Unsigned | 14    | I1 + I2 + I3 + I4                        |
+| O2    | PO   | Signed   | 11    | $signed(1'b1) - T168 + I5                |
+==============================================================================
+
+Datapath Report for DP_OP_173_139_6283
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_173_139_6283   | add_672 sub_672 gte_672                             |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 5     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| T144  | IFO  | Signed   | 7     | I1 + I2 - $unsigned(3'b111)              |
+| O1    | PO   | Signed   | 1     | T144 >= $signed(1'b0)                    |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_dw_fp_mac/ULSD
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U1             | DW_lzod        | a_width=11 | U1                         |
+|                |                | detect_1=0 |                            |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| u_dut/u_dw_fp_mac  | DW_fp_mac        | str                |                |
+| eq_x_5             | DW_cmp           | apparch (area)     |                |
+| sub_x_6            | DW01_sub         | pparch (area,speed)                 |
+| eq_x_7             | DW_cmp           | apparch (area)     |                |
+| add_x_8            | DW01_inc         | apparch (area)     |                |
+| sub_x_9            | DW01_dec         | apparch (area)     |                |
+| ashr_18            | DW_rightsh       | astr (area)        |                |
+| eq_x_22            | DW_cmp           | apparch (area)     |                |
+| ash_24             | DW_leftsh        | astr (area)        |                |
+| add_x_25           | DW01_add         | pparch (area,speed)                 |
+| eq_x_26            | DW_cmp           | apparch (area)     |                |
+| eq_x_34            | DW_cmp           | apparch (area)     |                |
+| eq_x_44            | DW_cmp           | apparch (area)     |                |
+| eq_x_47            | DW_cmp           | apparch (area)     |                |
+| UM1                | DW02_multp       | pparch (area,speed)                 |
+|                    |                  | mult_arch: and     |                |
+| ULSD               | DW_lsd           | str                |                |
+| add_x_50           | DW01_add         | apparch (area)     |                |
+| add_x_51           | DW01_add         | apparch (area)     |                |
+| add_x_52           | DW01_add         | apparch (area)     |                |
+| U1                 | DW_lzod          | rtl                |                |
+| DP_OP_170_136_5125 | DP_OP_170_136_5125 | str (area,speed) |                |
+| DP_OP_171_137_6653 | DP_OP_171_137_6653 | str (area,speed) |                |
+| DP_OP_172_138_9345 | DP_OP_172_138_9345 | str (speed)      |                |
+| DP_OP_173_139_6283 | DP_OP_173_139_6283 | str (speed)      |                |
+===============================================================================
+
+1

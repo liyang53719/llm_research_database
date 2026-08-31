@@ -1,0 +1,26 @@
+version: 1
+comparison_contract:
+  same_library_set: required
+  same_operating_condition: required
+  same_clock_periods: required
+  same_compile_mode: required
+  same_rtl_commit: required
+l1:
+  unique_groups: 28
+  clock_points_per_group: 3
+  expected_runs: 84
+l2:
+  unique_groups: 58
+  clock_points_per_group: 3
+  expected_runs: 174
+hard_fail:
+  - missing_summary
+  - mapped_cell_area_um2_nonpositive
+  - blackbox_count_nonzero
+  - missing_report_area
+  - inconsistent_library_set_id
+warnings:
+  - no_timing_met_point
+  - nonmonotonic_area_vs_timing
+  - unexpected_precision_area_order
+  - array_area_per_pe_not_converging

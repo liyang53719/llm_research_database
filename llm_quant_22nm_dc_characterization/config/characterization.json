@@ -1,0 +1,32 @@
+{
+  "project": "LLM quantization 22nm DC/DW area characterization",
+  "default_clock_periods_ns": [
+    2.0,
+    1.0,
+    0.9
+  ],
+  "tier_semantics": {
+    "L0": "Smoke test subset selected by scripts/gen_runs.py --smoke.",
+    "L1": "28 groups / 84 runs at three common periods. Minimum useful update for the current area table.",
+    "L2": "58 groups / 174 runs at three common periods. Full W/A database plus array and quantization overhead."
+  },
+  "comparison_contract": {
+    "common_library_set": true,
+    "common_operating_condition": true,
+    "common_compile_mode": true,
+    "common_clock_periods": true,
+    "registered_input_output_contract": true,
+    "dc_area_meaning": "Mapped standard-cell area only; excludes SRAM macros, placement utilization, CTS and routing."
+  },
+  "recommended_optional_runs": {
+    "second_vt_or_corner_anchor_groups": [
+      "INT_MAC_W4_A8_N64",
+      "INT_MAC_W8_A8_N64",
+      "FP_MAC_BF16_E8M7",
+      "PE_W4A8_L4",
+      "PE_RECONFIG_W4A4_W4A8_W8A8",
+      "ARRAY_W4A8_16X16"
+    ],
+    "extra_run_count_at_three_periods": 18
+  }
+}

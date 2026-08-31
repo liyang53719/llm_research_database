@@ -1,0 +1,76 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Sun Aug 30 21:12:46 2026
+****************************************
+
+
+Resource Report for this hierarchy in file
+        <PROJECT_ROOT>/rtl/requant_int.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| DP_OP_9J1_122_1805              |            |                            |
+|                | DP_OP_9J1_122_1805 |        |                            |
+| DP_OP_10J1_123_2907             |            |                            |
+|                | DP_OP_10J1_123_2907 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_9J1_122_1805
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_9J1_122_1805   | u_dut/mult_25 (requant_int.sv:25)                   |
+|                      | u_dut/add_26 (requant_int.sv:26)                    |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 32    |                                          |
+| I2    | PI   | Signed   | 16    |                                          |
+| T0    | IFO  | Signed   | 48    | I1 * I2 (requant_int.sv:25)              |
+| O1    | PO   | Unsigned | 48    | T0 + $unsigned(8'b10000000) (requant_int.sv:26) |
+==============================================================================
+
+Datapath Report for DP_OP_10J1_123_2907
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_10J1_123_2907  | u_dut/add_28 (requant_int.sv:28)                    |
+|                      | u_dut/gt_31 (requant_int.sv:31)                     |
+|                      | u_dut/lt_33 (requant_int.sv:33)                     |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 40    |                                          |
+| I2    | PI   | Signed   | 8     |                                          |
+| O1    | PO   | Signed   | 41    | I1 + I2 (requant_int.sv:28)              |
+| O2    | PO   | Signed   | 1     | O1 > $signed(8'b01111111) (requant_int.sv:31) |
+| O3    | PO   | Signed   | 1     | O1 < $signed(8'b10000000) (requant_int.sv:33) |
+==============================================================================
+
+
+Datapath Extraction Report
+
+Information: Operator associated with resources 'u_dut/add_28 (requant_int.sv:28)' in design 'char_top' breaks the datapath extraction because there is leakage due to truncation on the fanout of its driver 'u_dut/add_26 (requant_int.sv:26)'.  (HDL-120)
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| DP_OP_9J1_122_1805 | DP_OP_9J1_122_1805 | str (area,speed) |                |
+|                    |                  | mult_arch: benc_radix4              |
+| DP_OP_10J1_123_2907                   |                    |                |
+|                    | DP_OP_10J1_123_2907 | str (area,speed)                 |
+===============================================================================
+
+1

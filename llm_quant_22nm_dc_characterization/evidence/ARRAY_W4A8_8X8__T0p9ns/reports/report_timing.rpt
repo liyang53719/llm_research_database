@@ -1,0 +1,1617 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -nworst 5
+        -nets
+        -max_paths 20
+        -transition_time
+        -capacitance
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Sun Aug 30 21:07:02 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: tt_typical_max_0p80v_25c   Library: sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+Wire Load Model Mode: top
+
+  Startpoint: u_dut/w_pipe_reg[1][6][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[1][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[1][6][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[1][6][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.08       0.08 r
+  u_dut/w_pipe[1][6][3] (net)                  11         0.01                0.00       0.08 r
+  U8846/Y (XOR2_X3M_A6P5PP140ZTS_C35)                               0.03      0.04       0.12 r
+  n5064 (net)                                   1         0.00                0.00       0.12 r
+  U8847/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n5138 (net)                                   9         0.00                0.00       0.15 f
+  U8903/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.18 r
+  n5120 (net)                                   2         0.00                0.00       0.18 r
+  U8904/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.22 f
+  n5121 (net)                                   1         0.00                0.00       0.22 f
+  U8910/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.29 r
+  n5129 (net)                                   2         0.00                0.00       0.29 r
+  U8906/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.30 f
+  n12772 (net)                                  3         0.00                0.00       0.30 f
+  U8912/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.32 r
+  n5133 (net)                                   2         0.00                0.00       0.32 r
+  U8913/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n5135 (net)                                   1         0.00                0.00       0.34 f
+  U8919/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n12753 (net)                                  2         0.00                0.00       0.37 r
+  U695/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n12747 (net)                                  2         0.00                0.00       0.39 f
+  U474/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n12741 (net)                                  2         0.00                0.00       0.43 r
+  U8933/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n12737 (net)                                  2         0.00                0.00       0.46 f
+  U392/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n12731 (net)                                  2         0.00                0.00       0.50 r
+  U8938/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n12727 (net)                                  2         0.00                0.00       0.53 f
+  U316/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n12721 (net)                                  2         0.00                0.00       0.57 r
+  U8944/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n12717 (net)                                  2         0.00                0.00       0.60 f
+  U8946/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n12711 (net)                                  2         0.00                0.00       0.63 r
+  U214/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.66 f
+  n12707 (net)                                  2         0.00                0.00       0.66 f
+  U8952/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n12701 (net)                                  2         0.00                0.00       0.70 r
+  U2197/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n12697 (net)                                  2         0.00                0.00       0.72 f
+  U8959/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n5161 (net)                                   1         0.00                0.00       0.76 r
+  U2334/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n5162 (net)                                   1         0.00                0.00       0.79 r
+  U8962/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.03      0.02       0.81 f
+  u_dut/n2090 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[1][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.03      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[1][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[1][6][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[1][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[1][6][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[1][6][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.06      0.07       0.07 f
+  u_dut/w_pipe[1][6][3] (net)                  11         0.01                0.00       0.07 f
+  U8846/Y (XOR2_X3M_A6P5PP140ZTS_C35)                               0.03      0.04       0.11 f
+  n5064 (net)                                   1         0.00                0.00       0.11 f
+  U8847/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 r
+  n5138 (net)                                   9         0.00                0.00       0.15 r
+  U8903/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.18 f
+  n5120 (net)                                   2         0.00                0.00       0.18 f
+  U8904/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.22 f
+  n5121 (net)                                   1         0.00                0.00       0.22 f
+  U8910/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.29 r
+  n5129 (net)                                   2         0.00                0.00       0.29 r
+  U8906/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.30 f
+  n12772 (net)                                  3         0.00                0.00       0.30 f
+  U8912/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.32 r
+  n5133 (net)                                   2         0.00                0.00       0.32 r
+  U8913/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n5135 (net)                                   1         0.00                0.00       0.34 f
+  U8919/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n12753 (net)                                  2         0.00                0.00       0.37 r
+  U695/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n12747 (net)                                  2         0.00                0.00       0.39 f
+  U474/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n12741 (net)                                  2         0.00                0.00       0.43 r
+  U8933/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n12737 (net)                                  2         0.00                0.00       0.46 f
+  U392/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n12731 (net)                                  2         0.00                0.00       0.50 r
+  U8938/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n12727 (net)                                  2         0.00                0.00       0.53 f
+  U316/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n12721 (net)                                  2         0.00                0.00       0.57 r
+  U8944/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n12717 (net)                                  2         0.00                0.00       0.60 f
+  U8946/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n12711 (net)                                  2         0.00                0.00       0.63 r
+  U214/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.66 f
+  n12707 (net)                                  2         0.00                0.00       0.66 f
+  U8952/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n12701 (net)                                  2         0.00                0.00       0.70 r
+  U2197/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n12697 (net)                                  2         0.00                0.00       0.72 f
+  U8959/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n5161 (net)                                   1         0.00                0.00       0.76 r
+  U2334/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n5162 (net)                                   1         0.00                0.00       0.79 r
+  U8962/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.03      0.02       0.81 f
+  u_dut/n2090 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[1][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.03      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[1][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[1][6][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[1][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[1][6][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[1][6][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.08       0.08 r
+  u_dut/w_pipe[1][6][3] (net)                  11         0.01                0.00       0.08 r
+  U8846/Y (XOR2_X3M_A6P5PP140ZTS_C35)                               0.03      0.04       0.12 r
+  n5064 (net)                                   1         0.00                0.00       0.12 r
+  U8847/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n5138 (net)                                   9         0.00                0.00       0.15 f
+  U8903/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.18 r
+  n5120 (net)                                   2         0.00                0.00       0.18 r
+  U8904/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.22 f
+  n5121 (net)                                   1         0.00                0.00       0.22 f
+  U8910/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.29 r
+  n5129 (net)                                   2         0.00                0.00       0.29 r
+  U8906/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.30 f
+  n12772 (net)                                  3         0.00                0.00       0.30 f
+  U8912/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.32 r
+  n5133 (net)                                   2         0.00                0.00       0.32 r
+  U8913/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n5135 (net)                                   1         0.00                0.00       0.34 f
+  U8919/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n12753 (net)                                  2         0.00                0.00       0.37 r
+  U695/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n12747 (net)                                  2         0.00                0.00       0.39 f
+  U474/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n12741 (net)                                  2         0.00                0.00       0.43 r
+  U8933/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n12737 (net)                                  2         0.00                0.00       0.46 f
+  U392/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n12731 (net)                                  2         0.00                0.00       0.50 r
+  U8938/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n12727 (net)                                  2         0.00                0.00       0.53 f
+  U316/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n12721 (net)                                  2         0.00                0.00       0.57 r
+  U8944/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n12717 (net)                                  2         0.00                0.00       0.60 f
+  U8946/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n12711 (net)                                  2         0.00                0.00       0.63 r
+  U214/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.66 f
+  n12707 (net)                                  2         0.00                0.00       0.66 f
+  U8952/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n12701 (net)                                  2         0.00                0.00       0.70 r
+  U2197/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n12697 (net)                                  2         0.00                0.00       0.72 f
+  U8959/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n5161 (net)                                   1         0.00                0.00       0.76 r
+  U2334/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n5162 (net)                                   1         0.00                0.00       0.79 r
+  U8962/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.03      0.02       0.81 f
+  u_dut/n2090 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[1][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.03      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[1][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][7][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][7][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][7][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.09      0.08       0.08 r
+  u_dut/w_pipe[2][7][1] (net)                  11         0.01                0.00       0.08 r
+  U10615/Y (XNOR2_X4M_A6P5PP140ZTS_C35)                             0.05      0.05       0.13 r
+  n6580 (net)                                  11         0.01                0.00       0.13 r
+  U1035/Y (NAND2_X3M_A6P5PP140ZTS_C35)                              0.03      0.03       0.16 f
+  n6581 (net)                                   9         0.00                0.00       0.16 f
+  U10677/Y (OAI22_X1M_A6P5PP140ZTS_C35)                             0.05      0.03       0.19 r
+  n6563 (net)                                   2         0.00                0.00       0.19 r
+  U10678/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.23 r
+  n6564 (net)                                   1         0.00                0.00       0.23 r
+  U10683/S (ADDF_X1M_A6P5PP140ZTS_C35)                              0.02      0.07       0.30 f
+  n6572 (net)                                   2         0.00                0.00       0.30 f
+  U10680/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.03      0.03       0.33 r
+  n13935 (net)                                  3         0.00                0.00       0.33 r
+  U10685/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n6576 (net)                                   2         0.00                0.00       0.34 f
+  U10692/Y (AOI21_X2M_A6P5PP140ZTS_C35)                             0.02      0.02       0.37 r
+  n6577 (net)                                   1         0.00                0.00       0.37 r
+  U10693/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.02      0.02       0.39 f
+  n13916 (net)                                  2         0.00                0.00       0.39 f
+  U10703/Y (AOI21_X1M_A6P5PP140ZTS_C35)                             0.04      0.03       0.42 r
+  n13910 (net)                                  2         0.00                0.00       0.42 r
+  U10705/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.45 f
+  n13904 (net)                                  2         0.00                0.00       0.45 f
+  U437/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n13900 (net)                                  2         0.00                0.00       0.48 r
+  U10711/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n13894 (net)                                  2         0.00                0.00       0.51 f
+  U10714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.55 r
+  n13890 (net)                                  2         0.00                0.00       0.55 r
+  U10717/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.58 f
+  n13884 (net)                                  2         0.00                0.00       0.58 f
+  U10720/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.62 r
+  n13880 (net)                                  2         0.00                0.00       0.62 r
+  U10723/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.65 f
+  n13874 (net)                                  2         0.00                0.00       0.65 f
+  U1111/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.68 r
+  n13870 (net)                                  2         0.00                0.00       0.68 r
+  U10729/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.71 f
+  n13864 (net)                                  2         0.00                0.00       0.71 f
+  U10733/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.03       0.75 r
+  n13860 (net)                                  2         0.00                0.00       0.75 r
+  U10737/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                           0.02      0.02       0.77 f
+  n6604 (net)                                   1         0.00                0.00       0.77 f
+  U2349/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n6605 (net)                                   1         0.00                0.00       0.79 r
+  U10739/Y (NAND2_X1A_A6P5PP140ZTS_C35)                             0.02      0.02       0.81 f
+  u_dut/n2306 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][2][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][2][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][2][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][2][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.03      0.04       0.04 r
+  u_dut/w_pipe[3][2][1] (net)                   2         0.00                0.00       0.04 r
+  U3068/Y (BUFHA_X2M_A6P5PP140ZTS_C35)                              0.03      0.04       0.08 r
+  n4912 (net)                                  10         0.01                0.00       0.08 r
+  U1028/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.12 f
+  n4919 (net)                                   9         0.00                0.00       0.12 f
+  U8608/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.16 r
+  n4875 (net)                                   1         0.00                0.00       0.16 r
+  U8614/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n4882 (net)                                   1         0.00                0.00       0.21 f
+  U8624/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.27 r
+  n4897 (net)                                   2         0.00                0.00       0.27 r
+  U8628/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.29 f
+  n8107 (net)                                   2         0.00                0.00       0.29 f
+  U813/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n8097 (net)                                   2         0.00                0.00       0.32 r
+  U8643/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n8069 (net)                                   2         0.00                0.00       0.34 f
+  U8678/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n8056 (net)                                   2         0.00                0.00       0.37 r
+  U698/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.40 f
+  n8050 (net)                                   2         0.00                0.00       0.40 f
+  U469/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n8044 (net)                                   2         0.00                0.00       0.43 r
+  U8692/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n8040 (net)                                   2         0.00                0.00       0.46 f
+  U351/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n8034 (net)                                   2         0.00                0.00       0.50 r
+  U330/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.53 f
+  n8030 (net)                                   2         0.00                0.00       0.53 f
+  U314/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n8024 (net)                                   2         0.00                0.00       0.57 r
+  U8702/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n8020 (net)                                   2         0.00                0.00       0.60 f
+  U8704/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n8014 (net)                                   2         0.00                0.00       0.63 r
+  U8707/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.66 f
+  n8010 (net)                                   2         0.00                0.00       0.66 f
+  U8710/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n8004 (net)                                   2         0.00                0.00       0.70 r
+  U8714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n8000 (net)                                   2         0.00                0.00       0.72 f
+  U8718/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n4967 (net)                                   1         0.00                0.00       0.76 r
+  U8721/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n4968 (net)                                   1         0.00                0.00       0.79 r
+  U8722/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2378 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][2][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][2][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][7][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][7][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][7][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.09      0.08       0.08 r
+  u_dut/w_pipe[2][7][1] (net)                  11         0.01                0.00       0.08 r
+  U10615/Y (XNOR2_X4M_A6P5PP140ZTS_C35)                             0.05      0.05       0.13 r
+  n6580 (net)                                  11         0.01                0.00       0.13 r
+  U1035/Y (NAND2_X3M_A6P5PP140ZTS_C35)                              0.03      0.03       0.16 f
+  n6581 (net)                                   9         0.00                0.00       0.16 f
+  U10677/Y (OAI22_X1M_A6P5PP140ZTS_C35)                             0.05      0.03       0.19 r
+  n6563 (net)                                   2         0.00                0.00       0.19 r
+  U10678/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.23 r
+  n6564 (net)                                   1         0.00                0.00       0.23 r
+  U10683/S (ADDF_X1M_A6P5PP140ZTS_C35)                              0.02      0.07       0.30 f
+  n6572 (net)                                   2         0.00                0.00       0.30 f
+  U10680/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.03      0.03       0.33 r
+  n13935 (net)                                  3         0.00                0.00       0.33 r
+  U10685/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n6576 (net)                                   2         0.00                0.00       0.34 f
+  U10692/Y (AOI21_X2M_A6P5PP140ZTS_C35)                             0.02      0.02       0.37 r
+  n6577 (net)                                   1         0.00                0.00       0.37 r
+  U10693/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.02      0.02       0.39 f
+  n13916 (net)                                  2         0.00                0.00       0.39 f
+  U10703/Y (AOI21_X1M_A6P5PP140ZTS_C35)                             0.04      0.03       0.42 r
+  n13910 (net)                                  2         0.00                0.00       0.42 r
+  U10705/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.45 f
+  n13904 (net)                                  2         0.00                0.00       0.45 f
+  U437/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n13900 (net)                                  2         0.00                0.00       0.48 r
+  U10711/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n13894 (net)                                  2         0.00                0.00       0.51 f
+  U10714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.55 r
+  n13890 (net)                                  2         0.00                0.00       0.55 r
+  U10717/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.58 f
+  n13884 (net)                                  2         0.00                0.00       0.58 f
+  U10720/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.62 r
+  n13880 (net)                                  2         0.00                0.00       0.62 r
+  U10723/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.65 f
+  n13874 (net)                                  2         0.00                0.00       0.65 f
+  U1111/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.68 r
+  n13870 (net)                                  2         0.00                0.00       0.68 r
+  U10729/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.71 f
+  n13864 (net)                                  2         0.00                0.00       0.71 f
+  U10733/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.03       0.75 r
+  n13860 (net)                                  2         0.00                0.00       0.75 r
+  U10737/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                           0.02      0.02       0.77 f
+  n6604 (net)                                   1         0.00                0.00       0.77 f
+  U2349/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n6605 (net)                                   1         0.00                0.00       0.79 r
+  U10739/Y (NAND2_X1A_A6P5PP140ZTS_C35)                             0.02      0.02       0.81 f
+  u_dut/n2306 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[1][6][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[1][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[1][6][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[1][6][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.08       0.08 r
+  u_dut/w_pipe[1][6][3] (net)                  11         0.01                0.00       0.08 r
+  U8846/Y (XOR2_X3M_A6P5PP140ZTS_C35)                               0.03      0.04       0.12 r
+  n5064 (net)                                   1         0.00                0.00       0.12 r
+  U8847/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n5138 (net)                                   9         0.00                0.00       0.15 f
+  U8903/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.18 r
+  n5120 (net)                                   2         0.00                0.00       0.18 r
+  U8904/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.22 f
+  n5121 (net)                                   1         0.00                0.00       0.22 f
+  U8910/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.29 r
+  n5129 (net)                                   2         0.00                0.00       0.29 r
+  U8906/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.30 f
+  n12772 (net)                                  3         0.00                0.00       0.30 f
+  U8912/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.02      0.02       0.32 r
+  n5133 (net)                                   2         0.00                0.00       0.32 r
+  U8913/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n5135 (net)                                   1         0.00                0.00       0.34 f
+  U8919/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n12753 (net)                                  2         0.00                0.00       0.37 r
+  U695/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n12747 (net)                                  2         0.00                0.00       0.39 f
+  U474/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n12741 (net)                                  2         0.00                0.00       0.43 r
+  U8933/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n12737 (net)                                  2         0.00                0.00       0.46 f
+  U392/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n12731 (net)                                  2         0.00                0.00       0.50 r
+  U8938/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n12727 (net)                                  2         0.00                0.00       0.53 f
+  U316/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n12721 (net)                                  2         0.00                0.00       0.57 r
+  U8944/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n12717 (net)                                  2         0.00                0.00       0.60 f
+  U8946/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n12711 (net)                                  2         0.00                0.00       0.63 r
+  U214/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.66 f
+  n12707 (net)                                  2         0.00                0.00       0.66 f
+  U8952/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n12701 (net)                                  2         0.00                0.00       0.70 r
+  U2197/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n12697 (net)                                  2         0.00                0.00       0.72 f
+  U8959/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n5161 (net)                                   1         0.00                0.00       0.76 r
+  U2334/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n5162 (net)                                   1         0.00                0.00       0.79 r
+  U8962/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.03      0.02       0.81 f
+  u_dut/n2090 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[1][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.03      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[1][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][2][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][2][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][2][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][2][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.03      0.04       0.04 r
+  u_dut/w_pipe[3][2][1] (net)                   2         0.00                0.00       0.04 r
+  U3068/Y (BUFHA_X2M_A6P5PP140ZTS_C35)                              0.03      0.04       0.08 r
+  n4912 (net)                                  10         0.01                0.00       0.08 r
+  U1028/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.12 f
+  n4919 (net)                                   9         0.00                0.00       0.12 f
+  U8608/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.16 r
+  n4875 (net)                                   1         0.00                0.00       0.16 r
+  U8614/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n4882 (net)                                   1         0.00                0.00       0.21 f
+  U8624/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.27 r
+  n4897 (net)                                   2         0.00                0.00       0.27 r
+  U8628/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.29 f
+  n8107 (net)                                   2         0.00                0.00       0.29 f
+  U813/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n8097 (net)                                   2         0.00                0.00       0.32 r
+  U8643/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n8069 (net)                                   2         0.00                0.00       0.34 f
+  U8678/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n8056 (net)                                   2         0.00                0.00       0.37 r
+  U698/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.40 f
+  n8050 (net)                                   2         0.00                0.00       0.40 f
+  U469/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n8044 (net)                                   2         0.00                0.00       0.43 r
+  U8692/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n8040 (net)                                   2         0.00                0.00       0.46 f
+  U351/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n8034 (net)                                   2         0.00                0.00       0.50 r
+  U330/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.53 f
+  n8030 (net)                                   2         0.00                0.00       0.53 f
+  U314/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n8024 (net)                                   2         0.00                0.00       0.57 r
+  U8702/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n8020 (net)                                   2         0.00                0.00       0.60 f
+  U8704/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n8014 (net)                                   2         0.00                0.00       0.63 r
+  U8707/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.66 f
+  n8010 (net)                                   2         0.00                0.00       0.66 f
+  U8710/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n8004 (net)                                   2         0.00                0.00       0.70 r
+  U8714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n8000 (net)                                   2         0.00                0.00       0.72 f
+  U8718/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n4967 (net)                                   1         0.00                0.00       0.76 r
+  U8721/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n4968 (net)                                   1         0.00                0.00       0.79 r
+  U8722/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2378 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][2][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][2][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][6][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][6][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][6][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.07      0.07       0.07 r
+  u_dut/w_pipe[3][6][1] (net)                  10         0.01                0.00       0.07 r
+  U6198/Y (NAND2_X1M_A6P5PP140ZTS_C35)                              0.07      0.06       0.13 f
+  n2989 (net)                                   9         0.00                0.00       0.13 f
+  U6200/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.17 r
+  n2944 (net)                                   1         0.00                0.00       0.17 r
+  U6212/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.22 f
+  n2961 (net)                                   1         0.00                0.00       0.22 f
+  U6234/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.29 r
+  n2967 (net)                                   2         0.00                0.00       0.29 r
+  U6236/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.30 f
+  n7077 (net)                                   2         0.00                0.00       0.30 f
+  U924/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.33 r
+  n7066 (net)                                   2         0.00                0.00       0.33 r
+  U6240/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.36 f
+  n7038 (net)                                   2         0.00                0.00       0.36 f
+  U917/Y (OAI21_X2M_A6P5PP140ZTS_C35)                               0.03      0.03       0.39 r
+  n7032 (net)                                   2         0.00                0.00       0.39 r
+  U6277/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.41 f
+  n7028 (net)                                   2         0.00                0.00       0.41 f
+  U6282/Y (OAI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.43 r
+  n7022 (net)                                   2         0.00                0.00       0.43 r
+  U6285/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.45 f
+  n7017 (net)                                   2         0.00                0.00       0.45 f
+  U422/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.03       0.48 r
+  n7011 (net)                                   2         0.00                0.00       0.48 r
+  U360/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n7006 (net)                                   2         0.00                0.00       0.51 f
+  U337/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.54 r
+  n7000 (net)                                   2         0.00                0.00       0.54 r
+  U6295/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.57 f
+  n6995 (net)                                   2         0.00                0.00       0.57 f
+  U279/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.61 r
+  n6989 (net)                                   2         0.00                0.00       0.61 r
+  U233/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.63 f
+  n6984 (net)                                   2         0.00                0.00       0.63 f
+  U221/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.67 r
+  n6978 (net)                                   2         0.00                0.00       0.67 r
+  U6304/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.70 f
+  n6974 (net)                                   2         0.00                0.00       0.70 f
+  U167/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.74 r
+  n6968 (net)                                   2         0.00                0.00       0.74 r
+  U1120/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.77 f
+  n3035 (net)                                   1         0.00                0.00       0.77 f
+  U1150/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.02      0.03       0.79 r
+  n3036 (net)                                   1         0.00                0.00       0.79 r
+  U6314/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.01       0.81 f
+  u_dut/n2474 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][2][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][2][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][2][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][2][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.03      0.04       0.04 r
+  u_dut/w_pipe[3][2][1] (net)                   2         0.00                0.00       0.04 r
+  U3068/Y (BUFHA_X2M_A6P5PP140ZTS_C35)                              0.03      0.04       0.08 r
+  n4912 (net)                                  10         0.01                0.00       0.08 r
+  U1028/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.12 f
+  n4919 (net)                                   9         0.00                0.00       0.12 f
+  U8608/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.16 r
+  n4875 (net)                                   1         0.00                0.00       0.16 r
+  U8614/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n4882 (net)                                   1         0.00                0.00       0.21 f
+  U8624/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.27 r
+  n4897 (net)                                   2         0.00                0.00       0.27 r
+  U8628/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.29 f
+  n8107 (net)                                   2         0.00                0.00       0.29 f
+  U813/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n8097 (net)                                   2         0.00                0.00       0.32 r
+  U8643/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n8069 (net)                                   2         0.00                0.00       0.34 f
+  U8678/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n8056 (net)                                   2         0.00                0.00       0.37 r
+  U698/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.40 f
+  n8050 (net)                                   2         0.00                0.00       0.40 f
+  U469/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n8044 (net)                                   2         0.00                0.00       0.43 r
+  U8692/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n8040 (net)                                   2         0.00                0.00       0.46 f
+  U351/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n8034 (net)                                   2         0.00                0.00       0.50 r
+  U330/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.53 f
+  n8030 (net)                                   2         0.00                0.00       0.53 f
+  U314/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.57 r
+  n8024 (net)                                   2         0.00                0.00       0.57 r
+  U8702/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n8020 (net)                                   2         0.00                0.00       0.60 f
+  U8704/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n8014 (net)                                   2         0.00                0.00       0.63 r
+  U8707/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.66 f
+  n8010 (net)                                   2         0.00                0.00       0.66 f
+  U8710/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n8004 (net)                                   2         0.00                0.00       0.70 r
+  U8714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n8000 (net)                                   2         0.00                0.00       0.72 f
+  U8718/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n4967 (net)                                   1         0.00                0.00       0.76 r
+  U8721/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n4968 (net)                                   1         0.00                0.00       0.79 r
+  U8722/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2378 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][2][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][2][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][7][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][7][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][7][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.09      0.08       0.08 r
+  u_dut/w_pipe[2][7][1] (net)                  11         0.01                0.00       0.08 r
+  U10615/Y (XNOR2_X4M_A6P5PP140ZTS_C35)                             0.05      0.05       0.13 r
+  n6580 (net)                                  11         0.01                0.00       0.13 r
+  U1035/Y (NAND2_X3M_A6P5PP140ZTS_C35)                              0.03      0.03       0.16 f
+  n6581 (net)                                   9         0.00                0.00       0.16 f
+  U10677/Y (OAI22_X1M_A6P5PP140ZTS_C35)                             0.05      0.03       0.19 r
+  n6563 (net)                                   2         0.00                0.00       0.19 r
+  U10678/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.23 r
+  n6564 (net)                                   1         0.00                0.00       0.23 r
+  U10683/S (ADDF_X1M_A6P5PP140ZTS_C35)                              0.02      0.07       0.30 f
+  n6572 (net)                                   2         0.00                0.00       0.30 f
+  U10680/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.03      0.03       0.33 r
+  n13935 (net)                                  3         0.00                0.00       0.33 r
+  U10685/Y (NOR2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n6576 (net)                                   2         0.00                0.00       0.34 f
+  U10692/Y (AOI21_X2M_A6P5PP140ZTS_C35)                             0.02      0.02       0.37 r
+  n6577 (net)                                   1         0.00                0.00       0.37 r
+  U10693/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.02      0.02       0.39 f
+  n13916 (net)                                  2         0.00                0.00       0.39 f
+  U10703/Y (AOI21_X1M_A6P5PP140ZTS_C35)                             0.04      0.03       0.42 r
+  n13910 (net)                                  2         0.00                0.00       0.42 r
+  U10705/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.45 f
+  n13904 (net)                                  2         0.00                0.00       0.45 f
+  U437/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n13900 (net)                                  2         0.00                0.00       0.48 r
+  U10711/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n13894 (net)                                  2         0.00                0.00       0.51 f
+  U10714/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.55 r
+  n13890 (net)                                  2         0.00                0.00       0.55 r
+  U10717/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.58 f
+  n13884 (net)                                  2         0.00                0.00       0.58 f
+  U10720/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.04       0.62 r
+  n13880 (net)                                  2         0.00                0.00       0.62 r
+  U10723/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.65 f
+  n13874 (net)                                  2         0.00                0.00       0.65 f
+  U1111/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.68 r
+  n13870 (net)                                  2         0.00                0.00       0.68 r
+  U10729/Y (OAI21_X1M_A6P5PP140ZTS_C35)                             0.03      0.03       0.71 f
+  n13864 (net)                                  2         0.00                0.00       0.71 f
+  U10733/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                           0.04      0.03       0.74 r
+  n13860 (net)                                  2         0.00                0.00       0.74 r
+  U10737/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                           0.02      0.02       0.77 f
+  n6604 (net)                                   1         0.00                0.00       0.77 f
+  U2349/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n6605 (net)                                   1         0.00                0.00       0.79 r
+  U10739/Y (NAND2_X1A_A6P5PP140ZTS_C35)                             0.02      0.02       0.81 f
+  u_dut/n2306 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][5][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][5][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][5][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][5][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.06      0.07       0.07 f
+  u_dut/w_pipe[2][5][1] (net)                  11         0.01                0.00       0.07 f
+  U7880/Y (XNOR2_X3M_A6P5PP140ZTS_C35)                              0.04      0.06       0.13 f
+  n4359 (net)                                  11         0.00                0.00       0.13 f
+  U7882/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.06      0.05       0.18 r
+  n4360 (net)                                   9         0.00                0.00       0.18 r
+  U7888/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.22 f
+  n4302 (net)                                   1         0.00                0.00       0.22 f
+  U7901/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.08       0.29 r
+  n4315 (net)                                   2         0.00                0.00       0.29 r
+  U7905/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.31 f
+  n13711 (net)                                  2         0.00                0.00       0.31 f
+  U807/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.34 r
+  n13700 (net)                                  2         0.00                0.00       0.34 r
+  U7920/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.36 f
+  n13672 (net)                                  2         0.00                0.00       0.36 f
+  U7955/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.39 r
+  n13653 (net)                                  2         0.00                0.00       0.39 r
+  U440/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.42 f
+  n13646 (net)                                  2         0.00                0.00       0.42 f
+  U7972/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.45 r
+  n13640 (net)                                  2         0.00                0.00       0.45 r
+  U7975/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.48 f
+  n13636 (net)                                  2         0.00                0.00       0.48 f
+  U7978/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.51 r
+  n13630 (net)                                  2         0.00                0.00       0.51 r
+  U7980/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.54 f
+  n13626 (net)                                  2         0.00                0.00       0.54 f
+  U7983/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.58 r
+  n13620 (net)                                  2         0.00                0.00       0.58 r
+  U227/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.60 f
+  n13615 (net)                                  2         0.00                0.00       0.60 f
+  U220/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.64 r
+  n13609 (net)                                  2         0.00                0.00       0.64 r
+  U2215/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.67 f
+  n13604 (net)                                  2         0.00                0.00       0.67 f
+  U7995/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.05      0.04       0.71 r
+  n13598 (net)                                  1         0.00                0.00       0.71 r
+  U15394/CO (ADDF_X1M_A6P5PP140ZTS_C35)                             0.02      0.05       0.76 r
+  n4380 (net)                                   1         0.00                0.00       0.76 r
+  U7996/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n4382 (net)                                   1         0.00                0.00       0.79 r
+  U7998/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2258 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][5][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][5][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][6][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][6][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][6][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.07      0.07       0.07 r
+  u_dut/w_pipe[3][6][1] (net)                  10         0.01                0.00       0.07 r
+  U6198/Y (NAND2_X1M_A6P5PP140ZTS_C35)                              0.07      0.06       0.13 f
+  n2989 (net)                                   9         0.00                0.00       0.13 f
+  U6200/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.17 r
+  n2944 (net)                                   1         0.00                0.00       0.17 r
+  U6212/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.22 f
+  n2961 (net)                                   1         0.00                0.00       0.22 f
+  U6234/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.29 r
+  n2967 (net)                                   2         0.00                0.00       0.29 r
+  U6236/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.30 f
+  n7077 (net)                                   2         0.00                0.00       0.30 f
+  U924/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.33 r
+  n7066 (net)                                   2         0.00                0.00       0.33 r
+  U6240/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.36 f
+  n7038 (net)                                   2         0.00                0.00       0.36 f
+  U917/Y (OAI21_X2M_A6P5PP140ZTS_C35)                               0.03      0.03       0.39 r
+  n7032 (net)                                   2         0.00                0.00       0.39 r
+  U6277/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.41 f
+  n7028 (net)                                   2         0.00                0.00       0.41 f
+  U6282/Y (OAI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.43 r
+  n7022 (net)                                   2         0.00                0.00       0.43 r
+  U6285/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.45 f
+  n7017 (net)                                   2         0.00                0.00       0.45 f
+  U422/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.03       0.48 r
+  n7011 (net)                                   2         0.00                0.00       0.48 r
+  U360/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n7006 (net)                                   2         0.00                0.00       0.51 f
+  U337/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.54 r
+  n7000 (net)                                   2         0.00                0.00       0.54 r
+  U6295/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.57 f
+  n6995 (net)                                   2         0.00                0.00       0.57 f
+  U279/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.61 r
+  n6989 (net)                                   2         0.00                0.00       0.61 r
+  U233/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.63 f
+  n6984 (net)                                   2         0.00                0.00       0.63 f
+  U221/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.67 r
+  n6978 (net)                                   2         0.00                0.00       0.67 r
+  U6304/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.70 f
+  n6974 (net)                                   2         0.00                0.00       0.70 f
+  U167/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.74 r
+  n6968 (net)                                   2         0.00                0.00       0.74 r
+  U1120/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.77 f
+  n3035 (net)                                   1         0.00                0.00       0.77 f
+  U1150/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.02      0.03       0.79 r
+  n3036 (net)                                   1         0.00                0.00       0.79 r
+  U6314/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.01       0.81 f
+  u_dut/n2474 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[3][6][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[3][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[3][6][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[3][6][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.07      0.07       0.07 r
+  u_dut/w_pipe[3][6][1] (net)                  10         0.01                0.00       0.07 r
+  U6198/Y (NAND2_X1M_A6P5PP140ZTS_C35)                              0.07      0.06       0.13 f
+  n2989 (net)                                   9         0.00                0.00       0.13 f
+  U6200/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.17 r
+  n2944 (net)                                   1         0.00                0.00       0.17 r
+  U6212/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.22 f
+  n2961 (net)                                   1         0.00                0.00       0.22 f
+  U6234/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.29 r
+  n2967 (net)                                   2         0.00                0.00       0.29 r
+  U6236/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.30 f
+  n7077 (net)                                   2         0.00                0.00       0.30 f
+  U924/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.33 r
+  n7066 (net)                                   2         0.00                0.00       0.33 r
+  U6240/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.36 f
+  n7038 (net)                                   2         0.00                0.00       0.36 f
+  U917/Y (OAI21_X2M_A6P5PP140ZTS_C35)                               0.03      0.03       0.39 r
+  n7032 (net)                                   2         0.00                0.00       0.39 r
+  U6277/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.41 f
+  n7028 (net)                                   2         0.00                0.00       0.41 f
+  U6282/Y (OAI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.43 r
+  n7022 (net)                                   2         0.00                0.00       0.43 r
+  U6285/Y (AOI21_X3M_A6P5PP140ZTS_C35)                              0.02      0.02       0.45 f
+  n7017 (net)                                   2         0.00                0.00       0.45 f
+  U422/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.03       0.48 r
+  n7011 (net)                                   2         0.00                0.00       0.48 r
+  U360/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.51 f
+  n7006 (net)                                   2         0.00                0.00       0.51 f
+  U337/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.54 r
+  n7000 (net)                                   2         0.00                0.00       0.54 r
+  U6295/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.57 f
+  n6995 (net)                                   2         0.00                0.00       0.57 f
+  U279/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.61 r
+  n6989 (net)                                   2         0.00                0.00       0.61 r
+  U233/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.63 f
+  n6984 (net)                                   2         0.00                0.00       0.63 f
+  U221/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.67 r
+  n6978 (net)                                   2         0.00                0.00       0.67 r
+  U6304/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.70 f
+  n6974 (net)                                   2         0.00                0.00       0.70 f
+  U167/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.04       0.74 r
+  n6968 (net)                                   2         0.00                0.00       0.74 r
+  U1120/Y (AOI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.77 f
+  n3035 (net)                                   1         0.00                0.00       0.77 f
+  U1150/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.02      0.03       0.79 r
+  n3036 (net)                                   1         0.00                0.00       0.79 r
+  U6314/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.01       0.81 f
+  u_dut/n2474 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[3][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[3][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[0][7][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[0][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[0][7][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[0][7][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.07       0.07 r
+  u_dut/w_pipe[0][7][3] (net)                  11         0.01                0.00       0.07 r
+  U5593/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.05       0.12 r
+  n2453 (net)                                   1         0.00                0.00       0.12 r
+  U5594/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n2526 (net)                                   9         0.00                0.00       0.15 f
+  U5650/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.19 r
+  n2508 (net)                                   2         0.00                0.00       0.19 r
+  U5651/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.23 r
+  n2509 (net)                                   1         0.00                0.00       0.23 r
+  U5658/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.30 f
+  n2517 (net)                                   2         0.00                0.00       0.30 f
+  U5653/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.03      0.03       0.33 r
+  n11854 (net)                                  3         0.00                0.00       0.33 r
+  U919/Y (NOR2_X1A_A6P5PP140ZTS_C35)                                0.02      0.02       0.35 f
+  n2521 (net)                                   2         0.00                0.00       0.35 f
+  U5664/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.37 r
+  n2522 (net)                                   1         0.00                0.00       0.37 r
+  U492/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n11835 (net)                                  2         0.00                0.00       0.39 f
+  U738/Y (AOI21_X2M_A6P5PP140ZTS_C35)                               0.02      0.03       0.42 r
+  n11829 (net)                                  2         0.00                0.00       0.42 r
+  U5675/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.02       0.44 f
+  n11823 (net)                                  2         0.00                0.00       0.44 f
+  U438/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n11819 (net)                                  2         0.00                0.00       0.48 r
+  U5681/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.51 f
+  n11813 (net)                                  2         0.00                0.00       0.51 f
+  U5684/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.55 r
+  n11809 (net)                                  2         0.00                0.00       0.55 r
+  U5687/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.58 f
+  n11803 (net)                                  2         0.00                0.00       0.58 f
+  U5691/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.61 r
+  n11799 (net)                                  2         0.00                0.00       0.61 r
+  U5694/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.64 f
+  n11793 (net)                                  2         0.00                0.00       0.64 f
+  U207/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.68 r
+  n11789 (net)                                  2         0.00                0.00       0.68 r
+  U5700/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.71 f
+  n11783 (net)                                  2         0.00                0.00       0.71 f
+  U5704/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.74 r
+  n11779 (net)                                  2         0.00                0.00       0.74 r
+  U1096/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.02      0.03       0.77 f
+  n2549 (net)                                   1         0.00                0.00       0.77 f
+  U5709/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n2550 (net)                                   1         0.00                0.00       0.79 r
+  U5711/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n1922 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[0][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[0][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[0][7][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[0][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[0][7][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[0][7][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.07       0.07 r
+  u_dut/w_pipe[0][7][3] (net)                  11         0.01                0.00       0.07 r
+  U5593/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.05       0.12 r
+  n2453 (net)                                   1         0.00                0.00       0.12 r
+  U5594/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n2526 (net)                                   9         0.00                0.00       0.15 f
+  U5650/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.19 r
+  n2508 (net)                                   2         0.00                0.00       0.19 r
+  U5651/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.23 r
+  n2509 (net)                                   1         0.00                0.00       0.23 r
+  U5658/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.30 f
+  n2517 (net)                                   2         0.00                0.00       0.30 f
+  U5653/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.03      0.03       0.33 r
+  n11854 (net)                                  3         0.00                0.00       0.33 r
+  U919/Y (NOR2_X1A_A6P5PP140ZTS_C35)                                0.02      0.02       0.35 f
+  n2521 (net)                                   2         0.00                0.00       0.35 f
+  U5664/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.37 r
+  n2522 (net)                                   1         0.00                0.00       0.37 r
+  U492/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n11835 (net)                                  2         0.00                0.00       0.39 f
+  U738/Y (AOI21_X2M_A6P5PP140ZTS_C35)                               0.02      0.03       0.42 r
+  n11829 (net)                                  2         0.00                0.00       0.42 r
+  U5675/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.02       0.44 f
+  n11823 (net)                                  2         0.00                0.00       0.44 f
+  U438/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n11819 (net)                                  2         0.00                0.00       0.48 r
+  U5681/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.51 f
+  n11813 (net)                                  2         0.00                0.00       0.51 f
+  U5684/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.55 r
+  n11809 (net)                                  2         0.00                0.00       0.55 r
+  U5687/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.58 f
+  n11803 (net)                                  2         0.00                0.00       0.58 f
+  U5691/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.61 r
+  n11799 (net)                                  2         0.00                0.00       0.61 r
+  U5694/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.64 f
+  n11793 (net)                                  2         0.00                0.00       0.64 f
+  U207/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.68 r
+  n11789 (net)                                  2         0.00                0.00       0.68 r
+  U5700/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.71 f
+  n11783 (net)                                  2         0.00                0.00       0.71 f
+  U5704/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.74 r
+  n11779 (net)                                  2         0.00                0.00       0.74 r
+  U1096/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.02      0.03       0.77 f
+  n2549 (net)                                   1         0.00                0.00       0.77 f
+  U5709/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n2550 (net)                                   1         0.00                0.00       0.79 r
+  U5711/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n1922 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[0][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[0][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][3][0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][3][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][3][0]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][3][0]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.01      0.03       0.03 f
+  u_dut/w_pipe[2][3][0] (net)                   1         0.00                0.00       0.03 f
+  U2446/Y (INV_X1M_A6P5PP140ZTS_C35)                                0.06      0.04       0.08 r
+  u_dut/n1130 (net)                            11         0.01                0.00       0.08 r
+  U5951/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.12 f
+  n2787 (net)                                   9         0.00                0.00       0.12 f
+  U5953/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 r
+  n2744 (net)                                   1         0.00                0.00       0.15 r
+  U5960/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n2751 (net)                                   1         0.00                0.00       0.21 f
+  U5969/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.27 r
+  n2766 (net)                                   2         0.00                0.00       0.27 r
+  U5973/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.28 f
+  n13447 (net)                                  2         0.00                0.00       0.28 f
+  U811/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n13437 (net)                                  2         0.00                0.00       0.32 r
+  U5988/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n13409 (net)                                  2         0.00                0.00       0.34 f
+  U567/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.37 r
+  n13396 (net)                                  2         0.00                0.00       0.37 r
+  U2210/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.40 f
+  n13390 (net)                                  2         0.00                0.00       0.40 f
+  U475/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n13384 (net)                                  2         0.00                0.00       0.43 r
+  U6034/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n13380 (net)                                  2         0.00                0.00       0.46 f
+  U391/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n13374 (net)                                  2         0.00                0.00       0.50 r
+  U6038/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n13370 (net)                                  2         0.00                0.00       0.53 f
+  U6041/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.57 r
+  n13364 (net)                                  2         0.00                0.00       0.57 r
+  U262/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.59 f
+  n13360 (net)                                  2         0.00                0.00       0.59 f
+  U237/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.63 r
+  n13354 (net)                                  2         0.00                0.00       0.63 r
+  U6049/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.66 f
+  n13350 (net)                                  2         0.00                0.00       0.66 f
+  U6052/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n13344 (net)                                  2         0.00                0.00       0.70 r
+  U6056/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.73 f
+  n13340 (net)                                  2         0.00                0.00       0.73 f
+  U6060/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n2835 (net)                                   1         0.00                0.00       0.76 r
+  U6063/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n2836 (net)                                   1         0.00                0.00       0.79 r
+  U6065/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2210 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][3][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][3][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[2][3][0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[2][3][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[2][3][0]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[2][3][0]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.01      0.03       0.03 f
+  u_dut/w_pipe[2][3][0] (net)                   1         0.00                0.00       0.03 f
+  U2446/Y (INV_X1M_A6P5PP140ZTS_C35)                                0.06      0.04       0.08 r
+  u_dut/n1130 (net)                            11         0.01                0.00       0.08 r
+  U5951/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.12 f
+  n2787 (net)                                   9         0.00                0.00       0.12 f
+  U5953/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 r
+  n2744 (net)                                   1         0.00                0.00       0.15 r
+  U5960/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n2751 (net)                                   1         0.00                0.00       0.21 f
+  U5969/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.27 r
+  n2766 (net)                                   2         0.00                0.00       0.27 r
+  U5973/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.28 f
+  n13447 (net)                                  2         0.00                0.00       0.28 f
+  U811/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n13437 (net)                                  2         0.00                0.00       0.32 r
+  U5988/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.34 f
+  n13409 (net)                                  2         0.00                0.00       0.34 f
+  U567/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.37 r
+  n13396 (net)                                  2         0.00                0.00       0.37 r
+  U2210/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.40 f
+  n13390 (net)                                  2         0.00                0.00       0.40 f
+  U475/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.43 r
+  n13384 (net)                                  2         0.00                0.00       0.43 r
+  U6034/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.46 f
+  n13380 (net)                                  2         0.00                0.00       0.46 f
+  U391/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n13374 (net)                                  2         0.00                0.00       0.50 r
+  U6038/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n13370 (net)                                  2         0.00                0.00       0.53 f
+  U6041/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.57 r
+  n13364 (net)                                  2         0.00                0.00       0.57 r
+  U262/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.59 f
+  n13360 (net)                                  2         0.00                0.00       0.59 f
+  U237/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.63 r
+  n13354 (net)                                  2         0.00                0.00       0.63 r
+  U6049/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.66 f
+  n13350 (net)                                  2         0.00                0.00       0.66 f
+  U6052/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n13344 (net)                                  2         0.00                0.00       0.70 r
+  U6056/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.73 f
+  n13340 (net)                                  2         0.00                0.00       0.73 f
+  U6060/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n2835 (net)                                   1         0.00                0.00       0.76 r
+  U6063/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n2836 (net)                                   1         0.00                0.00       0.79 r
+  U6065/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n2210 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[2][3][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[2][3][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[5][6][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[5][6][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[5][6][1]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[5][6][1]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.04      0.04       0.04 r
+  u_dut/w_pipe[5][6][1] (net)                   2         0.00                0.00       0.04 r
+  U3029/Y (BUFHA_X2M_A6P5PP140ZTS_C35)                              0.03      0.04       0.08 r
+  n1628 (net)                                  10         0.01                0.00       0.08 r
+  U1027/Y (NAND2_X1TA_A6P5PP140ZTS_C35)                             0.05      0.04       0.13 f
+  n1634 (net)                                   9         0.00                0.00       0.13 f
+  U4525/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.04      0.03       0.16 r
+  n1591 (net)                                   1         0.00                0.00       0.16 r
+  U4531/S (ADDH_X1M_A6P5PP140ZTS_C35)                               0.02      0.05       0.21 f
+  n1598 (net)                                   1         0.00                0.00       0.21 f
+  U4541/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.06       0.28 r
+  n1613 (net)                                   2         0.00                0.00       0.28 r
+  U4544/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.01      0.01       0.29 f
+  n7592 (net)                                   2         0.00                0.00       0.29 f
+  U805/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.05      0.03       0.32 r
+  n7582 (net)                                   2         0.00                0.00       0.32 r
+  U4559/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.35 f
+  n7554 (net)                                   2         0.00                0.00       0.35 f
+  U4593/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.37 r
+  n7541 (net)                                   2         0.00                0.00       0.37 r
+  U697/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.40 f
+  n7535 (net)                                   2         0.00                0.00       0.40 f
+  U468/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.44 r
+  n7529 (net)                                   2         0.00                0.00       0.44 r
+  U4607/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.47 f
+  n7525 (net)                                   2         0.00                0.00       0.47 f
+  U388/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.50 r
+  n7519 (net)                                   2         0.00                0.00       0.50 r
+  U4613/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.53 f
+  n7515 (net)                                   2         0.00                0.00       0.53 f
+  U4616/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.57 r
+  n7509 (net)                                   2         0.00                0.00       0.57 r
+  U4620/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.60 f
+  n7505 (net)                                   2         0.00                0.00       0.60 f
+  U4622/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.63 r
+  n7499 (net)                                   2         0.00                0.00       0.63 r
+  U210/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.66 f
+  n7495 (net)                                   2         0.00                0.00       0.66 f
+  U4628/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.04      0.04       0.70 r
+  n7489 (net)                                   2         0.00                0.00       0.70 r
+  U4631/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.03      0.03       0.72 f
+  n7485 (net)                                   2         0.00                0.00       0.72 f
+  U4635/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.03       0.76 r
+  n1683 (net)                                   1         0.00                0.00       0.76 r
+  U4637/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.79 r
+  n1684 (net)                                   1         0.00                0.00       0.79 r
+  U4638/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.03      0.02       0.81 f
+  u_dut/n2858 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[5][6][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.03      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[5][6][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+  Startpoint: u_dut/w_pipe_reg[0][7][3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/acc_reg[0][7][23]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout       Cap     Trans      Incr       Path
+  ----------------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                       0.00       0.00
+  clock network delay (ideal)                                                 0.00       0.00
+  u_dut/w_pipe_reg[0][7][3]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.00      0.00 #     0.00 r
+  u_dut/w_pipe_reg[0][7][3]/QN (DFFSQNA_X1M_A6P5PP140ZTS_C35)       0.08      0.07       0.07 r
+  u_dut/w_pipe[0][7][3] (net)                  11         0.01                0.00       0.07 r
+  U5593/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.05       0.12 r
+  n2453 (net)                                   1         0.00                0.00       0.12 r
+  U5594/Y (NAND2_X2M_A6P5PP140ZTS_C35)                              0.04      0.03       0.15 f
+  n2526 (net)                                   9         0.00                0.00       0.15 f
+  U5650/Y (OAI22_X1M_A6P5PP140ZTS_C35)                              0.05      0.04       0.19 r
+  n2508 (net)                                   2         0.00                0.00       0.19 r
+  U5651/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.23 r
+  n2509 (net)                                   1         0.00                0.00       0.23 r
+  U5658/S (ADDF_X1M_A6P5PP140ZTS_C35)                               0.02      0.07       0.30 f
+  n2517 (net)                                   2         0.00                0.00       0.30 f
+  U5653/Y (NOR2_X1A_A6P5PP140ZTS_C35)                               0.03      0.03       0.33 r
+  n11854 (net)                                  3         0.00                0.00       0.33 r
+  U919/Y (NOR2_X1A_A6P5PP140ZTS_C35)                                0.02      0.02       0.35 f
+  n2521 (net)                                   2         0.00                0.00       0.35 f
+  U5664/Y (AOI21_X2M_A6P5PP140ZTS_C35)                              0.02      0.02       0.37 r
+  n2522 (net)                                   1         0.00                0.00       0.37 r
+  U492/Y (OAI21_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.03       0.39 f
+  n11835 (net)                                  2         0.00                0.00       0.39 f
+  U738/Y (AOI21_X2M_A6P5PP140ZTS_C35)                               0.02      0.03       0.42 r
+  n11829 (net)                                  2         0.00                0.00       0.42 r
+  U5675/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.02       0.44 f
+  n11823 (net)                                  2         0.00                0.00       0.44 f
+  U438/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.48 r
+  n11819 (net)                                  2         0.00                0.00       0.48 r
+  U5681/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.51 f
+  n11813 (net)                                  2         0.00                0.00       0.51 f
+  U5684/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.55 r
+  n11809 (net)                                  2         0.00                0.00       0.55 r
+  U5687/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.58 f
+  n11803 (net)                                  2         0.00                0.00       0.58 f
+  U5691/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.61 r
+  n11799 (net)                                  2         0.00                0.00       0.61 r
+  U5694/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.64 f
+  n11793 (net)                                  2         0.00                0.00       0.64 f
+  U207/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                             0.04      0.04       0.68 r
+  n11789 (net)                                  2         0.00                0.00       0.68 r
+  U5700/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.03      0.03       0.71 f
+  n11783 (net)                                  2         0.00                0.00       0.71 f
+  U5704/Y (AOI21_X0P5M_A6P5PP140ZTS_C35)                            0.04      0.04       0.74 r
+  n11779 (net)                                  2         0.00                0.00       0.74 r
+  U1096/Y (OAI21_X1M_A6P5PP140ZTS_C35)                              0.02      0.03       0.77 f
+  n2549 (net)                                   1         0.00                0.00       0.77 f
+  U5709/Y (XOR2_X0P5M_A6P5PP140ZTS_C35)                             0.03      0.02       0.79 r
+  n2550 (net)                                   1         0.00                0.00       0.79 r
+  U5711/Y (NAND2_X1A_A6P5PP140ZTS_C35)                              0.02      0.02       0.81 f
+  u_dut/n1922 (net)                             1         0.00                0.00       0.81 f
+  u_dut/acc_reg[0][7][23]/D (DFFSQNA_X1M_A6P5PP140ZTS_C35)          0.02      0.00       0.81 f
+  data arrival time                                                                      0.81
+
+  clock clk (rise edge)                                                       0.90       0.90
+  clock network delay (ideal)                                                 0.00       0.90
+  clock uncertainty                                                          -0.05       0.85
+  u_dut/acc_reg[0][7][23]/CK (DFFSQNA_X1M_A6P5PP140ZTS_C35)                   0.00       0.85 r
+  library setup time                                                         -0.05       0.81
+  data required time                                                                     0.81
+  ----------------------------------------------------------------------------------------------
+  data required time                                                                     0.81
+  data arrival time                                                                     -0.81
+  ----------------------------------------------------------------------------------------------
+  slack (MET)                                                                            0.00
+
+
+1
