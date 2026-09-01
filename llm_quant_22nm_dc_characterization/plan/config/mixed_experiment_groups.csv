@@ -1,0 +1,22 @@
+group_id,architecture_class,rtl_topology,supported_modes,int_w_bits,int_a_bits,fp_sig_width,fp_exp_width,throughput_contract,accumulator_contract,notes
+MIXREF_INT_W4A8_L4,reference,existing_packed_dot,W4A8,4,8,,,4 INT MAC/cycle,INT32,Repeat existing anchor
+MIXREF_INT_W8A8_L4,reference,existing_packed_dot,W8A8,8,8,,,4 INT MAC/cycle,INT32,Repeat existing anchor
+MIXREF_FP8_E4M3,reference,existing_fp_mac,FP8xFP8,,,3,4,1 FP MAC/cycle,same-format FP8,Repeat existing anchor
+MIXREF_BF16,reference,existing_fp_mac,BF16xBF16,,,7,8,1 FP MAC/cycle,same-format BF16,Repeat existing anchor
+SEP_W4A8_FP8,separate,separate_int_fp_reference,W4A8 + FP8xFP8,4,8,3,4,4 INT + 1 FP simultaneous,dual,Both outputs visible
+SEP_W8A8_FP8,separate,separate_int_fp_reference,W8A8 + FP8xFP8,8,8,3,4,4 INT + 1 FP simultaneous,dual,Both outputs visible
+SEP_W4A8_BF16,separate,separate_int_fp_reference,W4A8 + BF16xBF16,4,8,7,8,4 INT + 1 FP simultaneous,dual,Both outputs visible
+SEP_W8A8_BF16,separate,separate_int_fp_reference,W8A8 + BF16xBF16,8,8,7,8,4 INT + 1 FP simultaneous,dual,Both outputs visible
+DUAL_W4A8_FP8,dual_domain,dual_domain_int_fp_reference,W4A8/FP8,4,8,3,4,4 INT or 1 FP,dual,Measures mux/control only
+DUAL_W8A8_FP8,dual_domain,dual_domain_int_fp_reference,W8A8/FP8,8,8,3,4,4 INT or 1 FP,dual,Measures mux/control only
+DUAL_W4A8_BF16,dual_domain,dual_domain_int_fp_reference,W4A8/BF16,4,8,7,8,4 INT or 1 FP,dual,Measures mux/control only
+DUAL_W8A8_BF16,dual_domain,dual_domain_int_fp_reference,W8A8/BF16,8,8,7,8,4 INT or 1 FP,dual,Measures mux/control only
+CONV_I4_FP8,convert_fp,hybrid_convert_fp_mac_dw,I4xFP8/FP8xFP8,4,,3,4,1 FP MAC/cycle,FP8,INT4 conversion exact
+CONV_I8_FP8,convert_fp,hybrid_convert_fp_mac_dw,I8xFP8/FP8xFP8,8,,3,4,1 FP MAC/cycle,FP8,INT8 conversion lossy
+CONV_I4_BF16,convert_fp,hybrid_convert_fp_mac_dw,I4xBF16/BF16xBF16,4,,7,8,1 FP MAC/cycle,BF16,INT4 conversion exact
+CONV_I8_BF16,convert_fp,hybrid_convert_fp_mac_dw,I8xBF16/BF16xBF16,8,,7,8,1 FP MAC/cycle,BF16,INT8 conversion exact
+SHARED_NATIVE_INT_FP8_DUALACC,shared_native,hybrid_shared_mul_dual_acc,I4/I8/FP8 pairs,8,8,3,4,1 common product/cycle,INT40 + FP32,Native shared product
+SHARED_NATIVE_INT_BF16_DUALACC,shared_native,hybrid_shared_mul_dual_acc,I4/I8/BF16 pairs,8,8,7,8,1 common product/cycle,INT40 + FP32,Native shared product
+SHARED_NATIVE_ALL_DUALACC,shared_native,hybrid_shared_mul_dual_acc,I4/I8/FP8/BF16 pairs,8,8,7,8,1 common product/cycle,INT40 + FP32,All formats
+ARRAY4_SEP_W4A8_FP8,array,generated_4x4_separate,4x4 W4A8 + 4x4 FP8,4,8,3,4,16 INT + 16 FP simultaneous,dual,Full separate array
+ARRAY4_DUAL_W4A8_FP8,array,generated_4x4_dual,4x4 W4A8/FP8 dual,4,8,3,4,16 INT or 16 FP,dual,Array-level dual-domain

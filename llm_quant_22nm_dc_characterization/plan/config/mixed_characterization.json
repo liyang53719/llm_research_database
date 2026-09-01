@@ -1,0 +1,28 @@
+{
+  "clock_periods_ns": [
+    2.0,
+    1.0,
+    0.9
+  ],
+  "unique_groups": 21,
+  "expected_dc_runs": 63,
+  "fixed_environment": {
+    "library_set_id": "cln22ul_sc6p5mcpp140z_base_svt_c35_r3p0_tt_0p80v_25c",
+    "pvt": "TT typical_max, 0.80 V, 25 C",
+    "dc": "X-2025.06-SP3",
+    "dwbb": "X-2025.06-DWBB_202506.3",
+    "compile": "compile_ultra"
+  },
+  "comparison_rules": [
+    "Match delivered INT/FP MACs per cycle before comparing area.",
+    "Keep fixed-1-GHz and best-feasible area as separate fields.",
+    "Do not treat INT4xINT16 as INT4xBF16.",
+    "Do not delete timing-fail or non-monotonic points.",
+    "State accumulator precision and mode-switch granularity."
+  ],
+  "removed_experiments": {
+    "architecture_class": "all_fp32",
+    "removed_groups": 6,
+    "reason": "FP32 universal upper-bound removed from DC queue as architecturally non-competitive."
+  }
+}

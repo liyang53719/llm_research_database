@@ -1,0 +1,12 @@
+candidate_group,reference_groups,throughput_contract,throughput_match
+SEP_W4A8_FP8,MIXREF_INT_W4A8_L4;MIXREF_FP8_E4M3,simultaneous full reference,true
+SEP_W8A8_FP8,MIXREF_INT_W8A8_L4;MIXREF_FP8_E4M3,simultaneous full reference,true
+DUAL_W4A8_FP8,SEP_W4A8_FP8,mode mux versus separate arithmetic,true
+DUAL_W8A8_FP8,SEP_W8A8_FP8,mode mux versus separate arithmetic,true
+CONV_I4_FP8,MIXREF_FP8_E4M3,1 FP MAC/cycle,true
+CONV_I8_FP8,MIXREF_FP8_E4M3,"1 FP MAC/cycle, lossy conversion",true
+CONV_I4_BF16,MIXREF_BF16,1 BF16 MAC/cycle,true
+CONV_I8_BF16,MIXREF_BF16,1 BF16 MAC/cycle,true
+SHARED_NATIVE_INT_FP8_DUALACC,MIXREF_FP8_E4M3,1 product/cycle + dual acc,partial
+SHARED_NATIVE_INT_BF16_DUALACC,MIXREF_BF16,1 product/cycle + dual acc,partial
+ARRAY4_DUAL_W4A8_FP8,ARRAY4_SEP_W4A8_FP8,16-cell array comparison,true
