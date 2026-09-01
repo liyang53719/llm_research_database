@@ -1,0 +1,438 @@
+%%{init: {"theme": "base", "sequence": {"useMaxWidth": false, "diagramMarginX": 18, "diagramMarginY": 12, "actorMargin": 24, "width": 150, "height": 42, "boxMargin": 8, "boxTextMargin": 5, "noteMargin": 8, "messageMargin": 24, "mirrorActors": true, "rightAngles": true, "wrap": true}, "themeVariables": {"actorBkg": "#ffffff", "actorBorder": "#555555", "actorTextColor": "#1f1f1f", "actorLineColor": "#666666", "signalColor": "#333333", "signalTextColor": "#1f1f1f", "labelBoxBkgColor": "#ffffff", "labelBoxBorderColor": "#888888", "labelTextColor": "#1f1f1f", "loopTextColor": "#1f1f1f", "noteBkgColor": "#ffffff", "noteBorderColor": "#999999", "noteTextColor": "#333333", "activationBkgColor": "#f5f5f5", "activationBorderColor": "#777777", "sequenceNumberColor": "#555555"}, "themeCSS": ".actor-line { stroke: #666 !important; stroke-width: 1.25px !important; stroke-dasharray: 3 3; }"}}%%
+%% Family rank 1: Qwen2 / Qwen2.5 Dense
+%% Source block-atlas file: 01_qwen2_qwen2_5_dense.mmd
+%% Sequence file: 01_qwen2_qwen2_5_dense_owner_timing_sequence_v6.mmd
+%% 13-owner review basis: 381d85219d6feec9b10345e2800ac74d4185e5a0; frozen universal SLX 94384dda268433b7ec47bc88fe97b85a3d1a9fe2360116974e0f0358e2880945.
+%% Current-main confirmation: 0db7eed1e80610083ecc40b1c5982f60db5bda40; SLX 33d79655d4de9bf0e6147fb74f50cc7e26450d9e6e0cecc2d30f386ac7b83379; owner manifest v6.6.
+%% Q×Kᵀ is ScoreCore/QKProduct+QKBeatSum in SequenceCore.
+%% P×V is the OnlineORecurrence beta×V + alpha×Oold update in SequenceCore; full P is not materialized.
+%% SharedMatrix token-dot mode is FFN-down product reduction, not Attention QK/PV.
+%% Unsupported-family files are owner/edge mappings, not implementation-support claims.
+sequenceDiagram
+  autonumber
+  participant DDR as DDR / External Memory
+  participant C as ControlCore
+  participant A as ActivationReadDmaCore
+  participant P as ParamReadDmaCore
+  participant N as NormCore
+  participant B as ActivationTileBufferCore
+  participant W as WeightReadDmaCore
+  participant M as SharedMatrixCore
+  participant E as ElementwiseTransformCore
+  participant K as KVStateCore
+  participant S as SequenceCore
+  participant T as TailMatrixClientCore
+  participant F as FeedForwardCore
+  participant O as OutputCommitCore
+  Note over C,O: Colors follow the block atlas — yellow=input, red=params/weights, blue=MAC-heavy arithmetic, purple=non-matrix, green=state/output, white=residual, gray=hardware/control
+  Note over C,O: Blue means MAC-heavy math; the participant lifeline is the actual execution owner.
+  Note over C,O: Current fixed payload transfers follow manifest v6.6; future-only edges are explicitly labelled [FUTURE EDGE].
+
+  Note over C,O: OP_K_PROJ — DDR read → RMSNorm 1 → K Proj → RoPE → K cache → DDR write
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_K_PROJ
+  end
+  loop OP_K_PROJ autonomous token/chunk/tile loop
+  rect rgba(255, 242, 204, 0.24)
+    A->>DDR: [HW] AXI read request — K-pass activation / residual
+  end
+  %% source-node f01v01_n019 | owner=ActivationReadDmaCore | class=input | macro=OP_K_PROJ
+  rect rgba(255, 242, 204, 0.24)
+    DDR->>A: X
+  end
+  rect rgba(255, 242, 204, 0.24)
+    A-->>N: [HW] activation / residual stream
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P->>DDR: [HW] parameter read request — RMSNorm gamma / K bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] parameter stream — RMSNorm gamma / K bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>N: [HW] RMSNorm gamma / K bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>M: [HW] RMSNorm gamma / K bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>E: [HW] RMSNorm gamma / K bias / RoPE profile
+  end
+  %% source-node f01v01_n020 | owner=NormCore | class=other | macro=OP_K_PROJ
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 1
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized 32-lane stream
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B->>M: [HW] resident 128-lane tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — K Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — K Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n022 | owner=SharedMatrixCore | class=mac | macro=OP_K_PROJ
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: K Proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] K projection stream
+  end
+  %% source-node f01v01_n025 | owner=ElementwiseTransformCore | class=other | macro=OP_K_PROJ
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: RoPE
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>K: [HW] transformed K stream
+  end
+  %% source-node f01v01_n027 | owner=KVStateCore | class=state | macro=OP_K_PROJ
+  rect rgba(213, 232, 212, 0.24)
+    K->>K: K cache
+  end
+  rect rgba(213, 232, 212, 0.24)
+    K->>DDR: [HW] K-cache write
+  end
+  rect rgba(213, 232, 212, 0.24)
+    DDR-->>K: [HW] write response
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    K-->>C: OP_K_PROJ done
+  end
+  Note over C,O: OP_V_PROJ — DDR read → RMSNorm 1 replay → V Proj → V cache → DDR write
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_V_PROJ
+  end
+  loop OP_V_PROJ autonomous token/chunk/tile loop
+  rect rgba(255, 242, 204, 0.24)
+    A->>DDR: [HW] AXI read request — V-pass activation / residual
+  end
+  rect rgba(255, 242, 204, 0.24)
+    DDR-->>A: [HW] V-pass activation / residual
+  end
+  rect rgba(255, 242, 204, 0.24)
+    A-->>N: [HW] activation / residual stream
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P->>DDR: [HW] parameter read request — RMSNorm gamma / V bias
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] parameter stream — RMSNorm gamma / V bias
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>N: [HW] RMSNorm gamma / V bias
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>M: [HW] RMSNorm gamma / V bias
+  end
+  %% hardware replay of source operator: RMSNorm 1 | pass=V
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 1
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized 32-lane stream
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B->>M: [HW] resident 128-lane tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — V Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — V Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n024 | owner=SharedMatrixCore | class=mac | macro=OP_V_PROJ
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: V Proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [EDGE E_MATRIX_TO_TRANSFORM] V projection stream → projection-result dispatch
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>K: [EDGE E_TRANSFORM_TO_KV] K/V cache-write stream (RoPE or bypass)
+  end
+  %% source-node f01v01_n028 | owner=KVStateCore | class=state | macro=OP_V_PROJ
+  rect rgba(213, 232, 212, 0.24)
+    K->>K: V cache
+  end
+  rect rgba(213, 232, 212, 0.24)
+    K->>DDR: [HW] V-cache write
+  end
+  rect rgba(213, 232, 212, 0.24)
+    DDR-->>K: [HW] write response
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    K-->>C: OP_V_PROJ done
+  end
+  Note over C,O: OP_Q_ATTN_OPROJ — Q projection + RoPE → tiled attention → OProj → residual DDR commit
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_Q_ATTN_OPROJ
+  end
+  loop OP_Q_ATTN_OPROJ Q-projection token/chunk/tile phase
+  rect rgba(255, 242, 204, 0.24)
+    A->>DDR: [HW] AXI read request — Q-pass activation / residual
+  end
+  rect rgba(255, 242, 204, 0.24)
+    DDR-->>A: [HW] Q-pass activation / residual
+  end
+  rect rgba(255, 242, 204, 0.24)
+    A-->>N: [HW] activation / residual stream
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P->>DDR: [HW] parameter read request — RMSNorm gamma / Q bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] parameter stream — RMSNorm gamma / Q bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>N: [HW] RMSNorm gamma / Q bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>M: [HW] RMSNorm gamma / Q bias / RoPE profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>E: [HW] RMSNorm gamma / Q bias / RoPE profile
+  end
+  %% hardware replay of source operator: RMSNorm 1 | pass=Q
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 1
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized 32-lane stream
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B->>M: [HW] resident 128-lane tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — Q Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — Q Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n023 | owner=SharedMatrixCore | class=mac | macro=OP_Q_ATTN_OPROJ
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Q Proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] Q projection stream
+  end
+  %% source-node f01v01_n026 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_ATTN_OPROJ
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: RoPE
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>S: [HW] Q tile write / query stream
+  end
+  end
+  Note over C,O: Same macro-op, attention/OProj phase. Q projection may resume between OProj grants; SharedMatrix owner remains mutually exclusive.
+  loop OP_Q_ATTN_OPROJ Q-block / KV-tile phase
+  rect rgba(213, 232, 212, 0.24)
+    K->>DDR: [HW] K/V history read request
+  end
+  rect rgba(213, 232, 212, 0.24)
+    DDR-->>K: [HW] K/V history tile
+  end
+  rect rgba(213, 232, 212, 0.24)
+    K-->>S: [HW] independent K/V response channels
+  end
+  %% source-node f01v01_n029 | owner=SequenceCore | class=other | macro=OP_Q_ATTN_OPROJ
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: K head repeat ×6
+  end
+  %% source-node f01v01_n030 | owner=SequenceCore | class=other | macro=OP_Q_ATTN_OPROJ
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: V head repeat ×6
+  end
+  %% source-node f01v01_n031 | owner=SequenceCore | class=mac | macro=OP_Q_ATTN_OPROJ
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Q × Kᵀ
+  end
+  %% source-node f01v01_n032 | owner=SequenceCore | class=other | macro=OP_Q_ATTN_OPROJ
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: Softmax FP32
+  end
+  %% source-node f01v01_n033 | owner=SequenceCore | class=mac | macro=OP_Q_ATTN_OPROJ
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: P × V / Online O recurrence (β×V + α×Oold)
+  end
+  rect rgba(245, 245, 245, 0.18)
+    S-->>T: [HW] finalized attention O block + q-block/token/head tags
+  end
+  rect rgba(242, 242, 242, 0.18)
+    T->>M: [HW] OProj request / urgent / grant
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — O Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — O Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n034 | owner=SharedMatrixCore | class=mac | macro=OP_Q_ATTN_OPROJ
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: O Proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>T: [EDGE E_MATRIX_TO_TAIL] tagged OProj result tile
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>O: [EDGE E_MATRIX_TO_COMMIT] OProj result stream128
+  end
+  rect rgba(245, 245, 245, 0.18)
+    T-->>O: [EDGE E_TAIL_TO_COMMIT] OProj commit metadata / token-layout control
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+  end
+  %% source-node f01v01_n035 | owner=OutputCommitCore | class=plus | macro=OP_Q_ATTN_OPROJ
+  rect rgba(255, 255, 255, 0.28)
+    O->>O: +
+  end
+  %% source-node f01v01_n036 | owner=OutputCommitCore | class=output | macro=OP_Q_ATTN_OPROJ
+  rect rgba(213, 232, 212, 0.24)
+    O->>DDR: X + Attention
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    O-->>C: OP_Q_ATTN_OPROJ done
+  end
+  Note over C,O: OP_FFN — DDR read → RMSNorm 2 → gate/up → SiLU×up → down → residual DDR commit
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_FFN
+  end
+  loop OP_FFN token/chunk/weight-tile loop
+  rect rgba(255, 242, 204, 0.24)
+    A->>DDR: [HW] AXI read request — post-attention residual / FFN input
+  end
+  rect rgba(255, 242, 204, 0.24)
+    DDR-->>A: [HW] post-attention residual / FFN input
+  end
+  rect rgba(255, 242, 204, 0.24)
+    A-->>N: [HW] activation / residual stream
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P->>DDR: [HW] parameter read request — RMSNorm 2 gamma / FFN bias profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] parameter stream — RMSNorm 2 gamma / FFN bias profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>N: [HW] RMSNorm 2 gamma / FFN bias profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>M: [HW] RMSNorm 2 gamma / FFN bias profile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>F: [HW] RMSNorm 2 gamma / FFN bias profile
+  end
+  %% source-node f01v01_n037 | owner=NormCore | class=other | macro=OP_FFN
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 2
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized FFN stream
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>F: [HW] resident FFN tile
+  end
+  rect rgba(242, 242, 242, 0.18)
+    F->>M: [HW] matrix request — gate_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — gate_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — gate_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n039 | owner=SharedMatrixCore | class=mac | macro=OP_FFN
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: gate_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M->>M: [HW] gate tile held locally for fused SwiGLU
+  end
+  rect rgba(242, 242, 242, 0.18)
+    F->>M: [HW] matrix request — up_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — up_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — up_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n040 | owner=SharedMatrixCore | class=mac | macro=OP_FFN
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: up_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M->>M: [HW] up tile held locally for fused SwiGLU
+  end
+  %% source-node f01v01_n041 | owner=SharedMatrixCore | class=other | macro=OP_FFN
+  rect rgba(225, 213, 231, 0.24)
+    M->>M: SiLU (current fused MlpSiluLane32Core)
+  end
+  %% source-node f01v01_n042 | owner=SharedMatrixCore | class=other | macro=OP_FFN
+  rect rgba(225, 213, 231, 0.24)
+    M->>M: Elementwise gate (current fused Gate×Up)
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [EDGE E_MATRIX_TO_FFN] fused activation ready / down-phase event
+  end
+  rect rgba(242, 242, 242, 0.18)
+    F->>M: [HW] matrix request — down_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W->>DDR: [HW] weight read request — down_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] weight stream — down_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] weight tile stream
+  end
+  %% source-node f01v01_n043 | owner=SharedMatrixCore | class=mac | macro=OP_FFN
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: down_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] down_proj partial/result
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>O: [HW] FFN final vector / residual input
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+  end
+  %% source-node f01v01_n044 | owner=OutputCommitCore | class=plus | macro=OP_FFN
+  rect rgba(255, 255, 255, 0.28)
+    O->>O: +
+  end
+  %% source-node f01v01_n045 | owner=OutputCommitCore | class=output | macro=OP_FFN
+  rect rgba(213, 232, 212, 0.24)
+    O->>DDR: Block output
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    O-->>C: OP_FFN done
+  end

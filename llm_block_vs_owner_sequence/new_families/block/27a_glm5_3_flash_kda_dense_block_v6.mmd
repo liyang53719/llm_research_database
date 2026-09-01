@@ -1,0 +1,132 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only. Cross-layer KDA/DSA schedule is intentionally outside this diagram.
+flowchart TB
+  subgraph family_27a["GLM-5.3-Flash"]
+    direction TB
+    subgraph variant_27a_01["mHC + KDA + dense gated-MLP decoder block"]
+      direction TB
+      g53kd_x["4 residual streams<br/>decoder-block input"]:::input
+      subgraph g53kd_attn_mhc_grp["Attention-site mHC"]
+        direction TB
+        g53kd_attn_mhc_norm("mHC input RMSNorm"):::other
+        g53kd_attn_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53kd_attn_mhc_pre("Sigmoid pre weights"):::other
+        g53kd_attn_mhc_post("2 × Sigmoid post weights"):::other
+        g53kd_attn_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53kd_attn_mhc_collapse("4-stream collapse"):::other
+        g53kd_attn_mhc_norm --> g53kd_attn_mhc_linear
+        g53kd_attn_mhc_linear --> g53kd_attn_mhc_pre
+        g53kd_attn_mhc_linear --> g53kd_attn_mhc_post
+        g53kd_attn_mhc_linear --> g53kd_attn_mhc_combine
+        g53kd_attn_mhc_pre --> g53kd_attn_mhc_collapse
+      end
+      g53kd_x --> g53kd_attn_mhc_norm
+      g53kd_x --> g53kd_attn_mhc_collapse
+      g53kd_kda_norm("Input RMSNorm"):::other
+      g53kd_attn_mhc_collapse --> g53kd_kda_norm
+      g53kd_kda_q["Q Proj"]:::mac
+      g53kd_kda_norm --> g53kd_kda_q
+      g53kd_kda_k["K Proj"]:::mac
+      g53kd_kda_norm --> g53kd_kda_k
+      g53kd_kda_v["V Proj"]:::mac
+      g53kd_kda_norm --> g53kd_kda_v
+      g53kd_kda_fg_a["Forget-gate A projection"]:::mac
+      g53kd_kda_norm --> g53kd_kda_fg_a
+      g53kd_kda_beta["Input-gate β projection"]:::mac
+      g53kd_kda_norm --> g53kd_kda_beta
+      g53kd_kda_og["Output-gate projection"]:::mac
+      g53kd_kda_norm --> g53kd_kda_og
+      g53kd_kda_conv("Causal Depthwise Conv1D over Q/K/V"):::other
+      g53kd_kda_split("Split / reshape Q, K, V"):::other
+      g53kd_kda_qn("Q L2Norm"):::other
+      g53kd_kda_kn("K L2Norm"):::other
+      g53kd_kda_forget("Forget factor<br/>softplus / exp parameterization"):::other
+      g53kd_kda_beta_act("Input gate β<br/>sigmoid"):::other
+      g53kd_kda_state[("KDA recurrent state")]:::state
+      g53kd_kda_recur["Kimi-style Delta Attention recurrence"]:::mac
+      g53kd_kda_gated("Gated RMSNorm<br/>RMSNorm(O) ⊙ SiLU(gate)"):::other
+      g53kd_kda_oproj["O Proj"]:::mac
+      g53kd_kda_q --> g53kd_kda_conv
+      g53kd_kda_k --> g53kd_kda_conv
+      g53kd_kda_v --> g53kd_kda_conv
+      g53kd_kda_conv --> g53kd_kda_split
+      g53kd_kda_split --> g53kd_kda_qn
+      g53kd_kda_split --> g53kd_kda_kn
+      g53kd_kda_fg_a --> g53kd_kda_forget
+      g53kd_kda_beta --> g53kd_kda_beta_act
+      g53kd_kda_qn --> g53kd_kda_recur
+      g53kd_kda_kn --> g53kd_kda_recur
+      g53kd_kda_split --> g53kd_kda_recur
+      g53kd_kda_forget --> g53kd_kda_recur
+      g53kd_kda_beta_act --> g53kd_kda_recur
+      g53kd_kda_state -.-> g53kd_kda_recur
+      g53kd_kda_recur -.-> g53kd_kda_state
+      g53kd_kda_recur --> g53kd_kda_gated
+      g53kd_kda_og --> g53kd_kda_gated
+      g53kd_kda_gated --> g53kd_kda_oproj
+      g53kd_attn_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53kd_attn_post_streams["4 residual streams after KDA"]:::output
+      g53kd_kda_oproj --> g53kd_attn_post_post_update
+      g53kd_attn_mhc_post --> g53kd_attn_post_post_update
+      g53kd_attn_mhc_combine --> g53kd_attn_post_post_update
+      g53kd_x --> g53kd_attn_post_post_update
+      g53kd_attn_post_post_update --> g53kd_attn_post_streams
+      subgraph g53kd_ffn_mhc_grp["FFN-site mHC"]
+        direction TB
+        g53kd_ffn_mhc_norm("mHC input RMSNorm"):::other
+        g53kd_ffn_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53kd_ffn_mhc_pre("Sigmoid pre weights"):::other
+        g53kd_ffn_mhc_post("2 × Sigmoid post weights"):::other
+        g53kd_ffn_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53kd_ffn_mhc_collapse("4-stream collapse"):::other
+        g53kd_ffn_mhc_norm --> g53kd_ffn_mhc_linear
+        g53kd_ffn_mhc_linear --> g53kd_ffn_mhc_pre
+        g53kd_ffn_mhc_linear --> g53kd_ffn_mhc_post
+        g53kd_ffn_mhc_linear --> g53kd_ffn_mhc_combine
+        g53kd_ffn_mhc_pre --> g53kd_ffn_mhc_collapse
+      end
+      g53kd_attn_post_streams --> g53kd_ffn_mhc_norm
+      g53kd_attn_post_streams --> g53kd_ffn_mhc_collapse
+      g53kd_ffn_norm("RMSNorm 2"):::other
+      g53kd_ffn_gu["gate_up_proj"]:::mac
+      g53kd_ffn_split("Split gate / up"):::other
+      g53kd_ffn_cg("Clamp gate ≤ 10"):::other
+      g53kd_ffn_cu("Clamp up ∈ [−10,10]"):::other
+      g53kd_ffn_silu("SiLU"):::other
+      g53kd_ffn_mul("Elementwise gate"):::other
+      g53kd_ffn_down["down_proj"]:::mac
+      g53kd_ffn_mhc_collapse --> g53kd_ffn_norm
+      g53kd_ffn_norm --> g53kd_ffn_gu
+      g53kd_ffn_gu --> g53kd_ffn_split
+      g53kd_ffn_split --> g53kd_ffn_cg
+      g53kd_ffn_split --> g53kd_ffn_cu
+      g53kd_ffn_cg --> g53kd_ffn_silu
+      g53kd_ffn_silu --> g53kd_ffn_mul
+      g53kd_ffn_cu --> g53kd_ffn_mul
+      g53kd_ffn_mul --> g53kd_ffn_down
+      g53kd_ffn_mhc_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53kd_ffn_mhc_post_streams["Block output — 4 residual streams"]:::output
+      g53kd_ffn_down --> g53kd_ffn_mhc_post_post_update
+      g53kd_ffn_mhc_post --> g53kd_ffn_mhc_post_post_update
+      g53kd_ffn_mhc_combine --> g53kd_ffn_mhc_post_post_update
+      g53kd_attn_post_streams --> g53kd_ffn_mhc_post_post_update
+      g53kd_ffn_mhc_post_post_update --> g53kd_ffn_mhc_post_streams
+    end
+  end
+style family_27a fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_27a_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style g53kd_attn_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53kd_ffn_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 27,28 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 35,56 stroke:#777777,stroke-width:1.3px;

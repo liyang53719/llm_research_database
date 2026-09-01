@@ -1,0 +1,501 @@
+%%{init: {"theme": "base", "sequence": {"useMaxWidth": false, "diagramMarginX": 18, "diagramMarginY": 12, "actorMargin": 24, "width": 150, "height": 42, "boxMargin": 8, "boxTextMargin": 5, "noteMargin": 8, "messageMargin": 24, "mirrorActors": true, "rightAngles": true, "wrap": true}, "themeVariables": {"actorBkg": "#ffffff", "actorBorder": "#555555", "actorTextColor": "#1f1f1f", "actorLineColor": "#666666", "signalColor": "#333333", "signalTextColor": "#1f1f1f", "labelBoxBkgColor": "#ffffff", "labelBoxBorderColor": "#888888", "labelTextColor": "#1f1f1f", "loopTextColor": "#1f1f1f", "noteBkgColor": "#ffffff", "noteBorderColor": "#999999", "noteTextColor": "#333333", "activationBkgColor": "#f5f5f5", "activationBorderColor": "#777777", "sequenceNumberColor": "#555555"}, "themeCSS": ".actor-line { stroke: #666 !important; stroke-width: 1.25px !important; stroke-dasharray: 3 3; }"}}%%
+%% Family rank 26: Qwen3.8-Flash-Next Hybrid MoE
+%% Source block-atlas file: 26_qwen3_8_flash_next_hybrid_moe.mmd
+%% Sequence file: 26a_qwen3_8_flash_next_gdn_moe_owner_timing_sequence_v6.mmd
+%% 13-owner review basis: 381d85219d6feec9b10345e2800ac74d4185e5a0; frozen universal SLX 94384dda268433b7ec47bc88fe97b85a3d1a9fe2360116974e0f0358e2880945.
+%% Current-main confirmation: 0db7eed1e80610083ecc40b1c5982f60db5bda40; SLX 33d79655d4de9bf0e6147fb74f50cc7e26450d9e6e0cecc2d30f386ac7b83379; owner manifest v6.6.
+%% Q×Kᵀ is ScoreCore/QKProduct+QKBeatSum in SequenceCore.
+%% P×V is the OnlineORecurrence beta×V + alpha×Oold update in SequenceCore; full P is not materialized.
+%% SharedMatrix token-dot mode is FFN-down product reduction, not Attention QK/PV.
+%% Unsupported-family files are owner/edge mappings, not implementation-support claims.
+%% New-family diagrams are architecture-to-owner mappings, not claims that the current SLX already implements these operators.
+sequenceDiagram
+  autonumber
+  participant DDR as DDR / External Memory
+  participant C as ControlCore
+  participant A as ActivationReadDmaCore
+  participant P as ParamReadDmaCore
+  participant N as NormCore
+  participant B as ActivationTileBufferCore
+  participant W as WeightReadDmaCore
+  participant M as SharedMatrixCore
+  participant E as ElementwiseTransformCore
+  participant K as KVStateCore
+  participant S as SequenceCore
+  participant T as TailMatrixClientCore
+  participant F as FeedForwardCore
+  participant O as OutputCommitCore
+  Note over DDR,O: Colors follow the block atlas — yellow=input, red=params/weights, blue=MAC-heavy arithmetic, purple=non-matrix, green=state/output, white=residual, gray=hardware/control
+  Note over C,O: Blue means MAC-heavy math; the participant lifeline is the actual execution owner.
+  Note over C,O: Current fixed payload transfers follow manifest v6.6; future-only edges are explicitly labelled [FUTURE EDGE].
+  Note over C,O: Single GDN decoder Block only; PLE, vision tower, MTP and cross-layer recipe are outside this file.
+
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_GR_GDN_MOE — GR read mix → GDN → GR write → MoE → GR write
+  end
+  loop autonomous token / chunk / recurrent-state loop
+  rect rgba(255, 242, 204, 0.24)
+    A-->>DDR: [HW] AXI read request — 4 residual streams
+  end
+  %% source-node f26v01_n010 | owner=ActivationReadDmaCore | class=input | macro=OP_GR_GDN_MOE
+  rect rgba(255, 242, 204, 0.24)
+    DDR->>A: 4 residual streams
+  end
+  rect rgba(245, 245, 245, 0.18)
+    A-->>B: [HW] residual-stream staging
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>DDR: [HW] parameter read — Attention-site Gated Residual norm / low-rank gates
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] Attention-site Gated Residual parameters
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] Attention-site 4-stream grouped input
+  end
+  %% source-node f26v01_n011 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Attention-site Gated Residual grouped RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] Attention-site normalized 4-stream tensor
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>M: [EDGE E_ACTBUF_TO_MATRIX] resident normalized 4-stream tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — Attention-site input_mix_weight_down / input_mix_weight_up / block_inject_weight
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] Attention-site Gated Residual projection weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] Attention-site Gated Residual weights
+  end
+  %% source-node f26v01_n012 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Attention-site input_mix_weight_down
+  end
+  %% source-node f26v01_n013 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site SiLU / hc_count
+  end
+  %% source-node f26v01_n014 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Attention-site input_mix_weight_up
+  end
+  %% source-node f26v01_n015 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site Sigmoid read gate
+  end
+  %% source-node f26v01_n016 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site 4-stream weighted mean
+  end
+  %% source-node f26v01_n017 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Attention-site block_inject_weight
+  end
+  %% source-node f26v01_n018 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site 2 × Sigmoid write gate
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [FUTURE EDGE] collapsed attention-site input staging
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [FUTURE EDGE] collapsed attention-site input to shared Norm service
+  end
+  %% source-node f26v01_n019 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 1
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized GDN input
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — in_proj_qkv / in_proj_z / in_proj_a / in_proj_b / out_proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] GDN projection weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] GDN weight tiles
+  end
+  %% source-node f26v01_n020 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: in_proj_qkv
+  end
+  %% source-node f26v01_n021 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: in_proj_z
+  end
+  %% source-node f26v01_n022 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: in_proj_a
+  end
+  %% source-node f26v01_n023 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: in_proj_b
+  end
+  rect rgba(213, 232, 212, 0.24)
+    K-->>M: [FUTURE GDN STATE EDGE] conv-history response
+  end
+
+  %% source-node f26v01_n024 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Depthwise Conv1D
+  end
+  rect rgba(213, 232, 212, 0.24)
+    M-->>K: [FUTURE GDN STATE EDGE] updated conv-history commit
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] GDN projected / convolved stream
+  end
+  %% source-node f26v01_n025 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: SiLU
+  end
+  %% source-node f26v01_n026 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Split Q / K / V
+  end
+  %% source-node f26v01_n027 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Q reshape
+  end
+  %% source-node f26v01_n028 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: K reshape
+  end
+  %% source-node f26v01_n029 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: V reshape
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [EDGE E_TRANSFORM_GDN_HEAD_TO_ACTBUF] Q/K/V head tiles
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B->>N: [GDN HEAD-NORM SERVICE] Q/K L2Norm request / 32-lane replay
+  end
+  %% source-node f26v01_n030 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Q L2Norm
+  end
+  %% source-node f26v01_n031 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: K L2Norm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [GDN HEAD-NORM SERVICE] normalized Q/K response
+  end
+  rect rgba(245, 245, 245, 0.18)
+    K-->>S: [HW] recurrent state read
+  end
+  %% source-node f26v01_n032 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Decay preactivation
+  end
+  %% source-node f26v01_n033 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Decay factor
+  end
+  %% source-node f26v01_n034 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Update gate
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [EDGE E_TRANSFORM_GDN_HEAD_TO_ACTBUF] Z/A/B + decay/update streams
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>S: [EDGE E_ACTBUF_GDN_VZAB_TO_SEQUENCE] normalized Q/K + V/Z/A/B tiles
+  end
+  %% source-node f26v01_n035 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: Chunk partition
+  end
+  %% source-node f26v01_n036 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: Decay matrix Γ
+  end
+  %% source-node f26v01_n037 | owner=SequenceCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: K Kᵀ
+  end
+  %% source-node f26v01_n038 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: Build strict-lower L
+  end
+  %% source-node f26v01_n039 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: Triangular solve
+  end
+  %% source-node f26v01_n040 | owner=SequenceCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Q Kᵀ
+  end
+  %% source-node f26v01_n041 | owner=SequenceCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Intra-chunk output
+  end
+  %% source-node f26v01_n042 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: State read
+  end
+  %% source-node f26v01_n043 | owner=SequenceCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Output combine
+  end
+  %% source-node f26v01_n044 | owner=SequenceCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Kᵀ U
+  end
+  %% source-node f26v01_n045 | owner=SequenceCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    S->>S: State decay
+  end
+  %% source-node f26v01_n046 | owner=KVStateCore | class=state | macro=OP_GR_GDN_MOE
+  rect rgba(213, 232, 212, 0.24)
+    S-->>K: [GDN STATE COMMIT] updated recurrent state S
+  end
+  rect rgba(245, 245, 245, 0.18)
+    S-->>N: [FUTURE GDN NORM SERVICE] GDN output + gate request
+  end
+  %% source-node f26v01_n047 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNormGated
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>S: [FUTURE GDN NORM SERVICE] normalized/gated GDN response
+  end
+  rect rgba(245, 245, 245, 0.18)
+    S-->>T: [FUTURE GDN TAIL EDGE] gated GDN output + tags
+  end
+  rect rgba(245, 245, 245, 0.18)
+    T-->>M: [HW] out_proj request
+  end
+  %% source-node f26v01_n048 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: out_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>T: [EDGE E_MATRIX_TO_TAIL] out_proj result tile
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>O: [EDGE E_MATRIX_TO_COMMIT] OProj result stream128
+  end
+  rect rgba(245, 245, 245, 0.18)
+    T-->>E: [HW] Attention-site sublayer output + GR injection metadata
+  end
+  %% source-node f26v01_n049 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site write-gate injection into 4 residual branches
+  end
+  %% source-node f26v01_n050 | owner=OutputCommitCore | class=state | macro=OP_GR_GDN_MOE
+  rect rgba(213, 232, 212, 0.24)
+    O->>O: Attention-site 4-branch residual-state commit
+  end
+  rect rgba(248, 206, 204, 0.24)
+    P-->>DDR: [HW] parameter read — MLP-site Gated Residual norm / low-rank gates
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>P: [HW] MLP-site Gated Residual parameters
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] MLP-site 4-stream grouped input
+  end
+  %% source-node f26v01_n051 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: MLP-site Gated Residual grouped RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] MLP-site normalized 4-stream tensor
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>M: [EDGE E_ACTBUF_TO_MATRIX] resident normalized 4-stream tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — MLP-site input_mix_weight_down / input_mix_weight_up / block_inject_weight
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] MLP-site Gated Residual projection weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] MLP-site Gated Residual weights
+  end
+  %% source-node f26v01_n052 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: MLP-site input_mix_weight_down
+  end
+  %% source-node f26v01_n053 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: MLP-site SiLU / hc_count
+  end
+  %% source-node f26v01_n054 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: MLP-site input_mix_weight_up
+  end
+  %% source-node f26v01_n055 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: MLP-site Sigmoid read gate
+  end
+  %% source-node f26v01_n056 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: MLP-site 4-stream weighted mean
+  end
+  %% source-node f26v01_n057 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: MLP-site block_inject_weight
+  end
+  %% source-node f26v01_n058 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: MLP-site 2 × Sigmoid write gate
+  end
+  rect rgba(245, 245, 245, 0.18)
+    O-->>B: [HW] updated residual / MLP input staging
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] MLP input stream
+  end
+  %% source-node f26v01_n059 | owner=NormCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 2
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] normalized FFN input
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>F: [EDGE E_ACTBUF_TO_FFN] normalized FFN input
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — Router + 512 routed experts + shared expert
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] MoE weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] router / expert weight tiles
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Router projection request
+  end
+  %% source-node f26v01_n060 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Router projection
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] router logits
+  end
+  %% source-node f26v01_n061 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Sigmoid router scoring
+  end
+  %% source-node f26v01_n062 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Top-10 + renorm
+  end
+  %% source-node f26v01_n063 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Dispatch / gather
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>B: [HW] expert token queues
+  end
+  loop active routed experts — 10 selected of 512
+  rect rgba(245, 245, 245, 0.18)
+    B-->>F: [HW] selected expert token batch
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Routed Expert gate_up_proj request
+  end
+  %% source-node f26v01_n064 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Routed Expert gate_up_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] routed gate/up result
+  end
+  %% source-node f26v01_n065 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: SiLU × up
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Routed Expert down_proj request
+  end
+  %% source-node f26v01_n066 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Routed Expert down_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] routed expert output
+  end
+  %% source-node f26v01_n067 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Expert weighting
+  end
+  end
+  par Shared Expert
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert gate_proj / up_proj request
+  end
+  %% source-node f26v01_n068 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert gate_proj
+  end
+  %% source-node f26v01_n069 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert up_proj
+  end
+  %% source-node f26v01_n070 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Shared Expert SiLU × up
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert down_proj request
+  end
+  %% source-node f26v01_n071 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert down_proj
+  end
+  and Shared Expert gate
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert gate projection request
+  end
+  %% source-node f26v01_n072 | owner=SharedMatrixCore | class=mac | macro=OP_GR_GDN_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert gate projection
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] shared gate scalar
+  end
+  %% source-node f26v01_n073 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Shared Expert gate Sigmoid
+  end
+  end
+  %% source-node f26v01_n074 | owner=FeedForwardCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Scatter / weighted reduce
+  end
+  %% source-node f26v01_n075 | owner=FeedForwardCore | class=plus | macro=OP_GR_GDN_MOE
+  rect rgba(255, 255, 255, 0.28)
+    F->>F: Routed + Shared Expert sum
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>E: [HW] MLP-site sublayer output + GR injection metadata
+  end
+  %% source-node f26v01_n076 | owner=ElementwiseTransformCore | class=other | macro=OP_GR_GDN_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: MLP-site write-gate injection into 4 residual branches
+  end
+  %% source-node f26v01_n077 | owner=OutputCommitCore | class=state | macro=OP_GR_GDN_MOE
+  rect rgba(213, 232, 212, 0.24)
+    O->>O: MLP-site 4-branch residual-state commit
+  end
+  rect rgba(213, 232, 212, 0.24)
+    O-->>DDR: [HW] write updated 4 residual streams
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    O-->>C: OP_GR_GDN_MOE done
+  end

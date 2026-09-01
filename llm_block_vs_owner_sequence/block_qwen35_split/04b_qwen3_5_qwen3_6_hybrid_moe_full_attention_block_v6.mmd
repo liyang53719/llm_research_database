@@ -1,0 +1,130 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only; exact DAG split from the original family atlas.
+flowchart TB
+  subgraph family_04b["Qwen3.5 / Qwen3.6 Hybrid MoE"]
+    direction TB
+    subgraph variant_04b_01["Gated full-attention + routed/shared MoE block"]
+      direction TB
+      subgraph p08_g_shared["Shared expert body × 1"]
+        direction LR
+        p08_shared_gate["gate_proj"]:::mac
+        p08_shared_up["up_proj"]:::mac
+        p08_shared_act("SiLU<br/>gate activation"):::other
+        p08_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        p08_shared_down["down_proj"]:::mac
+        p08_shared_gate --> p08_shared_act
+        p08_shared_act --> p08_shared_mul
+        p08_shared_up --> p08_shared_mul
+        p08_shared_mul --> p08_shared_down
+      end
+      subgraph p08_g_routed["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p08_routed_gate["gate_proj"]:::mac
+        p08_routed_up["up_proj"]:::mac
+        p08_routed_act("SiLU<br/>gate activation"):::other
+        p08_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        p08_routed_down["down_proj"]:::mac
+        p08_routed_gate --> p08_routed_act
+        p08_routed_act --> p08_routed_mul
+        p08_routed_up --> p08_routed_mul
+        p08_routed_mul --> p08_routed_down
+      end
+      p08_n001["X<br/>[T=1024, H=2048]"]:::input
+      p08_n006("RMSNorm 1"):::other
+      p08_n007["K Proj<br/>X · Wk"]:::mac
+      p08_n008["Q Proj + gate<br/>X · Wq"]:::mac
+      p08_n009["V Proj<br/>X · Wv"]:::mac
+      p08_n010("K Head RMSNorm"):::other
+      p08_n011("Q Head RMSNorm"):::other
+      p08_n012("Partial RoPE"):::other
+      p08_n013("Partial RoPE"):::other
+      p08_n014[("K cache")]:::state
+      p08_n015[("V cache")]:::state
+      p08_n016("K head repeat ×8"):::other
+      p08_n017("V head repeat ×8"):::other
+      p08_n018["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p08_n019("Softmax FP32"):::other
+      p08_n020["P × V<br/>batched head GEMM"]:::mac
+      p08_n021("Q-gate sigmoid"):::other
+      p08_n022("Context gating"):::other
+      p08_n023["O Proj<br/>C · Wo"]:::mac
+      p08_n024((+)):::plus
+      p08_n025["X + Attention"]:::output
+      p08_n026("RMSNorm 2"):::other
+      p08_n027["Router projection"]:::mac
+      p08_n028("Router scoring<br/>softmax FP32"):::other
+      p08_n029("Top-8 + renorm"):::other
+      p08_n030("Dispatch / gather"):::other
+      p08_n043["Shared gate projection"]:::mac
+      p08_n044("Sigmoid"):::other
+      p08_n045("Shared gating"):::other
+      p08_n036("Expert weighting"):::other
+      p08_n037("Scatter / weighted reduce"):::other
+      p08_n002((+)):::plus
+      p08_n003((+)):::plus
+      p08_n004["Block output"]:::output
+      p08_n005["Attention dimensions<br/>Q=16×256; K/V=2×256"]:::note
+      p08_n001 --> p08_n006
+      p08_n006 --> p08_n007
+      p08_n006 --> p08_n008
+      p08_n006 --> p08_n009
+      p08_n007 --> p08_n010
+      p08_n008 --> p08_n011
+      p08_n010 --> p08_n012
+      p08_n011 --> p08_n013
+      p08_n012 -.-> p08_n014
+      p08_n009 -.-> p08_n015
+      p08_n014 -.-> p08_n016
+      p08_n015 -.-> p08_n017
+      p08_n013 --> p08_n018
+      p08_n016 --> p08_n018
+      p08_n018 --> p08_n019
+      p08_n019 --> p08_n020
+      p08_n017 --> p08_n020
+      p08_n008 --> p08_n021
+      p08_n020 --> p08_n022
+      p08_n021 --> p08_n022
+      p08_n022 --> p08_n023
+      p08_n023 --> p08_n024
+      p08_n001 --> p08_n024
+      p08_n024 --> p08_n025
+      p08_n025 --> p08_n026
+      p08_n026 --> p08_n027
+      p08_n027 --> p08_n028
+      p08_n028 --> p08_n029
+      p08_n029 --> p08_n030
+      p08_n030 --> p08_routed_gate
+      p08_n030 --> p08_routed_up
+      p08_routed_down --> p08_n036
+      p08_n029 --> p08_n036
+      p08_n036 --> p08_n037
+      p08_n026 --> p08_shared_gate
+      p08_n026 --> p08_shared_up
+      p08_n026 --> p08_n043
+      p08_n043 --> p08_n044
+      p08_n044 --> p08_n045
+      p08_shared_down --> p08_n045
+      p08_n037 --> p08_n002
+      p08_n045 --> p08_n002
+      p08_n002 --> p08_n003
+      p08_n025 --> p08_n003
+      p08_n003 --> p08_n004
+    end
+  end
+style family_04b fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_04b_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p08_g_shared fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p08_g_routed fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 16,17,18,19 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 30,51 stroke:#777777,stroke-width:1.3px;

@@ -1,0 +1,194 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only. Layer recipe, PLE placement, vision tower and MTP are intentionally outside this diagram.
+flowchart TB
+  subgraph family_26b["Qwen3.8-Flash-Next"]
+    direction TB
+    subgraph variant_26b_01["Gated Residual + Qwen Sparse Attention + Top-10 MoE decoder block"]
+      direction TB
+      q38q_x["4 residual streams<br/>decoder-block input"]:::input
+      subgraph q38q_attn_gr_grp["Attention-site Gated Residual read / write gates"]
+        direction TB
+        q38q_attn_gr_norm("Grouped RMSNorm over 4 residual streams"):::other
+        q38q_attn_gr_down["input_mix_weight_down"]:::mac
+        q38q_attn_gr_silu("SiLU / hc_count"):::other
+        q38q_attn_gr_up["input_mix_weight_up"]:::mac
+        q38q_attn_gr_read_gate("Sigmoid read weights"):::other
+        q38q_attn_gr_mean("4-stream weighted mean"):::other
+        q38q_attn_gr_inject["block_inject_weight"]:::mac
+        q38q_attn_gr_write_gate("2 × Sigmoid write gates"):::other
+        q38q_attn_gr_norm --> q38q_attn_gr_down
+        q38q_attn_gr_down --> q38q_attn_gr_silu
+        q38q_attn_gr_silu --> q38q_attn_gr_up
+        q38q_attn_gr_up --> q38q_attn_gr_read_gate
+        q38q_attn_gr_norm --> q38q_attn_gr_mean
+        q38q_attn_gr_read_gate --> q38q_attn_gr_mean
+        q38q_attn_gr_mean --> q38q_attn_gr_inject
+        q38q_attn_gr_inject --> q38q_attn_gr_write_gate
+      end
+      q38q_x --> q38q_attn_gr_norm
+      q38q_x --> q38q_attn_gr_mean
+      q38q_norm1("RMSNorm 1"):::other
+      q38q_attn_gr_mean --> q38q_norm1
+      q38q_k["K Proj"]:::mac
+      q38q_norm1 --> q38q_k
+      q38q_v["V Proj"]:::mac
+      q38q_norm1 --> q38q_v
+      q38q_qg["Q Proj + output gate"]:::mac
+      q38q_norm1 --> q38q_qg
+      q38q_idx["index_qk_proj"]:::mac
+      q38q_norm1 --> q38q_idx
+      q38q_kn("K Head RMSNorm"):::other
+      q38q_qn("Q Head RMSNorm"):::other
+      q38q_krope("Partial interleaved MRoPE"):::other
+      q38q_qrope("Partial interleaved MRoPE"):::other
+      q38q_gate("Sigmoid output gate"):::other
+      q38q_k --> q38q_kn
+      q38q_kn --> q38q_krope
+      q38q_qg --> q38q_qn
+      q38q_qn --> q38q_qrope
+      q38q_qg --> q38q_gate
+      q38q_kcache[("QSA K cache")]:::state
+      q38q_vcache[("QSA V cache")]:::state
+      q38q_krope -.-> q38q_kcache
+      q38q_v -.-> q38q_vcache
+      q38q_idx_split("Split Indexer Q / K"):::other
+      q38q_idx_qn("Indexer Q RMSNorm"):::other
+      q38q_idx_kn("Indexer K RMSNorm"):::other
+      q38q_pool("Micro-block mean pool ×4"):::other
+      q38q_idx_krope("Indexer K RoPE"):::other
+      q38q_idx_dot["Indexer Q × pooled Kᵀ"]:::mac
+      q38q_idx_relu("ReLU + index-head sum"):::other
+      q38q_top("Top-512 micro-blocks / 2048 tokens"):::other
+      q38q_idx --> q38q_idx_split
+      q38q_idx_split --> q38q_idx_qn
+      q38q_idx_split --> q38q_idx_kn
+      q38q_idx_kn --> q38q_pool
+      q38q_pool --> q38q_idx_krope
+      q38q_idx_qn --> q38q_idx_dot
+      q38q_idx_krope --> q38q_idx_dot
+      q38q_idx_dot --> q38q_idx_relu
+      q38q_idx_relu --> q38q_top
+      q38q_gather[("Selected K/V gather + local tail")]:::state
+      q38q_score["Sparse Q × Kᵀ"]:::mac
+      q38q_soft("Softmax FP32"):::other
+      q38q_pv["Sparse P × V"]:::mac
+      q38q_gating("Context gating"):::other
+      q38q_oproj["O Proj"]:::mac
+      q38q_write("Attention-site write-gate injection into 4 residual branches"):::other
+      q38q_after["4 residual streams after QSA"]:::output
+      q38q_top --> q38q_gather
+      q38q_kcache -.-> q38q_gather
+      q38q_vcache -.-> q38q_gather
+      q38q_qrope --> q38q_score
+      q38q_gather --> q38q_score
+      q38q_score --> q38q_soft
+      q38q_soft --> q38q_pv
+      q38q_gather --> q38q_pv
+      q38q_pv --> q38q_gating
+      q38q_gate --> q38q_gating
+      q38q_gating --> q38q_oproj
+      q38q_oproj --> q38q_write
+      q38q_attn_gr_write_gate --> q38q_write
+      q38q_x --> q38q_write
+      q38q_write --> q38q_after
+      subgraph q38q_mlp_gr_grp["MLP-site Gated Residual read / write gates"]
+        direction TB
+        q38q_mlp_gr_norm("Grouped RMSNorm over 4 residual streams"):::other
+        q38q_mlp_gr_down["input_mix_weight_down"]:::mac
+        q38q_mlp_gr_silu("SiLU / hc_count"):::other
+        q38q_mlp_gr_up["input_mix_weight_up"]:::mac
+        q38q_mlp_gr_read_gate("Sigmoid read weights"):::other
+        q38q_mlp_gr_mean("4-stream weighted mean"):::other
+        q38q_mlp_gr_inject["block_inject_weight"]:::mac
+        q38q_mlp_gr_write_gate("2 × Sigmoid write gates"):::other
+        q38q_mlp_gr_norm --> q38q_mlp_gr_down
+        q38q_mlp_gr_down --> q38q_mlp_gr_silu
+        q38q_mlp_gr_silu --> q38q_mlp_gr_up
+        q38q_mlp_gr_up --> q38q_mlp_gr_read_gate
+        q38q_mlp_gr_norm --> q38q_mlp_gr_mean
+        q38q_mlp_gr_read_gate --> q38q_mlp_gr_mean
+        q38q_mlp_gr_mean --> q38q_mlp_gr_inject
+        q38q_mlp_gr_inject --> q38q_mlp_gr_write_gate
+      end
+      q38q_after --> q38q_mlp_gr_norm
+      q38q_after --> q38q_mlp_gr_mean
+      q38q_mlp_norm("RMSNorm 2"):::other
+      q38q_mlp_router["Router projection"]:::mac
+      q38q_mlp_score("Sigmoid router scoring"):::other
+      q38q_mlp_top("Top-10 + renorm"):::other
+      q38q_mlp_dispatch("Dispatch / gather"):::other
+      q38q_mlp_gr_mean --> q38q_mlp_norm
+      q38q_mlp_norm --> q38q_mlp_router
+      q38q_mlp_router --> q38q_mlp_score
+      q38q_mlp_score --> q38q_mlp_top
+      q38q_mlp_top --> q38q_mlp_dispatch
+      subgraph q38q_mlp_routed_grp["Routed expert body × E; 10 active/token"]
+        direction LR
+        q38q_mlp_routed_gate_up["gate_up_proj"]:::mac
+        q38q_mlp_routed_split("Split gate / up"):::other
+        q38q_mlp_routed_gate_up --> q38q_mlp_routed_split
+        q38q_mlp_routed_act("SiLU<br/>gate activation"):::other
+        q38q_mlp_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        q38q_mlp_routed_down["down_proj"]:::mac
+        q38q_mlp_routed_split --> q38q_mlp_routed_act
+        q38q_mlp_routed_act --> q38q_mlp_routed_mul
+        q38q_mlp_routed_split --> q38q_mlp_routed_mul
+        q38q_mlp_routed_mul --> q38q_mlp_routed_down
+      end
+      subgraph q38q_mlp_shared_grp["Shared expert body × 1"]
+        direction LR
+        q38q_mlp_shared_gate["gate_proj"]:::mac
+        q38q_mlp_shared_up["up_proj"]:::mac
+        q38q_mlp_shared_act("SiLU<br/>gate activation"):::other
+        q38q_mlp_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        q38q_mlp_shared_down["down_proj"]:::mac
+        q38q_mlp_shared_gate --> q38q_mlp_shared_act
+        q38q_mlp_shared_act --> q38q_mlp_shared_mul
+        q38q_mlp_shared_up --> q38q_mlp_shared_mul
+        q38q_mlp_shared_mul --> q38q_mlp_shared_down
+      end
+      q38q_mlp_weight("Expert weighting"):::other
+      q38q_mlp_reduce("Scatter / weighted reduce"):::other
+      q38q_mlp_sgproj["Shared expert gate projection"]:::mac
+      q38q_mlp_sgsig("Sigmoid"):::other
+      q38q_mlp_sgating("Shared expert gating"):::other
+      q38q_mlp_merge((+)):::plus
+      q38q_mlp_write("MLP-site write-gate injection into 4 residual branches"):::other
+      q38q_mlp_out["Block output — 4 residual streams"]:::output
+      q38q_mlp_dispatch --> q38q_mlp_routed_gate_up
+      q38q_mlp_routed_down --> q38q_mlp_weight
+      q38q_mlp_top --> q38q_mlp_weight
+      q38q_mlp_weight --> q38q_mlp_reduce
+      q38q_mlp_norm --> q38q_mlp_shared_gate
+      q38q_mlp_norm --> q38q_mlp_shared_up
+      q38q_mlp_norm --> q38q_mlp_sgproj
+      q38q_mlp_sgproj --> q38q_mlp_sgsig
+      q38q_mlp_shared_down --> q38q_mlp_sgating
+      q38q_mlp_sgsig --> q38q_mlp_sgating
+      q38q_mlp_reduce --> q38q_mlp_merge
+      q38q_mlp_sgating --> q38q_mlp_merge
+      q38q_mlp_merge --> q38q_mlp_write
+      q38q_mlp_gr_write_gate --> q38q_mlp_write
+      q38q_after --> q38q_mlp_write
+      q38q_mlp_write --> q38q_mlp_out
+    end
+  end
+style family_26b fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_26b_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style q38q_attn_gr_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38q_mlp_gr_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38q_mlp_routed_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38q_mlp_shared_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 20,21,32,33 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 44,84 stroke:#777777,stroke-width:1.3px;

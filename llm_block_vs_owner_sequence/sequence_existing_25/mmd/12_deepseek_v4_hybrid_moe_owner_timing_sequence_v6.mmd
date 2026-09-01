@@ -1,0 +1,1966 @@
+%%{init: {"theme": "base", "sequence": {"useMaxWidth": false, "diagramMarginX": 18, "diagramMarginY": 12, "actorMargin": 24, "width": 150, "height": 42, "boxMargin": 8, "boxTextMargin": 5, "noteMargin": 8, "messageMargin": 24, "mirrorActors": true, "rightAngles": true, "wrap": true}, "themeVariables": {"actorBkg": "#ffffff", "actorBorder": "#555555", "actorTextColor": "#1f1f1f", "actorLineColor": "#666666", "signalColor": "#333333", "signalTextColor": "#1f1f1f", "labelBoxBkgColor": "#ffffff", "labelBoxBorderColor": "#888888", "labelTextColor": "#1f1f1f", "loopTextColor": "#1f1f1f", "noteBkgColor": "#ffffff", "noteBorderColor": "#999999", "noteTextColor": "#333333", "activationBkgColor": "#f5f5f5", "activationBorderColor": "#777777", "sequenceNumberColor": "#555555"}, "themeCSS": ".actor-line { stroke: #666 !important; stroke-width: 1.25px !important; stroke-dasharray: 3 3; }"}}%%
+%% Family rank 12: DeepSeek V4 Hybrid MoE
+%% Source block-atlas file: 12_deepseek_v4_hybrid_moe.mmd
+%% Sequence file: 12_deepseek_v4_hybrid_moe_owner_timing_sequence_v6.mmd
+%% 13-owner review basis: 381d85219d6feec9b10345e2800ac74d4185e5a0; frozen universal SLX 94384dda268433b7ec47bc88fe97b85a3d1a9fe2360116974e0f0358e2880945.
+%% Current-main confirmation: 0db7eed1e80610083ecc40b1c5982f60db5bda40; SLX 33d79655d4de9bf0e6147fb74f50cc7e26450d9e6e0cecc2d30f386ac7b83379; owner manifest v6.6.
+%% Q×Kᵀ is ScoreCore/QKProduct+QKBeatSum in SequenceCore.
+%% P×V is the OnlineORecurrence beta×V + alpha×Oold update in SequenceCore; full P is not materialized.
+%% SharedMatrix token-dot mode is FFN-down product reduction, not Attention QK/PV.
+%% Unsupported-family files are owner/edge mappings, not implementation-support claims.
+%% Q projection is shown as a separate sub-operation; in the current full-block profile it is followed immediately by sequence/OProj under the QSEQ control window.
+sequenceDiagram
+  autonumber
+  participant DDR as DDR / External Memory
+  participant C as ControlCore
+  participant A as ActivationReadDmaCore
+  participant P as ParamReadDmaCore
+  participant N as NormCore
+  participant B as ActivationTileBufferCore
+  participant W as WeightReadDmaCore
+  participant M as SharedMatrixCore
+  participant E as ElementwiseTransformCore
+  participant K as KVStateCore
+  participant S as SequenceCore
+  participant T as TailMatrixClientCore
+  participant F as FeedForwardCore
+  participant O as OutputCommitCore
+  Note over DDR,O: Colors follow the block atlas — yellow=input, red=params/weights, blue=MAC-heavy arithmetic, purple=non-matrix, green=state/output, white=residual, gray=hardware/control
+  Note over C,O: Blue means MAC-heavy math; the participant lifeline is the actual execution owner.
+  Note over C,O: Current fixed payload transfers follow manifest v6.6; future-only edges are explicitly labelled [FUTURE EDGE].
+
+
+  alt Variant 1 — Sliding-only + mHC + MoE block
+    Note over C,O: OP_MHC_INPUT — DDR read → mHC Sinkhorn matrix → mHC input mixing → mixed-stream staging
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MHC_INPUT
+    end
+    loop OP_MHC_INPUT token / residual-stream loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — four residual streams
+    end
+    %% source-node f12v01_n019 | owner=ActivationReadDmaCore | class=input | macro=OP_MHC_INPUT
+    rect rgba(255, 242, 204, 0.24)
+      A->>A: X
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>E: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] mHC Sinkhorn / mixing parameters
+    end
+    %% source-node f12v01_n020 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC Sinkhorn matrix
+    end
+    %% source-node f12v01_n021 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC input mixing
+    end
+    rect rgba(213, 232, 212, 0.24)
+      E-->>B: [HW] mixed activation streams
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B->>DDR: [HW] write mixed-stream scratch / checkpoint
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_MHC_INPUT done
+    end
+    Note over C,O: OP_Q_LORA_PROJ — RMSNorm 1 → Q LoRA A → Q LoRA RMSNorm → Partial RoPE split → Q LoRA B → YaRN RoPE
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_Q_LORA_PROJ
+    end
+    loop OP_Q_LORA_PROJ token/chunk/low-rank loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    %% source-node f12v01_n022 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] Q LoRA input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n024 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>B: [HEAD/POST-NORM STAGING] Q LoRA A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>N: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm request / 32-lane replay
+    end
+    %% source-node f12v01_n026 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: Q LoRA RMSNorm
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm output response
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>E: [HEAD-NORM REPLAY] normalized head stream to position/split transform
+    end
+    %% source-node f12v01_n027 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: Partial RoPE split
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>M: [HW] Partial RoPE split output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E->>M: [HW] input tile for Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n028 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] Q LoRA B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M->>E: [HW] input for YaRN RoPE
+    end
+    %% source-node f12v01_n029 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: YaRN RoPE
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>S: [HW] YaRN RoPE output
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S->>S: [HW] Q tile resident
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      S-->>C: OP_Q_LORA_PROJ done
+    end
+    Note over C,O: OP_SHARED_KV_PROJ — RMSNorm 1 replay → Shared K=V projection → K/V state commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_SHARED_KV_PROJ
+    end
+    loop OP_SHARED_KV_PROJ token/chunk loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    %% hardware replay of source operator: RMSNorm 1 | pass=shared K/V pass
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output — shared K/V pass
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] shared K/V input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n025 | owner=SharedMatrixCore | class=mac | macro=OP_SHARED_KV_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared K=V projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [EDGE E_MATRIX_TO_TRANSFORM] Shared K=V projection result → projection-result dispatch
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>K: [EDGE E_TRANSFORM_TO_KV] K/V cache-write stream (RoPE or bypass)
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] write shared K/V state
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      K-->>C: OP_SHARED_KV_PROJ done
+    end
+    Note over C,O: OP_LOCAL_ATTENTION — Q tile + local K/V state → sliding attention
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_LOCAL_ATTENTION
+    end
+    loop OP_LOCAL_ATTENTION Q-block / window loop
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] read local K/V window
+    end
+    rect rgba(213, 232, 212, 0.24)
+      DDR-->>K: [HW] local K/V tile
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K-->>S: [HW] local K/V response
+    end
+    %% source-node f12v01_n030 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Sliding Q × Kᵀ
+    end
+    %% source-node f12v01_n031 | owner=SequenceCore | class=other | macro=OP_LOCAL_ATTENTION
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Local Softmax
+    end
+    %% source-node f12v01_n032 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Local P × V
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S-->>B: [HW] local attention stream staging
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_LOCAL_ATTENTION done
+    end
+    Note over C,O: OP_MHC_TAIL_COMMIT — attention sink / stream combine → low-rank O projection → mHC output mixing → DDR commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_MHC_TAIL_COMMIT
+    end
+    loop OP_MHC_TAIL_COMMIT output-group / token loop
+    %% source-node f12v01_n033 | owner=SequenceCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Attention sink
+    end
+    %% source-node f12v01_n037 | owner=OutputCommitCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>T: [HW] selected attention stream(s)
+    end
+    rect rgba(242, 242, 242, 0.18)
+      T->>M: [HW] grouped low-rank O request
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n034 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Grouped O low-rank A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>T: [HW] Grouped O low-rank A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n035 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: O low-rank B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] O low-rank B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>E: [HW] input for mHC output mixing
+    end
+    %% source-node f12v01_n036 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC output mixing
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>O: [HW] mHC output mixing output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v01_n060 | owner=OutputCommitCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v01_n038 | owner=OutputCommitCore | class=output | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: 4 streams + Attention
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MHC_TAIL_COMMIT done
+    end
+    Note over C,O: OP_MOE — DDR read → RMSNorm 2 → Router / Top-k → experts → merge / residual write
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MOE
+    end
+    loop OP_MOE token batch / expert group loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>F: [HW] RMSNorm 2 / router / expert parameters
+    end
+    %% source-node f12v01_n039 | owner=NormCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 2
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 2 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>F: [HW] router input / expert queue source
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n041 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Router projection result
+    end
+    %% source-node f12v01_n042 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Router scoring
+    end
+    %% source-node f12v01_n043 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Top-6 + renorm
+    end
+    %% source-node f12v01_n044 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Dispatch / gather
+    end
+    rect rgba(213, 232, 212, 0.24)
+      F->>B: [HW] expert queue / token grouping
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B-->>F: [HW] grouped expert activation
+    end
+    loop selected routed experts / grouped tokens
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n045 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n046 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v01_n047 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v01_n048 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n049 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    %% source-node f12v01_n050 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Expert weighting
+    end
+    %% source-node f12v01_n051 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Scatter / weighted reduce
+    end
+    end
+    Note over F,O: Shared expert path executes for every token
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n052 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n053 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v01_n054 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v01_n055 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n056 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v01_n057 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Shared gate projection result
+    end
+    %% source-node f12v01_n058 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Sigmoid
+    end
+    %% source-node f12v01_n059 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Shared gating
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F-->>O: [HW] expert output stream(s)
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v01_n061 | owner=OutputCommitCore | class=plus | macro=OP_MOE
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v01_n062 | owner=OutputCommitCore | class=output | macro=OP_MOE
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: Block output
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MOE done
+    end
+  else Variant 2 — Compressed Sparse Attention + mHC + MoE block
+    Note over C,O: OP_MHC_INPUT — DDR read → mHC Sinkhorn matrix → mHC input mixing → mixed-stream staging
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MHC_INPUT
+    end
+    loop OP_MHC_INPUT token / residual-stream loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — four residual streams
+    end
+    %% source-node f12v02_n019 | owner=ActivationReadDmaCore | class=input | macro=OP_MHC_INPUT
+    rect rgba(255, 242, 204, 0.24)
+      A->>A: X
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>E: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] mHC Sinkhorn / mixing parameters
+    end
+    %% source-node f12v02_n020 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC Sinkhorn matrix
+    end
+    %% source-node f12v02_n021 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC input mixing
+    end
+    rect rgba(213, 232, 212, 0.24)
+      E-->>B: [HW] mixed activation streams
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B->>DDR: [HW] write mixed-stream scratch / checkpoint
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_MHC_INPUT done
+    end
+    Note over C,O: OP_Q_LORA_PROJ — RMSNorm 1 → Q LoRA A → Q LoRA RMSNorm → Partial RoPE split → Q LoRA B → YaRN RoPE
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_Q_LORA_PROJ
+    end
+    loop OP_Q_LORA_PROJ token/chunk/low-rank loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    %% source-node f12v02_n022 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] Q LoRA input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n024 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>B: [HEAD/POST-NORM STAGING] Q LoRA A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>N: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm request / 32-lane replay
+    end
+    %% source-node f12v02_n026 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: Q LoRA RMSNorm
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm output response
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>E: [HEAD-NORM REPLAY] normalized head stream to position/split transform
+    end
+    %% source-node f12v02_n027 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: Partial RoPE split
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>M: [HW] Partial RoPE split output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E->>M: [HW] input tile for Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n028 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] Q LoRA B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M->>E: [HW] input for YaRN RoPE
+    end
+    %% source-node f12v02_n029 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: YaRN RoPE
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>S: [HW] YaRN RoPE output
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S->>S: [HW] Q tile resident
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      S-->>C: OP_Q_LORA_PROJ done
+    end
+    Note over C,O: OP_SHARED_KV_PROJ — RMSNorm 1 replay → Shared K=V projection → K/V state commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_SHARED_KV_PROJ
+    end
+    loop OP_SHARED_KV_PROJ token/chunk loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    %% hardware replay of source operator: RMSNorm 1 | pass=shared K/V pass
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output — shared K/V pass
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] shared K/V input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n025 | owner=SharedMatrixCore | class=mac | macro=OP_SHARED_KV_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared K=V projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [EDGE E_MATRIX_TO_TRANSFORM] Shared K=V projection result → projection-result dispatch
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>K: [EDGE E_TRANSFORM_TO_KV] K/V cache-write stream (RoPE or bypass)
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] write shared K/V state
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      K-->>C: OP_SHARED_KV_PROJ done
+    end
+    Note over C,O: OP_LOCAL_ATTENTION — Q tile + local K/V state → sliding attention
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_LOCAL_ATTENTION
+    end
+    loop OP_LOCAL_ATTENTION Q-block / window loop
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] read local K/V window
+    end
+    rect rgba(213, 232, 212, 0.24)
+      DDR-->>K: [HW] local K/V tile
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K-->>S: [HW] local K/V response
+    end
+    %% source-node f12v02_n030 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Sliding Q × Kᵀ
+    end
+    %% source-node f12v02_n031 | owner=SequenceCore | class=other | macro=OP_LOCAL_ATTENTION
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Local Softmax
+    end
+    %% source-node f12v02_n032 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Local P × V
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S-->>B: [HW] local attention stream staging
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_LOCAL_ATTENTION done
+    end
+    Note over C,O: OP_CSA_INDEX — Block KV compressor → Lightning indexer → Top-512 blocks → sparse attention
+    rect rgba(242, 242, 242, 0.18)
+      C->>M: start OP_CSA_INDEX
+    end
+    loop OP_CSA_INDEX compressed-block / selected-block loop
+    rect rgba(245, 245, 245, 0.18)
+      K->>M: [HW] input tile for Block KV compressor
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Block KV compressor
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Block KV compressor
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n033 | owner=SharedMatrixCore | class=mac | macro=OP_CSA_INDEX
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Block KV compressor
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>M: [HW] Block KV compressor result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M->>M: [HW] input tile for Lightning indexer
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Lightning indexer
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Lightning indexer
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n034 | owner=SharedMatrixCore | class=mac | macro=OP_CSA_INDEX
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Lightning indexer
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>S: [HW] Lightning indexer result
+    end
+    %% source-node f12v02_n035 | owner=SequenceCore | class=other | macro=OP_CSA_INDEX
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Top-512 blocks
+    end
+    %% source-node f12v02_n036 | owner=SequenceCore | class=mac | macro=OP_CSA_INDEX
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Sparse Q × Kᵀ
+    end
+    %% source-node f12v02_n037 | owner=SequenceCore | class=other | macro=OP_CSA_INDEX
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Sparse Softmax
+    end
+    %% source-node f12v02_n038 | owner=SequenceCore | class=mac | macro=OP_CSA_INDEX
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Sparse P × V / Online O recurrence (selected V)
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S-->>B: [HW] sparse attention stream staging
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_CSA_INDEX done
+    end
+    Note over C,O: OP_MHC_TAIL_COMMIT — attention sink / stream combine → low-rank O projection → mHC output mixing → DDR commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_MHC_TAIL_COMMIT
+    end
+    loop OP_MHC_TAIL_COMMIT output-group / token loop
+    %% source-node f12v02_n039 | owner=SequenceCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Attention sink
+    end
+    %% source-node f12v02_n040 | owner=SequenceCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      S->>S: +
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>T: [HW] selected attention stream(s)
+    end
+    rect rgba(242, 242, 242, 0.18)
+      T->>M: [HW] grouped low-rank O request
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n041 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Grouped O low-rank A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>T: [HW] Grouped O low-rank A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n042 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: O low-rank B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] O low-rank B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>E: [HW] input for mHC output mixing
+    end
+    %% source-node f12v02_n043 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC output mixing
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>O: [HW] mHC output mixing output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v02_n044 | owner=OutputCommitCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v02_n045 | owner=OutputCommitCore | class=output | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: 4 streams + CSA
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MHC_TAIL_COMMIT done
+    end
+    Note over C,O: OP_MOE — DDR read → RMSNorm 2 → Router / Top-k → experts → merge / residual write
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MOE
+    end
+    loop OP_MOE token batch / expert group loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>F: [HW] RMSNorm 2 / router / expert parameters
+    end
+    %% source-node f12v02_n046 | owner=NormCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 2
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 2 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>F: [HW] router input / expert queue source
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n048 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Router projection result
+    end
+    %% source-node f12v02_n049 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Router scoring
+    end
+    %% source-node f12v02_n050 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Top-6 + renorm
+    end
+    %% source-node f12v02_n051 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Dispatch / gather
+    end
+    rect rgba(213, 232, 212, 0.24)
+      F->>B: [HW] expert queue / token grouping
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B-->>F: [HW] grouped expert activation
+    end
+    loop selected routed experts / grouped tokens
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n052 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n053 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v02_n054 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v02_n055 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n056 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    %% source-node f12v02_n057 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Expert weighting
+    end
+    %% source-node f12v02_n058 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Scatter / weighted reduce
+    end
+    end
+    Note over F,O: Shared expert path executes for every token
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n059 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n060 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v02_n061 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v02_n062 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n063 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v02_n064 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Shared gate projection result
+    end
+    %% source-node f12v02_n065 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Sigmoid
+    end
+    %% source-node f12v02_n066 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Shared gating
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F-->>O: [HW] expert output stream(s)
+    end
+    %% source-node f12v02_n067 | owner=OutputCommitCore | class=plus | macro=OP_MOE
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v02_n068 | owner=OutputCommitCore | class=plus | macro=OP_MOE
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v02_n069 | owner=OutputCommitCore | class=output | macro=OP_MOE
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: Block output
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MOE done
+    end
+  else Variant 3 — Hierarchical Compressed Attention + mHC + MoE block
+    Note over C,O: OP_MHC_INPUT — DDR read → mHC Sinkhorn matrix → mHC input mixing → mixed-stream staging
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MHC_INPUT
+    end
+    loop OP_MHC_INPUT token / residual-stream loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — four residual streams
+    end
+    %% source-node f12v03_n019 | owner=ActivationReadDmaCore | class=input | macro=OP_MHC_INPUT
+    rect rgba(255, 242, 204, 0.24)
+      A->>A: X
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>E: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — mHC Sinkhorn / mixing parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] mHC Sinkhorn / mixing parameters
+    end
+    %% source-node f12v03_n020 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC Sinkhorn matrix
+    end
+    %% source-node f12v03_n021 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_INPUT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC input mixing
+    end
+    rect rgba(213, 232, 212, 0.24)
+      E-->>B: [HW] mixed activation streams
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B->>DDR: [HW] write mixed-stream scratch / checkpoint
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_MHC_INPUT done
+    end
+    Note over C,O: OP_Q_LORA_PROJ — RMSNorm 1 → Q LoRA A → Q LoRA RMSNorm → Partial RoPE split → Q LoRA B → YaRN RoPE
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_Q_LORA_PROJ
+    end
+    loop OP_Q_LORA_PROJ token/chunk/low-rank loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed Q projection input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>E: [HW] Q LoRA / partial RoPE / YaRN parameters
+    end
+    %% source-node f12v03_n022 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] Q LoRA input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n024 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>B: [HEAD/POST-NORM STAGING] Q LoRA A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>N: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm request / 32-lane replay
+    end
+    %% source-node f12v03_n026 | owner=NormCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: Q LoRA RMSNorm
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HEAD/POST-NORM SERVICE] Q LoRA RMSNorm output response
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>E: [HEAD-NORM REPLAY] normalized head stream to position/split transform
+    end
+    %% source-node f12v03_n027 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: Partial RoPE split
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>M: [HW] Partial RoPE split output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E->>M: [HW] input tile for Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Q LoRA B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n028 | owner=SharedMatrixCore | class=mac | macro=OP_Q_LORA_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Q LoRA B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] Q LoRA B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M->>E: [HW] input for YaRN RoPE
+    end
+    %% source-node f12v03_n029 | owner=ElementwiseTransformCore | class=other | macro=OP_Q_LORA_PROJ
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: YaRN RoPE
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>S: [HW] YaRN RoPE output
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S->>S: [HW] Q tile resident
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      S-->>C: OP_Q_LORA_PROJ done
+    end
+    Note over C,O: OP_SHARED_KV_PROJ — RMSNorm 1 replay → Shared K=V projection → K/V state commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_SHARED_KV_PROJ
+    end
+    loop OP_SHARED_KV_PROJ token/chunk loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] mHC-mixed shared K/V input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    %% hardware replay of source operator: RMSNorm 1 | pass=shared K/V pass
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 1 output — shared K/V pass
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B->>M: [HW] shared K/V input tile
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared K=V projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n025 | owner=SharedMatrixCore | class=mac | macro=OP_SHARED_KV_PROJ
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared K=V projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [EDGE E_MATRIX_TO_TRANSFORM] Shared K=V projection result → projection-result dispatch
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>K: [EDGE E_TRANSFORM_TO_KV] K/V cache-write stream (RoPE or bypass)
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] write shared K/V state
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      K-->>C: OP_SHARED_KV_PROJ done
+    end
+    Note over C,O: OP_LOCAL_ATTENTION — Q tile + local K/V state → sliding attention
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_LOCAL_ATTENTION
+    end
+    loop OP_LOCAL_ATTENTION Q-block / window loop
+    rect rgba(213, 232, 212, 0.24)
+      K->>DDR: [HW] read local K/V window
+    end
+    rect rgba(213, 232, 212, 0.24)
+      DDR-->>K: [HW] local K/V tile
+    end
+    rect rgba(213, 232, 212, 0.24)
+      K-->>S: [HW] local K/V response
+    end
+    %% source-node f12v03_n030 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Sliding Q × Kᵀ
+    end
+    %% source-node f12v03_n031 | owner=SequenceCore | class=other | macro=OP_LOCAL_ATTENTION
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Local Softmax
+    end
+    %% source-node f12v03_n032 | owner=SequenceCore | class=mac | macro=OP_LOCAL_ATTENTION
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Local P × V
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S-->>B: [HW] local attention stream staging
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_LOCAL_ATTENTION done
+    end
+    Note over C,O: OP_HCA_COMPRESS — Hierarchical compressor L1/L2 → compressed attention
+    rect rgba(242, 242, 242, 0.18)
+      C->>M: start OP_HCA_COMPRESS
+    end
+    loop OP_HCA_COMPRESS hierarchy / compressed-block loop
+    rect rgba(245, 245, 245, 0.18)
+      K->>M: [HW] input tile for Hierarchical compressor L1
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Hierarchical compressor L1
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Hierarchical compressor L1
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n033 | owner=SharedMatrixCore | class=mac | macro=OP_HCA_COMPRESS
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Hierarchical compressor L1
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>M: [HW] Hierarchical compressor L1 result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      K->>M: [HW] input tile for Hierarchical compressor L2
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Hierarchical compressor L2
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Hierarchical compressor L2
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n034 | owner=SharedMatrixCore | class=mac | macro=OP_HCA_COMPRESS
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Hierarchical compressor L2
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>M: [HW] Hierarchical compressor L2 result
+    end
+    %% source-node f12v03_n035 | owner=SequenceCore | class=mac | macro=OP_HCA_COMPRESS
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: Q × compressed Kᵀ
+    end
+    %% source-node f12v03_n036 | owner=SequenceCore | class=other | macro=OP_HCA_COMPRESS
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Compressed Softmax
+    end
+    %% source-node f12v03_n037 | owner=SequenceCore | class=mac | macro=OP_HCA_COMPRESS
+    rect rgba(218, 232, 252, 0.24)
+      S->>S: P × compressed V
+    end
+    rect rgba(213, 232, 212, 0.24)
+      S-->>B: [HW] hierarchical attention stream staging
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      B-->>C: OP_HCA_COMPRESS done
+    end
+    Note over C,O: OP_MHC_TAIL_COMMIT — attention sink / stream combine → low-rank O projection → mHC output mixing → DDR commit
+    rect rgba(242, 242, 242, 0.18)
+      C->>S: start OP_MHC_TAIL_COMMIT
+    end
+    loop OP_MHC_TAIL_COMMIT output-group / token loop
+    %% source-node f12v03_n038 | owner=SequenceCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      S->>S: Attention sink
+    end
+    %% source-node f12v03_n039 | owner=SequenceCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      S->>S: +
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>T: [HW] selected attention stream(s)
+    end
+    rect rgba(242, 242, 242, 0.18)
+      T->>M: [HW] grouped low-rank O request
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Grouped O low-rank A
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n040 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Grouped O low-rank A
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>T: [HW] Grouped O low-rank A result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>M: [HW] input tile for O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — O low-rank B
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n041 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: O low-rank B
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>E: [HW] O low-rank B result
+    end
+    rect rgba(245, 245, 245, 0.18)
+      T->>E: [HW] input for mHC output mixing
+    end
+    %% source-node f12v03_n042 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(225, 213, 231, 0.24)
+      E->>E: mHC output mixing
+    end
+    rect rgba(245, 245, 245, 0.18)
+      E-->>O: [HW] mHC output mixing output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v03_n043 | owner=OutputCommitCore | class=plus | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v03_n044 | owner=OutputCommitCore | class=output | macro=OP_MHC_TAIL_COMMIT
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: 4 streams + HCA
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MHC_TAIL_COMMIT done
+    end
+    Note over C,O: OP_MOE — DDR read → RMSNorm 2 → Router / Top-k → experts → merge / residual write
+    rect rgba(242, 242, 242, 0.18)
+      C->>A: start OP_MOE
+    end
+    loop OP_MOE token batch / expert group loop
+    rect rgba(255, 242, 204, 0.24)
+      A->>DDR: [HW] AXI read request — post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      DDR-->>A: [HW] post-sequence MoE input
+    end
+    rect rgba(255, 242, 204, 0.24)
+      A-->>N: [HW] activation / residual stream
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P->>DDR: [HW] parameter read request — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>P: [HW] parameter stream — RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>N: [HW] RMSNorm 2 / router / expert parameters
+    end
+    rect rgba(248, 206, 204, 0.24)
+      P-->>F: [HW] RMSNorm 2 / router / expert parameters
+    end
+    %% source-node f12v03_n045 | owner=NormCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      N->>N: RMSNorm 2
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>B: [HW] RMSNorm 2 output
+    end
+    rect rgba(245, 245, 245, 0.18)
+      B-->>F: [HW] router input / expert queue source
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Router projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n047 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Router projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Router projection result
+    end
+    %% source-node f12v03_n048 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Router scoring
+    end
+    %% source-node f12v03_n049 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Top-6 + renorm
+    end
+    %% source-node f12v03_n050 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Dispatch / gather
+    end
+    rect rgba(213, 232, 212, 0.24)
+      F->>B: [HW] expert queue / token grouping
+    end
+    rect rgba(213, 232, 212, 0.24)
+      B-->>F: [HW] grouped expert activation
+    end
+    loop selected routed experts / grouped tokens
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n051 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n052 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v03_n053 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v03_n054 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n055 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    %% source-node f12v03_n056 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Expert weighting
+    end
+    %% source-node f12v03_n057 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Scatter / weighted reduce
+    end
+    end
+    Note over F,O: Shared expert path executes for every token
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — gate_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n058 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: gate_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] gate_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — up_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n059 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: up_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] up_proj result
+    end
+    %% source-node f12v03_n060 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: SiLU
+    end
+    %% source-node f12v03_n061 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Elementwise gate
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — down_proj
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n062 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: down_proj
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] down_proj result
+    end
+    rect rgba(242, 242, 242, 0.18)
+      F->>M: [HW] matrix request — Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F->>M: [HW] input tile for Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W->>DDR: [HW] weight read request — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      DDR-->>W: [HW] weight stream — Shared gate projection
+    end
+    rect rgba(248, 206, 204, 0.24)
+      W-->>M: [HW] weight tile stream
+    end
+    %% source-node f12v03_n063 | owner=SharedMatrixCore | class=mac | macro=OP_MOE
+    rect rgba(218, 232, 252, 0.24)
+      M->>M: Shared gate projection
+    end
+    rect rgba(245, 245, 245, 0.18)
+      M-->>F: [HW] Shared gate projection result
+    end
+    %% source-node f12v03_n064 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Sigmoid
+    end
+    %% source-node f12v03_n065 | owner=FeedForwardCore | class=other | macro=OP_MOE
+    rect rgba(225, 213, 231, 0.24)
+      F->>F: Shared gating
+    end
+    rect rgba(245, 245, 245, 0.18)
+      F-->>O: [HW] expert output stream(s)
+    end
+    %% source-node f12v03_n066 | owner=OutputCommitCore | class=plus | macro=OP_MOE
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    rect rgba(245, 245, 245, 0.18)
+      N-->>O: [EDGE E_NORM_RESIDUAL_TO_COMMIT] captured residual stream
+    end
+    %% source-node f12v03_n067 | owner=OutputCommitCore | class=plus | macro=OP_MOE
+    rect rgba(255, 255, 255, 0.28)
+      O->>O: +
+    end
+    %% source-node f12v03_n068 | owner=OutputCommitCore | class=output | macro=OP_MOE
+    rect rgba(213, 232, 212, 0.24)
+      O->>O: Block output
+    end
+    end
+    rect rgba(242, 242, 242, 0.18)
+      O-->>C: OP_MOE done
+    end
+  end

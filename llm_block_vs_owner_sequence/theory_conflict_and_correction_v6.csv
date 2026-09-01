@@ -1,0 +1,12 @@
+﻿topic,correct_current_conclusion,previous_conflict
+Q×Kᵀ,SequenceCore/QTileAttentionCore/AttentionLaneForEach/ScoreCore/QKProduct + QKBeatSum,以前把蓝色误读为SharedMatrix的说法作废；蓝色只表示MAC-heavy。
+P×V,SequenceCore/OnlineORecurrence: BetaTimesV + AlphaTimesO + OAdd,不物化完整P；必须写成online O recurrence。
+SharedMatrix token_dot,MLP down product-tile reduction,当前main的token-dot accumulation gating与Attention无关。
+Q/K HeadNorm,SharedMatrix→ActivationTileBuffer→Norm→ActivationTileBuffer→Elementwise,禁止直接Matrix→Norm；当前manifest classifier仍有3个head-norm edge schema drift。
+Qwen3.5 Q gate,"SharedMatrix→TailMatrixClient(split/capture); Tail→ActBuf(query), Tail→Sequence(gate)",sigmoid/scale在QTileAttentionCore的AttentionOutputGateCore。
+V projection commit,SharedMatrix→ElementwiseTransform(bypass/dispatch)→KVState,当前34-edge manifest没有Matrix→KV数值边。
+GDN Q/K head norm,Elementwise→ActivationTileBuffer→Norm service→ActivationTileBuffer→Sequence,v5把Q/K L2Norm放在Elementwise的映射作废。
+GDN conv history,KVState↔SharedMatrix,Depthwise Conv1D在SharedMatrix；历史状态由KVState持有。
+GDN gated norm,Sequence→Norm→Sequence→Tail,Norm响应返回Sequence完成gate，再交Tail/OProj。
+Dense SwiGLU current physical path,SharedMatrix/ProjParallel128Core/MlpSiluLane32Core,FeedForwardCore仍拥有phase/state；v5把SiLU/Gate×Up画在F不够精确。
+OProj commit,Sequence→Tail→SharedMatrix; Matrix→Tail + Matrix→OutputCommit; Tail→OutputCommit metadata,residual来自NormCore capture，不来自Tail。

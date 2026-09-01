@@ -1,0 +1,178 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only. Cross-layer KDA/DSA schedule is intentionally outside this diagram.
+flowchart TB
+  subgraph family_27b["GLM-5.3-Flash"]
+    direction TB
+    subgraph variant_27b_01["mHC + KDA + Top-8 routed/shared MoE decoder block"]
+      direction TB
+      g53km_x["4 residual streams<br/>decoder-block input"]:::input
+      subgraph g53km_attn_mhc_grp["Attention-site mHC"]
+        direction TB
+        g53km_attn_mhc_norm("mHC input RMSNorm"):::other
+        g53km_attn_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53km_attn_mhc_pre("Sigmoid pre weights"):::other
+        g53km_attn_mhc_post("2 × Sigmoid post weights"):::other
+        g53km_attn_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53km_attn_mhc_collapse("4-stream collapse"):::other
+        g53km_attn_mhc_norm --> g53km_attn_mhc_linear
+        g53km_attn_mhc_linear --> g53km_attn_mhc_pre
+        g53km_attn_mhc_linear --> g53km_attn_mhc_post
+        g53km_attn_mhc_linear --> g53km_attn_mhc_combine
+        g53km_attn_mhc_pre --> g53km_attn_mhc_collapse
+      end
+      g53km_x --> g53km_attn_mhc_norm
+      g53km_x --> g53km_attn_mhc_collapse
+      g53km_kda_norm("Input RMSNorm"):::other
+      g53km_attn_mhc_collapse --> g53km_kda_norm
+      g53km_kda_q["Q Proj"]:::mac
+      g53km_kda_norm --> g53km_kda_q
+      g53km_kda_k["K Proj"]:::mac
+      g53km_kda_norm --> g53km_kda_k
+      g53km_kda_v["V Proj"]:::mac
+      g53km_kda_norm --> g53km_kda_v
+      g53km_kda_fg_a["Forget-gate A projection"]:::mac
+      g53km_kda_norm --> g53km_kda_fg_a
+      g53km_kda_beta["Input-gate β projection"]:::mac
+      g53km_kda_norm --> g53km_kda_beta
+      g53km_kda_og["Output-gate projection"]:::mac
+      g53km_kda_norm --> g53km_kda_og
+      g53km_kda_conv("Causal Depthwise Conv1D over Q/K/V"):::other
+      g53km_kda_split("Split / reshape Q, K, V"):::other
+      g53km_kda_qn("Q L2Norm"):::other
+      g53km_kda_kn("K L2Norm"):::other
+      g53km_kda_forget("Forget factor<br/>softplus / exp parameterization"):::other
+      g53km_kda_beta_act("Input gate β<br/>sigmoid"):::other
+      g53km_kda_state[("KDA recurrent state")]:::state
+      g53km_kda_recur["Kimi-style Delta Attention recurrence"]:::mac
+      g53km_kda_gated("Gated RMSNorm<br/>RMSNorm(O) ⊙ SiLU(gate)"):::other
+      g53km_kda_oproj["O Proj"]:::mac
+      g53km_kda_q --> g53km_kda_conv
+      g53km_kda_k --> g53km_kda_conv
+      g53km_kda_v --> g53km_kda_conv
+      g53km_kda_conv --> g53km_kda_split
+      g53km_kda_split --> g53km_kda_qn
+      g53km_kda_split --> g53km_kda_kn
+      g53km_kda_fg_a --> g53km_kda_forget
+      g53km_kda_beta --> g53km_kda_beta_act
+      g53km_kda_qn --> g53km_kda_recur
+      g53km_kda_kn --> g53km_kda_recur
+      g53km_kda_split --> g53km_kda_recur
+      g53km_kda_forget --> g53km_kda_recur
+      g53km_kda_beta_act --> g53km_kda_recur
+      g53km_kda_state -.-> g53km_kda_recur
+      g53km_kda_recur -.-> g53km_kda_state
+      g53km_kda_recur --> g53km_kda_gated
+      g53km_kda_og --> g53km_kda_gated
+      g53km_kda_gated --> g53km_kda_oproj
+      g53km_attn_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53km_attn_post_streams["4 residual streams after KDA"]:::output
+      g53km_kda_oproj --> g53km_attn_post_post_update
+      g53km_attn_mhc_post --> g53km_attn_post_post_update
+      g53km_attn_mhc_combine --> g53km_attn_post_post_update
+      g53km_x --> g53km_attn_post_post_update
+      g53km_attn_post_post_update --> g53km_attn_post_streams
+      subgraph g53km_moe_mhc_grp["FFN-site mHC"]
+        direction TB
+        g53km_moe_mhc_norm("mHC input RMSNorm"):::other
+        g53km_moe_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53km_moe_mhc_pre("Sigmoid pre weights"):::other
+        g53km_moe_mhc_post("2 × Sigmoid post weights"):::other
+        g53km_moe_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53km_moe_mhc_collapse("4-stream collapse"):::other
+        g53km_moe_mhc_norm --> g53km_moe_mhc_linear
+        g53km_moe_mhc_linear --> g53km_moe_mhc_pre
+        g53km_moe_mhc_linear --> g53km_moe_mhc_post
+        g53km_moe_mhc_linear --> g53km_moe_mhc_combine
+        g53km_moe_mhc_pre --> g53km_moe_mhc_collapse
+      end
+      g53km_attn_post_streams --> g53km_moe_mhc_norm
+      g53km_attn_post_streams --> g53km_moe_mhc_collapse
+      g53km_moe_norm("RMSNorm 2"):::other
+      g53km_moe_router["Router projection"]:::mac
+      g53km_moe_score("Sigmoid router scoring"):::other
+      g53km_moe_top("Top-8 + renorm"):::other
+      g53km_moe_dispatch("Dispatch / gather"):::other
+      g53km_moe_mhc_collapse --> g53km_moe_norm
+      g53km_moe_norm --> g53km_moe_router
+      g53km_moe_router --> g53km_moe_score
+      g53km_moe_score --> g53km_moe_top
+      g53km_moe_top --> g53km_moe_dispatch
+      subgraph g53km_moe_routed_grp["Routed expert body × E; 8 active/token"]
+        direction LR
+        g53km_moe_routed_gate_up["gate_up_proj"]:::mac
+        g53km_moe_routed_split("Split gate / up"):::other
+        g53km_moe_routed_gate_up --> g53km_moe_routed_split
+        g53km_moe_routed_clamp_gate("Clamp gate ≤ 10"):::other
+        g53km_moe_routed_clamp_up("Clamp up ∈ [−10,10]"):::other
+        g53km_moe_routed_split --> g53km_moe_routed_clamp_gate
+        g53km_moe_routed_split --> g53km_moe_routed_clamp_up
+        g53km_moe_routed_act("SiLU<br/>gate activation"):::other
+        g53km_moe_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        g53km_moe_routed_down["down_proj"]:::mac
+        g53km_moe_routed_clamp_gate --> g53km_moe_routed_act
+        g53km_moe_routed_act --> g53km_moe_routed_mul
+        g53km_moe_routed_clamp_up --> g53km_moe_routed_mul
+        g53km_moe_routed_mul --> g53km_moe_routed_down
+      end
+      subgraph g53km_moe_shared_grp["Shared expert body × 1"]
+        direction LR
+        g53km_moe_shared_gate["gate_proj"]:::mac
+        g53km_moe_shared_up["up_proj"]:::mac
+        g53km_moe_shared_clamp_gate("Clamp gate ≤ 10"):::other
+        g53km_moe_shared_clamp_up("Clamp up ∈ [−10,10]"):::other
+        g53km_moe_shared_gate --> g53km_moe_shared_clamp_gate
+        g53km_moe_shared_up --> g53km_moe_shared_clamp_up
+        g53km_moe_shared_act("SiLU<br/>gate activation"):::other
+        g53km_moe_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        g53km_moe_shared_down["down_proj"]:::mac
+        g53km_moe_shared_clamp_gate --> g53km_moe_shared_act
+        g53km_moe_shared_act --> g53km_moe_shared_mul
+        g53km_moe_shared_clamp_up --> g53km_moe_shared_mul
+        g53km_moe_shared_mul --> g53km_moe_shared_down
+      end
+      g53km_moe_weight("Expert weighting"):::other
+      g53km_moe_reduce("Scatter / weighted reduce"):::other
+      g53km_moe_sgp["Shared expert gate projection"]:::mac
+      g53km_moe_sgs("Sigmoid"):::other
+      g53km_moe_sg("Shared expert gating"):::other
+      g53km_moe_merge((+)):::plus
+      g53km_moe_dispatch --> g53km_moe_routed_gate_up
+      g53km_moe_routed_down --> g53km_moe_weight
+      g53km_moe_top --> g53km_moe_weight
+      g53km_moe_weight --> g53km_moe_reduce
+      g53km_moe_norm --> g53km_moe_shared_gate
+      g53km_moe_norm --> g53km_moe_shared_up
+      g53km_moe_norm --> g53km_moe_sgp
+      g53km_moe_sgp --> g53km_moe_sgs
+      g53km_moe_shared_down --> g53km_moe_sg
+      g53km_moe_sgs --> g53km_moe_sg
+      g53km_moe_reduce --> g53km_moe_merge
+      g53km_moe_sg --> g53km_moe_merge
+      g53km_moe_mhc_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53km_moe_mhc_post_streams["Block output — 4 residual streams"]:::output
+      g53km_moe_merge --> g53km_moe_mhc_post_post_update
+      g53km_moe_mhc_post --> g53km_moe_mhc_post_post_update
+      g53km_moe_mhc_combine --> g53km_moe_mhc_post_post_update
+      g53km_attn_post_streams --> g53km_moe_mhc_post_post_update
+      g53km_moe_mhc_post_post_update --> g53km_moe_mhc_post_streams
+    end
+  end
+style family_27b fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_27b_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style g53km_attn_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53km_moe_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53km_moe_routed_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53km_moe_shared_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 27,28 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 35,77 stroke:#777777,stroke-width:1.3px;

@@ -1,0 +1,128 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only; exact DAG split from the original family atlas.
+%% Blue=MAC-heavy, purple=non-matrix, green=state/output, yellow=input.
+flowchart TB
+  subgraph family_08a["Qwen3.5 / Qwen3.6 Hybrid Dense"]
+    direction TB
+    subgraph variant_08a_01["GDN + dense SwiGLU block"]
+      direction TB
+      subgraph p05_gdn_core["Chunk Gated Delta Rule — expanded logical prefill dataflow"]
+        direction TB
+        p05_recurrence["Token recurrence<br/>rₜ = vₜ − kₜᵀSₜ₋₁<br/>Sₜ = αₜSₜ₋₁ + βₜkₜrₜᵀ<br/>oₜ = qₜᵀSₜ"]:::note
+        p05_chunk("Chunk partition<br/>representative C=64"):::other
+        p05_gamma("Decay matrix Γ<br/>Γᵢⱼ = exp(Σ g)"):::other
+        p05_kkt["K Kᵀ<br/>batched head GEMM"]:::mac
+        p05_lower("Build strict-lower L<br/>I + tril(β·Γ·KKᵀ, −1)"):::other
+        p05_solve("Triangular solve<br/>U = L⁻¹(β ⊙ V)"):::other
+        p05_qkt["Q Kᵀ<br/>batched head GEMM"]:::mac
+        p05_intra["Intra-chunk output<br/>(Γ ⊙ QKᵀ) · U"]:::mac
+        p05_state_read["State read<br/>Q · Sᵢₙ"]:::mac
+        p05_combine("Output combine<br/>Ostate + Ointra"):::other
+        p05_state[("Recurrent state S<br/>[heads,dK,dV] FP32")]:::state
+        p05_ktu["Kᵀ U<br/>state-delta GEMM"]:::mac
+        p05_state_decay("State decay<br/>αend ⊙ Sᵢₙ"):::other
+        p05_state_add((+)):::plus
+      end
+      p05_n001["X<br/>[T=1024, H=2048]"]:::input
+      p05_n004("RMSNorm 1<br/>x ⊙ γ / √(mean(x²)+ε)"):::other
+      p05_n005["in_proj_qkv<br/>X · Wqkv"]:::mac
+      p05_n006["in_proj_z<br/>X · Wz"]:::mac
+      p05_n007["in_proj_a<br/>X · Wa"]:::mac
+      p05_n008["in_proj_b<br/>X · Wb"]:::mac
+      p05_n009("Depthwise Conv1D<br/>causal, k=4; channelwise"):::other
+      p05_n010("SiLU<br/>u·σ(u)"):::other
+      p05_n011("Split Q / K / V<br/>reshape mixed projection into three tensors"):::other
+      p05_n012("Decay preactivation<br/>−exp(A_log)·softplus(a+dt_bias)"):::other
+      p05_n013("Decay factor<br/>α = exp(g)"):::other
+      p05_n014("Update gate<br/>β = sigmoid(b)"):::other
+      p05_n015("Q reshape<br/>[16,T,128]"):::other
+      p05_n016("K reshape<br/>[16,T,128]"):::other
+      p05_n017("V reshape<br/>[16,T,128]"):::other
+      p05_n018("Q L2Norm<br/>x̂ = x / max(‖x‖₂, ε)"):::other
+      p05_n019("K L2Norm<br/>x̂ = x / max(‖x‖₂, ε)"):::other
+      p05_n034("RMSNormGated<br/>RMSNorm(O) ⊙ SiLU(z)"):::other
+      p05_n035["out_proj<br/>Y · Wout"]:::mac
+      p05_n036((+)):::plus
+      p05_n037["X + GDN"]:::output
+      p05_n038("RMSNorm 2<br/>x ⊙ γ / √(mean(x²)+ε)"):::other
+      p05_n039["gate_proj<br/>X · Wgate"]:::mac
+      p05_n040["up_proj<br/>X · Wup"]:::mac
+      p05_n041("SiLU<br/>u·σ(u)"):::other
+      p05_n042("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+      p05_n043["down_proj<br/>Z · Wdown"]:::mac
+      p05_n002((+)):::plus
+      p05_n003["Block output"]:::output
+      p05_n001 --> p05_n004
+      p05_n004 --> p05_n005
+      p05_n004 --> p05_n006
+      p05_n004 --> p05_n007
+      p05_n004 --> p05_n008
+      p05_n005 --> p05_n009
+      p05_n009 --> p05_n010
+      p05_n010 --> p05_n011
+      p05_n007 --> p05_n012
+      p05_n012 --> p05_n013
+      p05_n008 --> p05_n014
+      p05_n011 --> p05_n015
+      p05_n011 --> p05_n016
+      p05_n011 --> p05_n017
+      p05_n015 --> p05_n018
+      p05_n016 --> p05_n019
+      p05_n013 --> p05_gamma
+      p05_n018 --> p05_chunk
+      p05_n019 --> p05_chunk
+      p05_n017 --> p05_chunk
+      p05_chunk --> p05_kkt
+      p05_kkt --> p05_lower
+      p05_n014 --> p05_lower
+      p05_gamma --> p05_lower
+      p05_lower --> p05_solve
+      p05_chunk --> p05_qkt
+      p05_qkt --> p05_intra
+      p05_gamma --> p05_intra
+      p05_solve --> p05_intra
+      p05_n018 --> p05_state_read
+      p05_intra --> p05_combine
+      p05_state_read --> p05_combine
+      p05_chunk --> p05_ktu
+      p05_solve --> p05_ktu
+      p05_gamma --> p05_state_decay
+      p05_ktu --> p05_state_add
+      p05_state_decay --> p05_state_add
+      p05_state_add -.-> p05_state
+      p05_state -.-> p05_state_read
+      p05_state -.-> p05_state_decay
+      p05_combine --> p05_n034
+      p05_n006 --> p05_n034
+      p05_n034 --> p05_n035
+      p05_n035 --> p05_n036
+      p05_n001 --> p05_n036
+      p05_n036 --> p05_n037
+      p05_n037 --> p05_n038
+      p05_n038 --> p05_n039
+      p05_n038 --> p05_n040
+      p05_n039 --> p05_n041
+      p05_n041 --> p05_n042
+      p05_n040 --> p05_n042
+      p05_n042 --> p05_n043
+      p05_n043 --> p05_n002
+      p05_n037 --> p05_n002
+      p05_n002 --> p05_n003
+    end
+  end
+style family_08a fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_08a_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p05_gdn_core fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 37,38,39 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 44,54 stroke:#777777,stroke-width:1.3px;

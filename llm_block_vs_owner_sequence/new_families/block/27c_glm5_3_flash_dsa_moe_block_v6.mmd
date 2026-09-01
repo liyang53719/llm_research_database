@@ -1,0 +1,187 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only. Cross-layer KDA/DSA schedule and index reuse policy are outside this diagram.
+flowchart TB
+  subgraph family_27c["GLM-5.3-Flash"]
+    direction TB
+    subgraph variant_27c_01["mHC + NoPE MLA/DSA + Top-8 routed/shared MoE decoder block"]
+      direction TB
+      g53ds_x["4 residual streams<br/>decoder-block input"]:::input
+      subgraph g53ds_attn_mhc_grp["Attention-site mHC"]
+        direction TB
+        g53ds_attn_mhc_norm("mHC input RMSNorm"):::other
+        g53ds_attn_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53ds_attn_mhc_pre("Sigmoid pre weights"):::other
+        g53ds_attn_mhc_post("2 × Sigmoid post weights"):::other
+        g53ds_attn_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53ds_attn_mhc_collapse("4-stream collapse"):::other
+        g53ds_attn_mhc_norm --> g53ds_attn_mhc_linear
+        g53ds_attn_mhc_linear --> g53ds_attn_mhc_pre
+        g53ds_attn_mhc_linear --> g53ds_attn_mhc_post
+        g53ds_attn_mhc_linear --> g53ds_attn_mhc_combine
+        g53ds_attn_mhc_pre --> g53ds_attn_mhc_collapse
+      end
+      g53ds_x --> g53ds_attn_mhc_norm
+      g53ds_x --> g53ds_attn_mhc_collapse
+      g53ds_norm("Input RMSNorm"):::other
+      g53ds_attn_mhc_collapse --> g53ds_norm
+      g53ds_qa["Q low-rank A"]:::mac
+      g53ds_norm --> g53ds_qa
+      g53ds_kvc["KV compression"]:::mac
+      g53ds_norm --> g53ds_kvc
+      g53ds_idxproj["DSA Indexer Q/K projection"]:::mac
+      g53ds_norm --> g53ds_idxproj
+      g53ds_qn("Q low-rank RMSNorm"):::other
+      g53ds_qb["Q low-rank B"]:::mac
+      g53ds_qsplit("Split Q — NoPE"):::other
+      g53ds_kvn("KV latent RMSNorm"):::other
+      g53ds_kvup["KV expansion"]:::mac
+      g53ds_kvsplit("Split K / V — NoPE"):::other
+      g53ds_cache[("Latent KV cache")]:::state
+      g53ds_qa --> g53ds_qn
+      g53ds_qn --> g53ds_qb
+      g53ds_qb --> g53ds_qsplit
+      g53ds_kvc --> g53ds_kvn
+      g53ds_kvn --> g53ds_kvup
+      g53ds_kvup --> g53ds_kvsplit
+      g53ds_kvc -.-> g53ds_cache
+      g53ds_idxsplit("Split Indexer Q / K"):::other
+      g53ds_kpool("KPool-16 compressed-key mean"):::other
+      g53ds_idxdot["Indexer Q × pooled Kᵀ"]:::mac
+      g53ds_idxrelu("ReLU + index-head reduce"):::other
+      g53ds_top("Top-2048 select"):::other
+      g53ds_prev[("Previous full-layer Top-k selection")]:::state
+      g53ds_sel("Selected-index source mux"):::other
+      g53ds_gather[("Selected latent/token gather + incomplete tail")]:::state
+      g53ds_idxproj --> g53ds_idxsplit
+      g53ds_idxsplit --> g53ds_kpool
+      g53ds_idxsplit --> g53ds_idxdot
+      g53ds_kpool --> g53ds_idxdot
+      g53ds_idxdot --> g53ds_idxrelu
+      g53ds_idxrelu --> g53ds_top
+      g53ds_top --> g53ds_sel
+      g53ds_prev -.-> g53ds_sel
+      g53ds_sel --> g53ds_gather
+      g53ds_cache -.-> g53ds_gather
+      g53ds_score["Selected sparse MLA Q × Kᵀ"]:::mac
+      g53ds_soft("Softmax FP32"):::other
+      g53ds_pv["Sparse P × V / online O recurrence"]:::mac
+      g53ds_oproj["O Proj"]:::mac
+      g53ds_qsplit --> g53ds_score
+      g53ds_kvsplit --> g53ds_gather
+      g53ds_gather --> g53ds_score
+      g53ds_score --> g53ds_soft
+      g53ds_soft --> g53ds_pv
+      g53ds_gather --> g53ds_pv
+      g53ds_pv --> g53ds_oproj
+      g53ds_attn_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53ds_attn_post_streams["4 residual streams after DSA"]:::output
+      g53ds_oproj --> g53ds_attn_post_post_update
+      g53ds_attn_mhc_post --> g53ds_attn_post_post_update
+      g53ds_attn_mhc_combine --> g53ds_attn_post_post_update
+      g53ds_x --> g53ds_attn_post_post_update
+      g53ds_attn_post_post_update --> g53ds_attn_post_streams
+      subgraph g53ds_moe_mhc_grp["FFN-site mHC"]
+        direction TB
+        g53ds_moe_mhc_norm("mHC input RMSNorm"):::other
+        g53ds_moe_mhc_linear["mHC F.linear(fn)"]:::mac
+        g53ds_moe_mhc_pre("Sigmoid pre weights"):::other
+        g53ds_moe_mhc_post("2 × Sigmoid post weights"):::other
+        g53ds_moe_mhc_combine("Softmax + Sinkhorn combine matrix"):::other
+        g53ds_moe_mhc_collapse("4-stream collapse"):::other
+        g53ds_moe_mhc_norm --> g53ds_moe_mhc_linear
+        g53ds_moe_mhc_linear --> g53ds_moe_mhc_pre
+        g53ds_moe_mhc_linear --> g53ds_moe_mhc_post
+        g53ds_moe_mhc_linear --> g53ds_moe_mhc_combine
+        g53ds_moe_mhc_pre --> g53ds_moe_mhc_collapse
+      end
+      g53ds_attn_post_streams --> g53ds_moe_mhc_norm
+      g53ds_attn_post_streams --> g53ds_moe_mhc_collapse
+      g53ds_moe_norm("RMSNorm 2"):::other
+      g53ds_moe_router["Router projection"]:::mac
+      g53ds_moe_score("Sigmoid router scoring"):::other
+      g53ds_moe_top("Top-8 + renorm"):::other
+      g53ds_moe_dispatch("Dispatch / gather"):::other
+      g53ds_moe_mhc_collapse --> g53ds_moe_norm
+      g53ds_moe_norm --> g53ds_moe_router
+      g53ds_moe_router --> g53ds_moe_score
+      g53ds_moe_score --> g53ds_moe_top
+      g53ds_moe_top --> g53ds_moe_dispatch
+      subgraph g53ds_moe_routed_grp["Routed expert body × E; 8 active/token"]
+        direction LR
+        g53ds_moe_routed_gate_up["gate_up_proj"]:::mac
+        g53ds_moe_routed_split("Split gate / up"):::other
+        g53ds_moe_routed_gate_up --> g53ds_moe_routed_split
+        g53ds_moe_routed_clamp_gate("Clamp gate ≤ 10"):::other
+        g53ds_moe_routed_clamp_up("Clamp up ∈ [−10,10]"):::other
+        g53ds_moe_routed_split --> g53ds_moe_routed_clamp_gate
+        g53ds_moe_routed_split --> g53ds_moe_routed_clamp_up
+        g53ds_moe_routed_act("SiLU<br/>gate activation"):::other
+        g53ds_moe_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        g53ds_moe_routed_down["down_proj"]:::mac
+        g53ds_moe_routed_clamp_gate --> g53ds_moe_routed_act
+        g53ds_moe_routed_act --> g53ds_moe_routed_mul
+        g53ds_moe_routed_clamp_up --> g53ds_moe_routed_mul
+        g53ds_moe_routed_mul --> g53ds_moe_routed_down
+      end
+      subgraph g53ds_moe_shared_grp["Shared expert body × 1"]
+        direction LR
+        g53ds_moe_shared_gate["gate_proj"]:::mac
+        g53ds_moe_shared_up["up_proj"]:::mac
+        g53ds_moe_shared_clamp_gate("Clamp gate ≤ 10"):::other
+        g53ds_moe_shared_clamp_up("Clamp up ∈ [−10,10]"):::other
+        g53ds_moe_shared_gate --> g53ds_moe_shared_clamp_gate
+        g53ds_moe_shared_up --> g53ds_moe_shared_clamp_up
+        g53ds_moe_shared_act("SiLU<br/>gate activation"):::other
+        g53ds_moe_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        g53ds_moe_shared_down["down_proj"]:::mac
+        g53ds_moe_shared_clamp_gate --> g53ds_moe_shared_act
+        g53ds_moe_shared_act --> g53ds_moe_shared_mul
+        g53ds_moe_shared_clamp_up --> g53ds_moe_shared_mul
+        g53ds_moe_shared_mul --> g53ds_moe_shared_down
+      end
+      g53ds_moe_weight("Expert weighting"):::other
+      g53ds_moe_reduce("Scatter / weighted reduce"):::other
+      g53ds_moe_sgp["Shared expert gate projection"]:::mac
+      g53ds_moe_sgs("Sigmoid"):::other
+      g53ds_moe_sg("Shared expert gating"):::other
+      g53ds_moe_merge((+)):::plus
+      g53ds_moe_dispatch --> g53ds_moe_routed_gate_up
+      g53ds_moe_routed_down --> g53ds_moe_weight
+      g53ds_moe_top --> g53ds_moe_weight
+      g53ds_moe_weight --> g53ds_moe_reduce
+      g53ds_moe_norm --> g53ds_moe_shared_gate
+      g53ds_moe_norm --> g53ds_moe_shared_up
+      g53ds_moe_norm --> g53ds_moe_sgp
+      g53ds_moe_sgp --> g53ds_moe_sgs
+      g53ds_moe_shared_down --> g53ds_moe_sg
+      g53ds_moe_sgs --> g53ds_moe_sg
+      g53ds_moe_reduce --> g53ds_moe_merge
+      g53ds_moe_sg --> g53ds_moe_merge
+      g53ds_moe_mhc_post_post_update("post × sublayer output + combineᵀ × residual streams"):::other
+      g53ds_moe_mhc_post_streams["Block output — 4 residual streams"]:::output
+      g53ds_moe_merge --> g53ds_moe_mhc_post_post_update
+      g53ds_moe_mhc_post --> g53ds_moe_mhc_post_post_update
+      g53ds_moe_mhc_combine --> g53ds_moe_mhc_post_post_update
+      g53ds_attn_post_streams --> g53ds_moe_mhc_post_post_update
+      g53ds_moe_mhc_post_post_update --> g53ds_moe_mhc_post_streams
+    end
+  end
+style family_27c fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_27c_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style g53ds_attn_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53ds_moe_mhc_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53ds_moe_routed_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style g53ds_moe_shared_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 17,25,27 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 38,80 stroke:#777777,stroke-width:1.3px;

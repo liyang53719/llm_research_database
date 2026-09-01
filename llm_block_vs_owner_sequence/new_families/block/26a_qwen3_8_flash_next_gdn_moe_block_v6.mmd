@@ -1,0 +1,215 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only. Layer recipe, PLE placement, vision tower and MTP are intentionally outside this diagram.
+flowchart TB
+  subgraph family_26a["Qwen3.8-Flash-Next"]
+    direction TB
+    subgraph variant_26a_01["Gated Residual + Gated DeltaNet + Top-10 MoE decoder block"]
+      direction TB
+      q38g_x["4 residual streams<br/>decoder-block input"]:::input
+      subgraph q38g_attn_gr_grp["Attention-site Gated Residual read / write gates"]
+        direction TB
+        q38g_attn_gr_norm("Grouped RMSNorm over 4 residual streams"):::other
+        q38g_attn_gr_down["input_mix_weight_down"]:::mac
+        q38g_attn_gr_silu("SiLU / hc_count"):::other
+        q38g_attn_gr_up["input_mix_weight_up"]:::mac
+        q38g_attn_gr_read_gate("Sigmoid read weights"):::other
+        q38g_attn_gr_mean("4-stream weighted mean"):::other
+        q38g_attn_gr_inject["block_inject_weight"]:::mac
+        q38g_attn_gr_write_gate("2 × Sigmoid write gates"):::other
+        q38g_attn_gr_norm --> q38g_attn_gr_down
+        q38g_attn_gr_down --> q38g_attn_gr_silu
+        q38g_attn_gr_silu --> q38g_attn_gr_up
+        q38g_attn_gr_up --> q38g_attn_gr_read_gate
+        q38g_attn_gr_norm --> q38g_attn_gr_mean
+        q38g_attn_gr_read_gate --> q38g_attn_gr_mean
+        q38g_attn_gr_mean --> q38g_attn_gr_inject
+        q38g_attn_gr_inject --> q38g_attn_gr_write_gate
+      end
+      q38g_x --> q38g_attn_gr_norm
+      q38g_x --> q38g_attn_gr_mean
+      q38g_norm1("RMSNorm 1"):::other
+      q38g_attn_gr_mean --> q38g_norm1
+      q38g_qkv["in_proj_qkv"]:::mac
+      q38g_norm1 --> q38g_qkv
+      q38g_z["in_proj_z"]:::mac
+      q38g_norm1 --> q38g_z
+      q38g_a["in_proj_a"]:::mac
+      q38g_norm1 --> q38g_a
+      q38g_b["in_proj_b"]:::mac
+      q38g_norm1 --> q38g_b
+      q38g_conv("Depthwise Conv1D<br/>causal, channelwise"):::other
+      q38g_silu("SiLU"):::other
+      q38g_split("Split Q / K / V"):::other
+      q38g_qshape("Q reshape"):::other
+      q38g_kshape("K reshape"):::other
+      q38g_vshape("V reshape"):::other
+      q38g_qnorm("Q L2Norm"):::other
+      q38g_knorm("K L2Norm"):::other
+      q38g_decay_pre("Decay preactivation"):::other
+      q38g_decay("Decay factor α"):::other
+      q38g_beta("Update gate β"):::other
+      q38g_qkv --> q38g_conv
+      q38g_conv --> q38g_silu
+      q38g_silu --> q38g_split
+      q38g_split --> q38g_qshape
+      q38g_split --> q38g_kshape
+      q38g_split --> q38g_vshape
+      q38g_qshape --> q38g_qnorm
+      q38g_kshape --> q38g_knorm
+      q38g_a --> q38g_decay_pre
+      q38g_decay_pre --> q38g_decay
+      q38g_b --> q38g_beta
+      subgraph q38g_gdn_core["Chunk Gated Delta Rule — expanded logical prefill dataflow"]
+        direction TB
+        q38g_recurrence["Token recurrence<br/>rₜ = vₜ − kₜᵀSₜ₋₁<br/>Sₜ = αₜSₜ₋₁ + βₜkₜrₜᵀ<br/>oₜ = qₜᵀSₜ"]:::note
+        q38g_chunk("Chunk partition<br/>representative C=64"):::other
+        q38g_gamma("Decay matrix Γ<br/>Γᵢⱼ = exp(Σ g)"):::other
+        q38g_kkt["K Kᵀ<br/>batched head GEMM"]:::mac
+        q38g_lower("Build strict-lower L<br/>I + tril(β·Γ·KKᵀ, −1)"):::other
+        q38g_solve("Triangular solve<br/>U = L⁻¹(β ⊙ V)"):::other
+        q38g_qkt["Q Kᵀ<br/>batched head GEMM"]:::mac
+        q38g_intra["Intra-chunk output<br/>(Γ ⊙ QKᵀ) · U"]:::mac
+        q38g_state_read["State read<br/>Q · Sᵢₙ"]:::mac
+        q38g_combine("Output combine<br/>Ostate + Ointra"):::other
+        q38g_state[("Recurrent state S<br/>[heads,dK,dV] FP32")]:::state
+        q38g_ktu["Kᵀ U<br/>state-delta GEMM"]:::mac
+        q38g_state_decay("State decay<br/>αend ⊙ Sᵢₙ"):::other
+        q38g_state_add((+)):::plus
+      end
+      q38g_qnorm --> q38g_chunk
+      q38g_knorm --> q38g_chunk
+      q38g_vshape --> q38g_chunk
+      q38g_decay --> q38g_gamma
+      q38g_chunk --> q38g_kkt
+      q38g_kkt --> q38g_lower
+      q38g_beta --> q38g_lower
+      q38g_gamma --> q38g_lower
+      q38g_lower --> q38g_solve
+      q38g_chunk --> q38g_qkt
+      q38g_qkt --> q38g_intra
+      q38g_gamma --> q38g_intra
+      q38g_solve --> q38g_intra
+      q38g_qnorm --> q38g_state_read
+      q38g_intra --> q38g_combine
+      q38g_state_read --> q38g_combine
+      q38g_chunk --> q38g_ktu
+      q38g_solve --> q38g_ktu
+      q38g_gamma --> q38g_state_decay
+      q38g_ktu --> q38g_state_add
+      q38g_state_decay --> q38g_state_add
+      q38g_state_add -.-> q38g_state
+      q38g_state -.-> q38g_state_read
+      q38g_state -.-> q38g_state_decay
+      q38g_rmsg("RMSNormGated<br/>RMSNorm(O) ⊙ SiLU(z)"):::other
+      q38g_outproj["out_proj"]:::mac
+      q38g_attn_write("Attention-site write-gate injection into 4 residual branches"):::other
+      q38g_after["4 residual streams after GDN"]:::output
+      q38g_combine --> q38g_rmsg
+      q38g_z --> q38g_rmsg
+      q38g_rmsg --> q38g_outproj
+      q38g_outproj --> q38g_attn_write
+      q38g_attn_gr_write_gate --> q38g_attn_write
+      q38g_x --> q38g_attn_write
+      q38g_attn_write --> q38g_after
+      subgraph q38g_mlp_gr_grp["MLP-site Gated Residual read / write gates"]
+        direction TB
+        q38g_mlp_gr_norm("Grouped RMSNorm over 4 residual streams"):::other
+        q38g_mlp_gr_down["input_mix_weight_down"]:::mac
+        q38g_mlp_gr_silu("SiLU / hc_count"):::other
+        q38g_mlp_gr_up["input_mix_weight_up"]:::mac
+        q38g_mlp_gr_read_gate("Sigmoid read weights"):::other
+        q38g_mlp_gr_mean("4-stream weighted mean"):::other
+        q38g_mlp_gr_inject["block_inject_weight"]:::mac
+        q38g_mlp_gr_write_gate("2 × Sigmoid write gates"):::other
+        q38g_mlp_gr_norm --> q38g_mlp_gr_down
+        q38g_mlp_gr_down --> q38g_mlp_gr_silu
+        q38g_mlp_gr_silu --> q38g_mlp_gr_up
+        q38g_mlp_gr_up --> q38g_mlp_gr_read_gate
+        q38g_mlp_gr_norm --> q38g_mlp_gr_mean
+        q38g_mlp_gr_read_gate --> q38g_mlp_gr_mean
+        q38g_mlp_gr_mean --> q38g_mlp_gr_inject
+        q38g_mlp_gr_inject --> q38g_mlp_gr_write_gate
+      end
+      q38g_after --> q38g_mlp_gr_norm
+      q38g_after --> q38g_mlp_gr_mean
+      q38g_mlp_norm("RMSNorm 2"):::other
+      q38g_mlp_router["Router projection"]:::mac
+      q38g_mlp_score("Sigmoid router scoring"):::other
+      q38g_mlp_top("Top-10 + renorm"):::other
+      q38g_mlp_dispatch("Dispatch / gather"):::other
+      q38g_mlp_gr_mean --> q38g_mlp_norm
+      q38g_mlp_norm --> q38g_mlp_router
+      q38g_mlp_router --> q38g_mlp_score
+      q38g_mlp_score --> q38g_mlp_top
+      q38g_mlp_top --> q38g_mlp_dispatch
+      subgraph q38g_mlp_routed_grp["Routed expert body × E; 10 active/token"]
+        direction LR
+        q38g_mlp_routed_gate_up["gate_up_proj"]:::mac
+        q38g_mlp_routed_split("Split gate / up"):::other
+        q38g_mlp_routed_gate_up --> q38g_mlp_routed_split
+        q38g_mlp_routed_act("SiLU<br/>gate activation"):::other
+        q38g_mlp_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        q38g_mlp_routed_down["down_proj"]:::mac
+        q38g_mlp_routed_split --> q38g_mlp_routed_act
+        q38g_mlp_routed_act --> q38g_mlp_routed_mul
+        q38g_mlp_routed_split --> q38g_mlp_routed_mul
+        q38g_mlp_routed_mul --> q38g_mlp_routed_down
+      end
+      subgraph q38g_mlp_shared_grp["Shared expert body × 1"]
+        direction LR
+        q38g_mlp_shared_gate["gate_proj"]:::mac
+        q38g_mlp_shared_up["up_proj"]:::mac
+        q38g_mlp_shared_act("SiLU<br/>gate activation"):::other
+        q38g_mlp_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        q38g_mlp_shared_down["down_proj"]:::mac
+        q38g_mlp_shared_gate --> q38g_mlp_shared_act
+        q38g_mlp_shared_act --> q38g_mlp_shared_mul
+        q38g_mlp_shared_up --> q38g_mlp_shared_mul
+        q38g_mlp_shared_mul --> q38g_mlp_shared_down
+      end
+      q38g_mlp_weight("Expert weighting"):::other
+      q38g_mlp_reduce("Scatter / weighted reduce"):::other
+      q38g_mlp_sgproj["Shared expert gate projection"]:::mac
+      q38g_mlp_sgsig("Sigmoid"):::other
+      q38g_mlp_sgating("Shared expert gating"):::other
+      q38g_mlp_merge((+)):::plus
+      q38g_mlp_write("MLP-site write-gate injection into 4 residual branches"):::other
+      q38g_mlp_out["Block output — 4 residual streams"]:::output
+      q38g_mlp_dispatch --> q38g_mlp_routed_gate_up
+      q38g_mlp_routed_down --> q38g_mlp_weight
+      q38g_mlp_top --> q38g_mlp_weight
+      q38g_mlp_weight --> q38g_mlp_reduce
+      q38g_mlp_norm --> q38g_mlp_shared_gate
+      q38g_mlp_norm --> q38g_mlp_shared_up
+      q38g_mlp_norm --> q38g_mlp_sgproj
+      q38g_mlp_sgproj --> q38g_mlp_sgsig
+      q38g_mlp_shared_down --> q38g_mlp_sgating
+      q38g_mlp_sgsig --> q38g_mlp_sgating
+      q38g_mlp_reduce --> q38g_mlp_merge
+      q38g_mlp_sgating --> q38g_mlp_merge
+      q38g_mlp_merge --> q38g_mlp_write
+      q38g_mlp_gr_write_gate --> q38g_mlp_write
+      q38g_after --> q38g_mlp_write
+      q38g_mlp_write --> q38g_mlp_out
+    end
+  end
+style family_26a fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_26a_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style q38g_attn_gr_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38g_gdn_core fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38g_mlp_gr_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38g_mlp_routed_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style q38g_mlp_shared_grp fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 47,48,49 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 55,95 stroke:#777777,stroke-width:1.3px;

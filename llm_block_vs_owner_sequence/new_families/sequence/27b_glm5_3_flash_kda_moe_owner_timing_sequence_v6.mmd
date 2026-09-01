@@ -1,0 +1,451 @@
+%%{init: {"theme": "base", "sequence": {"useMaxWidth": false, "diagramMarginX": 18, "diagramMarginY": 12, "actorMargin": 24, "width": 150, "height": 42, "boxMargin": 8, "boxTextMargin": 5, "noteMargin": 8, "messageMargin": 24, "mirrorActors": true, "rightAngles": true, "wrap": true}, "themeVariables": {"actorBkg": "#ffffff", "actorBorder": "#555555", "actorTextColor": "#1f1f1f", "actorLineColor": "#666666", "signalColor": "#333333", "signalTextColor": "#1f1f1f", "labelBoxBkgColor": "#ffffff", "labelBoxBorderColor": "#888888", "labelTextColor": "#1f1f1f", "loopTextColor": "#1f1f1f", "noteBkgColor": "#ffffff", "noteBorderColor": "#999999", "noteTextColor": "#333333", "activationBkgColor": "#f5f5f5", "activationBorderColor": "#777777", "sequenceNumberColor": "#555555"}, "themeCSS": ".actor-line { stroke: #666 !important; stroke-width: 1.25px !important; stroke-dasharray: 3 3; }"}}%%
+%% Family rank 27: GLM-5.3-Flash Hybrid MoE
+%% Source block-atlas file: 27_glm5_3_flash_hybrid_moe.mmd
+%% Sequence file: 27b_glm5_3_flash_kda_moe_owner_timing_sequence_v6.mmd
+%% 13-owner review basis: 381d85219d6feec9b10345e2800ac74d4185e5a0; frozen universal SLX 94384dda268433b7ec47bc88fe97b85a3d1a9fe2360116974e0f0358e2880945.
+%% Current-main confirmation: 0db7eed1e80610083ecc40b1c5982f60db5bda40; SLX 33d79655d4de9bf0e6147fb74f50cc7e26450d9e6e0cecc2d30f386ac7b83379; owner manifest v6.6.
+%% Q×Kᵀ is ScoreCore/QKProduct+QKBeatSum in SequenceCore.
+%% P×V is the OnlineORecurrence beta×V + alpha×Oold update in SequenceCore; full P is not materialized.
+%% SharedMatrix token-dot mode is FFN-down product reduction, not Attention QK/PV.
+%% Unsupported-family files are owner/edge mappings, not implementation-support claims.
+%% New-family diagrams are architecture-to-owner mappings, not claims that the current SLX already implements these operators.
+sequenceDiagram
+  autonumber
+  participant DDR as DDR / External Memory
+  participant C as ControlCore
+  participant A as ActivationReadDmaCore
+  participant P as ParamReadDmaCore
+  participant N as NormCore
+  participant B as ActivationTileBufferCore
+  participant W as WeightReadDmaCore
+  participant M as SharedMatrixCore
+  participant E as ElementwiseTransformCore
+  participant K as KVStateCore
+  participant S as SequenceCore
+  participant T as TailMatrixClientCore
+  participant F as FeedForwardCore
+  participant O as OutputCommitCore
+  Note over DDR,O: Colors follow the block atlas — yellow=input, red=params/weights, blue=MAC-heavy arithmetic, purple=non-matrix, green=state/output, white=residual, gray=hardware/control
+  Note over C,O: Blue means MAC-heavy math; the participant lifeline is the actual execution owner.
+  Note over C,O: Current fixed payload transfers follow manifest v6.6; future-only edges are explicitly labelled [FUTURE EDGE].
+
+  Note over C,O: Single KDA decoder Block only; cross-layer KDA/DSA ratio is outside this file.
+  Note over C,O: KDA is Kimi-style delta attention with Q/K L2Norm, depthwise Conv1D, forget/input gates and recurrent state.
+  rect rgba(242, 242, 242, 0.18)
+    C->>A: start OP_MHC_KDA_MOE — mHC → KDA → mHC → Top-8 Routed/Shared MoE → mHC
+  end
+  loop autonomous token / chunk / recurrent-state loop
+  rect rgba(255, 242, 204, 0.24)
+    A-->>DDR: [HW] AXI read request — 4 residual streams
+  end
+  %% source-node f27v02_n001 | owner=ActivationReadDmaCore | class=input | macro=OP_MHC_KDA_MOE
+  rect rgba(255, 242, 204, 0.24)
+    DDR->>A: 4 residual streams
+  end
+  rect rgba(245, 245, 245, 0.18)
+    A-->>B: [HW] residual-stream staging
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] Attention-site 4 residual streams
+  end
+  %% source-node f27v02_n002 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Attention-site mHC input RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] Attention-site normalized flattened 4-stream tensor
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>M: [EDGE E_ACTBUF_TO_MATRIX] resident normalized 4-stream tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — Attention-site mHC fn/base/scale
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] Attention-site mHC parameters
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] Attention-site mHC projection weights
+  end
+  %% source-node f27v02_n003 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Attention-site mHC F.linear(fn)
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] Attention-site pre/post/comb logits
+  end
+  %% source-node f27v02_n004 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site Sigmoid pre weights
+  end
+  %% source-node f27v02_n005 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site 2 × Sigmoid post weights
+  end
+  %% source-node f27v02_n006 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site Softmax + Sinkhorn combine matrix
+  end
+  %% source-node f27v02_n007 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site 4-stream collapse
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [FUTURE EDGE] collapsed KDA input staging
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [FUTURE EDGE] collapsed KDA input to shared Norm service
+  end
+  %% source-node f27v02_n008 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Input RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [HW] normalized KDA input
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — Q/K/V, forget/input/output gates, O Proj
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] KDA weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] KDA weight tiles
+  end
+  %% source-node f27v02_n009 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Q Proj
+  end
+  %% source-node f27v02_n010 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: K Proj
+  end
+  %% source-node f27v02_n011 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: V Proj
+  end
+  %% source-node f27v02_n012 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Depthwise Conv1D
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] convolved Q/K/V stream
+  end
+  %% source-node f27v02_n013 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: SiLU
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [FUTURE KDA HEAD STAGING] convolved Q/K/V head streams
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B->>N: [FUTURE KDA NORM SERVICE] Q/K L2Norm request / 32-lane replay
+  end
+  %% source-node f27v02_n014 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Q L2Norm
+  end
+  %% source-node f27v02_n015 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: K L2Norm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [FUTURE KDA NORM SERVICE] normalized Q/K response
+  end
+  %% source-node f27v02_n016 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: f_a_proj
+  end
+  %% source-node f27v02_n017 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: f_b_proj
+  end
+  %% source-node f27v02_n018 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: b_proj
+  end
+  %% source-node f27v02_n019 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: g_a_proj
+  end
+  %% source-node f27v02_n020 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: g_b_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] forget/input/output gate projections
+  end
+  %% source-node f27v02_n021 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: dt_bias + A_log
+  end
+  %% source-node f27v02_n022 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Exp forget decay
+  end
+  %% source-node f27v02_n023 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Safe lower-bound clamp
+  end
+  %% source-node f27v02_n024 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Sigmoid input gate β
+  end
+  rect rgba(245, 245, 245, 0.18)
+    E-->>B: [FUTURE KDA STAGING] V + forget decay + β + output-gate projection
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>S: [FUTURE KDA EDGE] normalized Q/K + V + decay + β
+  end
+  rect rgba(245, 245, 245, 0.18)
+    K-->>S: [HW] KDA recurrent state read
+  end
+  %% source-node f27v02_n025 | owner=SequenceCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    S->>S: Kimi Delta Attention — chunk / recurrent
+  end
+  %% source-node f27v02_n026 | owner=SequenceCore | class=state | macro=OP_MHC_KDA_MOE
+  rect rgba(213, 232, 212, 0.24)
+    S->>S: KDA recurrent state update
+  end
+  rect rgba(213, 232, 212, 0.24)
+    S-->>K: [FUTURE KDA STATE COMMIT] updated recurrent state
+  end
+  rect rgba(245, 245, 245, 0.18)
+    S-->>N: [FUTURE KDA NORM SERVICE] KDA core output + output-gate request
+  end
+  %% source-node f27v02_n027 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: Gated RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>S: [FUTURE KDA NORM SERVICE] normalized/gated KDA response
+  end
+  rect rgba(245, 245, 245, 0.18)
+    S-->>T: [FUTURE KDA TAIL EDGE] final KDA output + tags
+  end
+  rect rgba(245, 245, 245, 0.18)
+    T-->>M: [HW] O Proj request
+  end
+  %% source-node f27v02_n028 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: O Proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>T: [EDGE E_MATRIX_TO_TAIL] O Proj result tile
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>O: [EDGE E_MATRIX_TO_COMMIT] OProj result stream128
+  end
+  rect rgba(245, 245, 245, 0.18)
+    T-->>E: [HW] Attention-site sublayer output
+  end
+  %% source-node f27v02_n029 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: Attention-site post × output + combᵀ × residual streams
+  end
+  %% source-node f27v02_n030 | owner=OutputCommitCore | class=state | macro=OP_MHC_KDA_MOE
+  rect rgba(213, 232, 212, 0.24)
+    O->>O: Attention-site 4-stream residual commit
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] FFN-site 4 residual streams
+  end
+  %% source-node f27v02_n031 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: FFN-site mHC input RMSNorm
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] FFN-site normalized flattened 4-stream tensor
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>M: [EDGE E_ACTBUF_TO_MATRIX] resident normalized 4-stream tile
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — FFN-site mHC fn/base/scale
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] FFN-site mHC parameters
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] FFN-site mHC projection weights
+  end
+  %% source-node f27v02_n032 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: FFN-site mHC F.linear(fn)
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>E: [HW] FFN-site pre/post/comb logits
+  end
+  %% source-node f27v02_n033 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: FFN-site Sigmoid pre weights
+  end
+  %% source-node f27v02_n034 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: FFN-site 2 × Sigmoid post weights
+  end
+  %% source-node f27v02_n035 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: FFN-site Softmax + Sinkhorn combine matrix
+  end
+  %% source-node f27v02_n036 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: FFN-site 4-stream collapse
+  end
+  rect rgba(245, 245, 245, 0.18)
+    O-->>B: [HW] updated residual / MLP input staging
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>N: [HW] MLP input stream
+  end
+  %% source-node f27v02_n037 | owner=NormCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    N->>N: RMSNorm 2
+  end
+  rect rgba(245, 245, 245, 0.18)
+    N-->>B: [EDGE E_NORM_TO_ACTBUF] normalized FFN input
+  end
+  rect rgba(245, 245, 245, 0.18)
+    B-->>F: [EDGE E_ACTBUF_TO_FFN] normalized FFN input
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>DDR: [HW] weight read — Router + 288 routed experts + shared expert
+  end
+  rect rgba(248, 206, 204, 0.24)
+    DDR-->>W: [HW] MoE weights
+  end
+  rect rgba(248, 206, 204, 0.24)
+    W-->>M: [HW] router / expert weight tiles
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Router projection request
+  end
+  %% source-node f27v02_n038 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Router projection
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] router logits
+  end
+  %% source-node f27v02_n039 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Sigmoid router scoring
+  end
+  %% source-node f27v02_n040 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Top-8 + renorm
+  end
+  %% source-node f27v02_n041 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Dispatch / gather
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>B: [HW] expert token queues
+  end
+  loop active routed experts — 8 selected of 288
+  rect rgba(245, 245, 245, 0.18)
+    B-->>F: [HW] selected expert token batch
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Routed Expert gate_up_proj request
+  end
+  %% source-node f27v02_n042 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Routed Expert gate_up_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] routed gate/up result
+  end
+  %% source-node f27v02_n043 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Clamp gate≤10 / up∈[-10,10]
+  end
+  %% source-node f27v02_n044 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: SiLU × up
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Routed Expert down_proj request
+  end
+  %% source-node f27v02_n045 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Routed Expert down_proj
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] routed expert output
+  end
+  %% source-node f27v02_n046 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Expert weighting
+  end
+  end
+  par Shared Expert
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert gate_proj / up_proj request
+  end
+  %% source-node f27v02_n047 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert gate_proj
+  end
+  %% source-node f27v02_n048 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert up_proj
+  end
+  %% source-node f27v02_n049 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Clamp gate≤10 / up∈[-10,10]
+  end
+  %% source-node f27v02_n050 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Shared Expert SiLU × up
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert down_proj request
+  end
+  %% source-node f27v02_n051 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert down_proj
+  end
+  and Shared Expert gate
+  rect rgba(245, 245, 245, 0.18)
+    F-->>M: [HW] Shared Expert gate projection request
+  end
+  %% source-node f27v02_n052 | owner=SharedMatrixCore | class=mac | macro=OP_MHC_KDA_MOE
+  rect rgba(218, 232, 252, 0.24)
+    M->>M: Shared Expert gate projection
+  end
+  rect rgba(245, 245, 245, 0.18)
+    M-->>F: [HW] shared gate scalar
+  end
+  %% source-node f27v02_n053 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Shared Expert gate Sigmoid
+  end
+  end
+  %% source-node f27v02_n054 | owner=FeedForwardCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    F->>F: Scatter / weighted reduce
+  end
+  %% source-node f27v02_n055 | owner=FeedForwardCore | class=plus | macro=OP_MHC_KDA_MOE
+  rect rgba(255, 255, 255, 0.28)
+    F->>F: Routed + Shared Expert sum
+  end
+  rect rgba(245, 245, 245, 0.18)
+    F-->>E: [HW] FFN-site sublayer output
+  end
+  %% source-node f27v02_n056 | owner=ElementwiseTransformCore | class=other | macro=OP_MHC_KDA_MOE
+  rect rgba(225, 213, 231, 0.24)
+    E->>E: FFN-site post × output + combᵀ × residual streams
+  end
+  %% source-node f27v02_n057 | owner=OutputCommitCore | class=state | macro=OP_MHC_KDA_MOE
+  rect rgba(213, 232, 212, 0.24)
+    O->>O: FFN-site 4-stream residual commit
+  end
+  rect rgba(213, 232, 212, 0.24)
+    O-->>DDR: [HW] write 4 residual streams
+  end
+  end
+  rect rgba(242, 242, 242, 0.18)
+    O-->>C: OP_MHC_KDA_MOE done
+  end

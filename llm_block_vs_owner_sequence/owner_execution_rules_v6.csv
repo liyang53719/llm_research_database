@@ -1,0 +1,14 @@
+﻿owner,current_role,not_role
+ControlCore,Macro-op/recipe、chunk/bank、Matrix owner/grant、completion、GDN/hybrid scheduler,不传数值payload
+ActivationReadDmaCore,Token/activation/residual DDR read transaction,不做Norm或staging
+ParamReadDmaCore,gamma/beta、dynamic bias、RoPE/GDN parameters,不做数值计算
+WeightReadDmaCore,all Matrix-client weight DDR transaction,不拥有weight SRAM/MAC
+NormCore,input ping-pong、RMS/Layer/QK/GDN norm service、residual capture,不拥有resident 128-token tile banks
+ActivationTileBufferCore,Norm/MLP/head/GDN resident banks、32↔128、transpose/lifecycle,不做主算术
+SharedMatrixCore,single 128×32 Matrix、weights、projection/OProj/FFN/GDN clients、current fused dense SiLU,不执行Attention QK/PV
+ElementwiseTransformCore,projection dispatch、RoPE、GDN SiLU/scale/static transforms,不执行Qwen3.5 attention output gate
+KVStateCore,K/V + GDN/KDA/latent/compressed state lifecycle,不执行recurrent arithmetic
+SequenceCore,QK、online softmax/PV/O、Attention output gate、GDN/KDA/recurrent arithmetic,不拥有tail projection Matrix
+TailMatrixClientCore,Attention gate buffer、final O buffer、OProj request/urgent/grant/result collection,不拥有MAC/weight SRAM
+FeedForwardCore,"Dense/MoE phase, routing, expert queue, down partial accumulation/output state",current dense SiLU arithmetic entity is fused in SharedMatrix
+OutputCommitCore,"OProj/MLP layout, transpose, residual join, Token DDR write",不执行Matrix compute

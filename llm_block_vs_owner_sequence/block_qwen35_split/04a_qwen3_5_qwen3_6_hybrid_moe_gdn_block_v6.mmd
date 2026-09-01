@@ -1,0 +1,173 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Single decoder Block only; exact DAG split from the original family atlas.
+flowchart TB
+  subgraph family_04a["Qwen3.5 / Qwen3.6 Hybrid MoE"]
+    direction TB
+    subgraph variant_04a_01["GDN + routed/shared MoE block"]
+      direction TB
+      subgraph p07_gdn_core["Chunk Gated Delta Rule — expanded logical prefill dataflow"]
+        direction TB
+        p07_recurrence["Token recurrence<br/>rₜ = vₜ − kₜᵀSₜ₋₁<br/>Sₜ = αₜSₜ₋₁ + βₜkₜrₜᵀ<br/>oₜ = qₜᵀSₜ"]:::note
+        p07_chunk("Chunk partition<br/>representative C=64"):::other
+        p07_gamma("Decay matrix Γ<br/>Γᵢⱼ = exp(Σ g)"):::other
+        p07_kkt["K Kᵀ<br/>batched head GEMM"]:::mac
+        p07_lower("Build strict-lower L<br/>I + tril(β·Γ·KKᵀ, −1)"):::other
+        p07_solve("Triangular solve<br/>U = L⁻¹(β ⊙ V)"):::other
+        p07_qkt["Q Kᵀ<br/>batched head GEMM"]:::mac
+        p07_intra["Intra-chunk output<br/>(Γ ⊙ QKᵀ) · U"]:::mac
+        p07_state_read["State read<br/>Q · Sᵢₙ"]:::mac
+        p07_combine("Output combine<br/>Ostate + Ointra"):::other
+        p07_state[("Recurrent state S<br/>[heads,dK,dV] FP32")]:::state
+        p07_ktu["Kᵀ U<br/>state-delta GEMM"]:::mac
+        p07_state_decay("State decay<br/>αend ⊙ Sᵢₙ"):::other
+        p07_state_add((+)):::plus
+      end
+      subgraph p07_g_shared["Shared expert body × 1"]
+        direction LR
+        p07_shared_gate["gate_proj"]:::mac
+        p07_shared_up["up_proj"]:::mac
+        p07_shared_act("SiLU<br/>gate activation"):::other
+        p07_shared_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        p07_shared_down["down_proj"]:::mac
+        p07_shared_gate --> p07_shared_act
+        p07_shared_act --> p07_shared_mul
+        p07_shared_up --> p07_shared_mul
+        p07_shared_mul --> p07_shared_down
+      end
+      subgraph p07_g_routed["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p07_routed_gate["gate_proj"]:::mac
+        p07_routed_up["up_proj"]:::mac
+        p07_routed_act("SiLU<br/>gate activation"):::other
+        p07_routed_mul("Elementwise gate<br/>activation(gate) ⊙ up"):::other
+        p07_routed_down["down_proj"]:::mac
+        p07_routed_gate --> p07_routed_act
+        p07_routed_act --> p07_routed_mul
+        p07_routed_up --> p07_routed_mul
+        p07_routed_mul --> p07_routed_down
+      end
+      p07_n001["X<br/>[T=1024, H=2048]"]:::input
+      p07_n009("RMSNorm 1"):::other
+      p07_n017["in_proj_qkv<br/>X · Wqkv"]:::mac
+      p07_n021["in_proj_z<br/>X · Wz"]:::mac
+      p07_n025["in_proj_a<br/>X · Wa"]:::mac
+      p07_n026["in_proj_b<br/>X · Wb"]:::mac
+      p07_n027("Depthwise Conv1D<br/>causal, k=4; channelwise"):::other
+      p07_n028("SiLU"):::other
+      p07_n029("Split Q / K / V"):::other
+      p07_n030("Decay preactivation"):::other
+      p07_n031("Decay factor α"):::other
+      p07_n032("Update gate β"):::other
+      p07_n033("Q reshape<br/>[16,T,128]"):::other
+      p07_n034("K reshape<br/>[16,T,128]"):::other
+      p07_n035("V reshape<br/>[32,T,128]"):::other
+      p07_n036("Q head repeat ×2"):::other
+      p07_n037("K head repeat ×2"):::other
+      p07_n038("Q L2Norm"):::other
+      p07_n039("K L2Norm"):::other
+      p07_n054("RMSNormGated<br/>RMSNorm(O) ⊙ SiLU(z)"):::other
+      p07_n055["out_proj<br/>Y · Wout"]:::mac
+      p07_n056((+)):::plus
+      p07_n057["X + GDN"]:::output
+      p07_n058("RMSNorm 2"):::other
+      p07_n059["Router projection<br/>logits = X · Wrouter"]:::mac
+      p07_n060("Router scoring<br/>softmax FP32"):::other
+      p07_n002("Top-8 + renorm"):::other
+      p07_n003("Dispatch / gather"):::other
+      p07_n018["Shared gate projection<br/>s = X · ws"]:::mac
+      p07_n019("Sigmoid<br/>σ(s)"):::other
+      p07_n020("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p07_n010("Expert weighting<br/>pₑ ⊙ Eₑ(X)"):::other
+      p07_n011("Scatter / weighted reduce"):::other
+      p07_n022((+)):::plus
+      p07_n023((+)):::plus
+      p07_n024["Block output"]:::output
+      p07_n001 --> p07_n009
+      p07_n009 --> p07_n017
+      p07_n009 --> p07_n021
+      p07_n009 --> p07_n025
+      p07_n009 --> p07_n026
+      p07_n017 --> p07_n027
+      p07_n027 --> p07_n028
+      p07_n028 --> p07_n029
+      p07_n025 --> p07_n030
+      p07_n030 --> p07_n031
+      p07_n026 --> p07_n032
+      p07_n029 --> p07_n033
+      p07_n029 --> p07_n034
+      p07_n029 --> p07_n035
+      p07_n033 --> p07_n036
+      p07_n034 --> p07_n037
+      p07_n036 --> p07_n038
+      p07_n037 --> p07_n039
+      p07_n031 --> p07_gamma
+      p07_n038 --> p07_chunk
+      p07_n039 --> p07_chunk
+      p07_n035 --> p07_chunk
+      p07_chunk --> p07_kkt
+      p07_kkt --> p07_lower
+      p07_n032 --> p07_lower
+      p07_gamma --> p07_lower
+      p07_lower --> p07_solve
+      p07_chunk --> p07_qkt
+      p07_qkt --> p07_intra
+      p07_gamma --> p07_intra
+      p07_solve --> p07_intra
+      p07_n038 --> p07_state_read
+      p07_intra --> p07_combine
+      p07_state_read --> p07_combine
+      p07_chunk --> p07_ktu
+      p07_solve --> p07_ktu
+      p07_gamma --> p07_state_decay
+      p07_ktu --> p07_state_add
+      p07_state_decay --> p07_state_add
+      p07_state_add -.-> p07_state
+      p07_state -.-> p07_state_read
+      p07_state -.-> p07_state_decay
+      p07_combine --> p07_n054
+      p07_n021 --> p07_n054
+      p07_n054 --> p07_n055
+      p07_n055 --> p07_n056
+      p07_n001 --> p07_n056
+      p07_n056 --> p07_n057
+      p07_n057 --> p07_n058
+      p07_n058 --> p07_n059
+      p07_n059 --> p07_n060
+      p07_n060 --> p07_n002
+      p07_n002 --> p07_n003
+      p07_n003 --> p07_routed_gate
+      p07_n003 --> p07_routed_up
+      p07_routed_down --> p07_n010
+      p07_n002 --> p07_n010
+      p07_n010 --> p07_n011
+      p07_n058 --> p07_shared_gate
+      p07_n058 --> p07_shared_up
+      p07_n058 --> p07_n018
+      p07_n018 --> p07_n019
+      p07_n019 --> p07_n020
+      p07_shared_down --> p07_n020
+      p07_n011 --> p07_n022
+      p07_n020 --> p07_n022
+      p07_n022 --> p07_n023
+      p07_n057 --> p07_n023
+      p07_n023 --> p07_n024
+    end
+  end
+style family_04a fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_04a_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p07_gdn_core fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p07_g_shared fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p07_g_routed fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 47,48,49 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 54,75 stroke:#777777,stroke-width:1.3px;
