@@ -1,0 +1,23 @@
+﻿candidate_group,reference_groups,area_basis,candidate_area_um2,reference_area_sum_um2,area_delta_um2,area_ratio,area_saving_pct,throughput_contract,throughput_match,candidate_timing_met_1ghz,reference_timing_met_1ghz,candidate_accumulator_contract,comparison_status
+SEP_W4A8_FP8,MIXREF_INT_W4A8_L4;MIXREF_FP8_E4M3,area_1ghz_um2,1107.743013,1079.442015,28.300997999999936,1.0262181734699292,-2.6218173469929162,simultaneous full reference,true,1,1;1,dual,comparable
+SEP_W4A8_FP8,MIXREF_INT_W4A8_L4;MIXREF_FP8_E4M3,best_feasible_area_um2,638.547009,633.269009,5.27800000000002,1.008334530704944,-0.8334530704944054,simultaneous full reference,true,1,1;1,dual,comparable
+SEP_W8A8_FP8,MIXREF_INT_W8A8_L4;MIXREF_FP8_E4M3,area_1ghz_um2,1331.876019,1298.024021,33.851998000000094,1.0260796390916713,-2.6079639091671325,simultaneous full reference,true,1,1;1,dual,comparable
+SEP_W8A8_FP8,MIXREF_INT_W8A8_L4;MIXREF_FP8_E4M3,best_feasible_area_um2,849.576016,845.299016,4.27699999999993,1.0050597479933656,-0.5059747993365615,simultaneous full reference,true,1,1;1,dual,comparable
+DUAL_W4A8_FP8,SEP_W4A8_FP8,area_1ghz_um2,1020.838012,1107.743013,-86.90500099999997,0.9215476875230808,7.8452312476919195,exclusive-mode mux versus simultaneous separate arithmetic,partial,1,1,dual,partial_throughput_match
+DUAL_W4A8_FP8,SEP_W4A8_FP8,best_feasible_area_um2,620.71101,638.547009,-17.835999000000015,0.9720678372169776,2.793216278302235,exclusive-mode mux versus simultaneous separate arithmetic,partial,1,1,dual,partial_throughput_match
+DUAL_W8A8_FP8,SEP_W8A8_FP8,area_1ghz_um2,1277.82202,1331.876019,-54.053998999999976,0.9594151420786262,4.058485792137379,exclusive-mode mux versus simultaneous separate arithmetic,partial,1,1,dual,partial_throughput_match
+DUAL_W8A8_FP8,SEP_W8A8_FP8,best_feasible_area_um2,830.011016,849.576016,-19.56499999999994,0.9769708659007155,2.302913409928453,exclusive-mode mux versus simultaneous separate arithmetic,partial,1,1,dual,partial_throughput_match
+CONV_I4_FP8,MIXREF_FP8_E4M3,area_1ghz_um2,900.99101,678.314008,222.67700200000002,1.3282801171341874,-32.82801171341874,1 FP MAC/cycle,true,0,1,FP8,candidate_1ghz_timing_fail
+CONV_I4_FP8,MIXREF_FP8_E4M3,best_feasible_area_um2,316.316002,254.345002,61.97100000000003,1.2436493719660355,-24.364937196603552,1 FP MAC/cycle,true,0,1,FP8,comparable
+CONV_I8_FP8,MIXREF_FP8_E4M3,area_1ghz_um2,1018.563012,678.314008,340.249004,1.501609873874225,-50.160987387422495,"1 FP MAC/cycle, lossy conversion",true,0,1,FP8,candidate_1ghz_timing_fail
+CONV_I8_FP8,MIXREF_FP8_E4M3,best_feasible_area_um2,559.195005,254.345002,304.850003,2.198568875357732,-119.8568875357732,"1 FP MAC/cycle, lossy conversion",true,0,1,FP8,comparable
+CONV_I4_BF16,MIXREF_BF16,area_1ghz_um2,1536.62602,1373.918017,162.70800299999996,1.1184262823449094,-11.842628234490938,1 BF16 MAC/cycle,true,0,0,BF16,candidate_1ghz_timing_fail
+CONV_I4_BF16,MIXREF_BF16,best_feasible_area_um2,857.22001,857.493009,-0.2729990000000271,0.9996816312236546,0.03183687763453902,1 BF16 MAC/cycle,true,0,0,BF16,comparable
+CONV_I8_BF16,MIXREF_BF16,area_1ghz_um2,1676.493022,1373.918017,302.57500500000015,1.220227845661915,-22.02278456619149,1 BF16 MAC/cycle,true,0,0,BF16,candidate_1ghz_timing_fail
+CONV_I8_BF16,MIXREF_BF16,best_feasible_area_um2,957.22901,857.493009,99.73600099999999,1.116311153505859,-11.631115350585898,1 BF16 MAC/cycle,true,0,0,BF16,comparable
+SHARED_NATIVE_INT_FP8_DUALACC,MIXREF_FP8_E4M3,area_1ghz_um2,2186.730021,678.314008,1508.416013,3.2237724640945347,-222.37724640945348,1 product/cycle + dual acc,partial,0,1,INT40 + FP32,partial_throughput_match
+SHARED_NATIVE_INT_FP8_DUALACC,MIXREF_FP8_E4M3,best_feasible_area_um2,1480.661016,254.345002,1226.316014,5.821466922318372,-482.14669223183716,1 product/cycle + dual acc,partial,0,1,INT40 + FP32,partial_throughput_match
+SHARED_NATIVE_INT_BF16_DUALACC,MIXREF_BF16,area_1ghz_um2,2456.272024,1373.918017,1082.354007,1.78778645713036,-78.77864571303601,1 product/cycle + dual acc,partial,0,0,INT40 + FP32,partial_throughput_match
+SHARED_NATIVE_INT_BF16_DUALACC,MIXREF_BF16,best_feasible_area_um2,1850.940018,857.493009,993.447009,2.158548231382724,-115.85482313827238,1 product/cycle + dual acc,partial,0,0,INT40 + FP32,partial_throughput_match
+ARRAY4_DUAL_W4A8_FP8,ARRAY4_SEP_W4A8_FP8,area_1ghz_um2,12663.0141,15074.96912,-2411.9550199999994,0.8400026560054407,15.999734399455933,16-cell exclusive-mode versus simultaneous array,partial,0,0,dual,partial_throughput_match
+ARRAY4_DUAL_W4A8_FP8,ARRAY4_SEP_W4A8_FP8,best_feasible_area_um2,7304.570077,7647.549077,-342.97899999999936,0.9551517752227954,4.484822477720463,16-cell exclusive-mode versus simultaneous array,partial,0,0,dual,partial_throughput_match

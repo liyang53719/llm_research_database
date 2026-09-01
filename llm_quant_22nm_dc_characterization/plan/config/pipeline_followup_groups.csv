@@ -1,0 +1,11 @@
+﻿group_id,base_group,architecture_class,rtl_topology,supported_modes,int_w_bits,int_a_bits,fp_sig_width,fp_exp_width,throughput_contract,accumulator_contract,notes
+PIPE_MIXREF_BF16,MIXREF_BF16,pipeline_followup,pipelined_fp_mac_dw,BF16xBF16,,,7,8,1 FP MAC/cycle,same-format BF16,Two arithmetic stages
+PIPE_CONV_I4_FP8,CONV_I4_FP8,pipeline_followup,hybrid_convert_fp_mac_dw_pipeline,I4xFP8/FP8xFP8,4,,3,4,1 FP MAC/cycle,FP8,Register after conversion
+PIPE_CONV_I4_BF16,CONV_I4_BF16,pipeline_followup,hybrid_convert_fp_mac_dw_pipeline,I4xBF16/BF16xBF16,4,,7,8,1 FP MAC/cycle,BF16,Register after conversion
+PIPE_SHARED_NATIVE_ALL_DUALACC,SHARED_NATIVE_ALL_DUALACC,pipeline_followup,hybrid_shared_mul_dual_acc_pipeline,I4/I8/FP8/BF16 pairs,8,8,7,8,1 common product/cycle,INT40 + FP32,Register shared product before accumulator
+PIPE_ARRAY4_DUAL_W4A8_FP8,ARRAY4_DUAL_W4A8_FP8,pipeline_followup,generated_4x4_dual_pipeline,4x4 W4A8/FP8 dual,4,8,3,4,16 INT or 16 FP,dual,Pipelined FP arithmetic per cell
+PIPE2_CONV_I4_BF16,CONV_I4_BF16,pipeline_followup,hybrid_convert_fp_mac_dw_pipeline2,I4xBF16/BF16xBF16,4,,7,8,1 FP MAC/cycle,BF16,Conversion plus registered multiply and add
+PIPE2_CONV_I8_BF16,CONV_I8_BF16,pipeline_followup,hybrid_convert_fp_mac_dw_pipeline2,I8xBF16/BF16xBF16,8,,7,8,1 FP MAC/cycle,BF16,Conversion plus registered multiply and add
+PIPE_MIXREF_FP8,MIXREF_FP8_E4M3,pipeline_followup,pipelined_fp_mac_dw,FP8xFP8,,,3,4,1 FP MAC/cycle,same-format FP8,Two arithmetic stages
+PIPE_MIXREF_INT_W4A8_L1,MIXREF_INT_W4A8_L4,pipeline_followup,int_l1_reference,W4A8,4,8,,,1 INT MAC/cycle,INT40,One-lane throughput-matched INT cell
+PIPE_ARRAY4_SEP_W4A8_FP8,ARRAY4_SEP_W4A8_FP8,pipeline_followup,generated_4x4_sep_pipeline,4x4 W4A8 + 4x4 FP8,4,8,3,4,16 INT + 16 FP simultaneous,dual,Pipelined separate FP arithmetic per cell

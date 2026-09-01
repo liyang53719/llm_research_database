@@ -76,3 +76,19 @@ r = required_FP_peak / INT_main_peak
 ## 边界
 
 沙箱没有 22 nm `.db`、DC/DW 或 HDL simulator，因此 RTL 只完成源代码生成、Python 数值验证、Python 编译和静态结构检查。真正 PPA、DW 接口兼容性、subnormal/NaN 行为和流水时序由本地 Agent 完成。
+
+## 本地执行结果
+
+本地 CLN22UL/DC/DW 执行已经完成：基线 21 组/63 点与流水 follow-up 10 组/30 点均通过硬验收。详见：
+
+```text
+results/LOCAL_EXECUTION_REPORT.md
+results/mixed_area_raw.csv
+results/mixed_group_summary.csv
+results/mixed_architecture_comparison.csv
+results/pipeline/mixed_area_raw.csv
+results/pipeline_followup_comparison.csv
+results/numeric_rtl_crosscheck.csv
+```
+
+目标模型 operator/window trace 仍未提供，因此真实浮点峰值比例 `r` 尚不能从模型测量；报告中的 sweep 继续标记为 scenario。

@@ -65,8 +65,16 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     raw_rows: list[dict[str, object]] = []
-    for meta_path in sorted(build_dir.glob("*/meta.json")):
-        run_dir = meta_path.parent
+    manifest_path = build_dir / "runs.csv"
+    if not manifest_path.exists():
+        raise SystemExit(f"Missing manifest: {manifest_path}")
+    with manifest_path.open(encoding="utf-8-sig") as handle:
+        manifest_rows = list(csv.DictReader(handle))
+    for manifest_row in manifest_rows:
+        run_dir = Path(manifest_row["run_dir"])
+        meta_path = run_dir / "meta.json"
+        if not meta_path.exists():
+            raise SystemExit(f"Missing metadata: {meta_path}")
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         summary = read_kv(run_dir / "summary.kv")
         area_report = run_dir / "reports" / "report_area.rpt"
@@ -80,6 +88,8 @@ def main() -> None:
             "library_set_id": summary.get("library_set_id", ""),
             "target_libraries": summary.get("target_libraries", ""),
             "compile_mode": summary.get("compile_mode", ""),
+            "keep_hierarchy": summary.get("keep_hierarchy", ""),
+            "max_cores": summary.get("max_cores", ""),
             "mapped_cell_area_um2": number(summary.get("mapped_cell_area_um2")),
             "leaf_cell_count": integer(summary.get("leaf_cell_count")),
             "blackbox_count": integer(summary.get("blackbox_count")),
@@ -130,11 +140,13 @@ def main() -> None:
         group_rows.append(
             {
                 "group_id": group_id,
+                "base_group": first.get("base_group", ""),
                 "architecture_class": first["architecture_class"],
                 "rtl_topology": first["rtl_topology"],
                 "supported_modes": first["supported_modes"],
                 "throughput_contract": first["throughput_contract"],
                 "accumulator_contract": first["accumulator_contract"],
+                "notes": first.get("notes", ""),
                 "run_count": len(rows),
                 "valid_area_count": len(good),
                 "timing_met_count": len(met),

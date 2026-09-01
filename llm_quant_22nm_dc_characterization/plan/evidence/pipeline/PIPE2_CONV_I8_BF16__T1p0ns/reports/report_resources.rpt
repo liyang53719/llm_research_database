@@ -1,0 +1,287 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 14:13:17 2026
+****************************************
+
+
+Resource Report for this hierarchy in file
+        <PROJECT_ROOT>/plan/rtl/hybrid_convert_fp_mac_dw_pipeline2.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| lte_x_1        | DW_cmp         | width=2    | u_dut/lte_22 (hybrid_convert_fp_mac_dw_pipeline2.sv:22) |
+| lte_x_3        | DW_cmp         | width=2    | u_dut/lte_23 (hybrid_convert_fp_mac_dw_pipeline2.sv:23) |
+| u_dut/ud       | DW_fp_add      | sig_width=7 | u_dut/ud (hybrid_convert_fp_mac_dw_pipeline2.sv:26) |
+        | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+| u_dut/um       | DW_fp_mult     | sig_width=7 | u_dut/um (hybrid_convert_fp_mac_dw_pipeline2.sv:24) |
+        | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+|                |                | en_ubr_flag=0 |                         |
+| u_dut/ub       | DW_fp_i2flt    | sig_width=7 | u_dut/ub (hybrid_convert_fp_mac_dw_pipeline2.sv:21) |
+        | exp_width=8 |                           |
+|                |                | isize=8    |                            |
+|                |                | isign=1    |                            |
+| u_dut/ua       | DW_fp_i2flt    | sig_width=7 | u_dut/ua (hybrid_convert_fp_mac_dw_pipeline2.sv:20) |
+        | exp_width=8 |                           |
+|                |                | isize=8    |                            |
+|                |                | isign=1    |                            |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/ud
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U1             | DW_fp_addsub   | sig_width=7 | U1                        |
+|                |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/ua in file
+        ./DW_fp_i2flt__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| ash_4          | DW_leftsh      | A_width=10 | sll_242                    |
+|                |                | SH_width=2 |                            |
+| DP_OP_30J1_122_88               |            |                            |
+|                | DP_OP_30J1_122_88 |         |                            |
+=============================================================================
+
+Datapath Report for DP_OP_30J1_122_88
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_30J1_122_88    | add_315 sub_360 add_360                             |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 6     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| I3    | PI   | Unsigned | 3     |                                          |
+| T26   | IFO  | Unsigned | 1     | O1[6]                                    |
+| O1    | PO   | Unsigned | 7     | I1 + I2                                  |
+| O2    | PO   | Signed   | 8     | $unsigned(8'b10000101) - I3 + T26        |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/ub in file
+        ./DW_fp_i2flt__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| ash_4          | DW_leftsh      | A_width=10 | sll_242                    |
+|                |                | SH_width=2 |                            |
+| DP_OP_30J1_123_88               |            |                            |
+|                | DP_OP_30J1_123_88 |         |                            |
+=============================================================================
+
+Datapath Report for DP_OP_30J1_123_88
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_30J1_123_88    | add_315 sub_360 add_360                             |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 6     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| I3    | PI   | Unsigned | 3     |                                          |
+| T26   | IFO  | Unsigned | 1     | O1[6]                                    |
+| O1    | PO   | Unsigned | 7     | I1 + I2                                  |
+| O2    | PO   | Signed   | 8     | $unsigned(8'b10000101) - I3 + T26        |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy *cell*3387/U1 in file
+        ./DW_norm_rtl.vhd.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U2             | DW01_ash       | A_width=11 | U2                         |
+|                |                | SH_width=3 |                            |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/ud/U1 in file
+        ./DW_fp_addsub__str.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| lt_x_1         | DW_cmp         | width=15   | lt_224                     |
+| ashr_5         | DW_rightsh     | A_width=10 | srl_284_lsb_trim           |
+|                |                | SH_width=8 |                            |
+| ash_6          | DW_leftsh      | A_width=10 | sll_286                    |
+|                |                | SH_width=8 |                            |
+| ash_8          | DW_leftsh      | A_width=11 | sll_338                    |
+|                |                | SH_width=5 |                            |
+| add_x_9        | DW01_add       | width=4    | add_340                    |
+| add_x_16       | DW01_inc       | width=7    | add_399                    |
+| U2             | DW_lzd         | a_width=12 | U2                         |
+| U1             | DW_norm        | a_width=11 | U1                         |
+|                |                | srch_wind=3 |                           |
+|                |                | exp_width=5 |                           |
+|                |                | exp_ctr=0  |                            |
+| DP_OP_65_133_8201               |            |                            |
+|                | DP_OP_65_133_8201 |         |                            |
+| DP_OP_66_134_4294               |            |                            |
+|                | DP_OP_66_134_4294 |         |                            |
+| DP_OP_67_135_7124               |            |                            |
+|                | DP_OP_67_135_7124 |         |                            |
+=============================================================================
+
+Datapath Report for DP_OP_65_133_8201
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_65_133_8201    | sub_278 sub_add_280 add_280_ni                      |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 8     |                                          |
+| T64   | IFO  | Signed   | 8     | O1[7:0]                                  |
+| O1    | PO   | Signed   | 9     | I1 - I2                                  |
+| O2    | PO   | Signed   | 8     | -T64 + $unsigned(8'b00000000)            |
+==============================================================================
+
+Datapath Report for DP_OP_66_134_4294
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_66_134_4294    | add_295 add_295_2                                   |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 11    |                                          |
+| I2    | PI   | Unsigned | 12    |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Unsigned | 12    | I1 + I2 + I3                             |
+==============================================================================
+
+Datapath Report for DP_OP_67_135_7124
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_67_135_7124    | add_403 sub_404                                     |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 4     |                                          |
+| O1    | PO   | Unsigned | 9     | I1 + $unsigned(1'b1)                     |
+| O2    | PO   | Signed   | 10    | O1 - I2                                  |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/ud/U1/U2
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/um/U4
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/um/U3
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/um in file ./DW_fp_mult__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_2        | DW01_inc       | width=8    | add_376                    |
+| lte_x_3        | DW_cmp         | width=10   | lte_384                    |
+| gte_x_5        | DW_cmp         | width=9    | gte_394                    |
+| gte_x_7        | DW_cmp         | width=9    | gte_396                    |
+| add_x_12       | DW01_add       | width=5    | add_481_4                  |
+| mult_x_13      | DW_mult_uns    | a_width=8  | mult_487                   |
+|                |                | b_width=8  |                            |
+| eq_x_14        | DW_cmp         | width=10   | eq_488                     |
+| lt_x_17        | DW_cmp         | width=6    | lt_502                     |
+| lt_x_19        | DW_cmp         | width=6    | lt_507                     |
+| add_x_20       | DW01_add       | width=8    | add_511                    |
+| U1             | DW_lzd         | a_width=8  | U1                         |
+| U2             | DW_lzd         | a_width=8  | U2                         |
+| U3             | DW_lzd         | a_width=8  | U3                         |
+| U4             | DW_lzd         | a_width=8  | U4                         |
+| sub_x_33       | DW01_sub       | width=9    | add_373 sub_373            |
+| add_x_34       | DW01_add       | width=10   | add_373 sub_373            |
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| lte_x_1            | DW_cmp           | apparch (area)     |                |
+| lte_x_3            | DW_cmp           | apparch (area)     |                |
+| u_dut/ud           | DW_fp_add        | rtl                |                |
+| u_dut/um           | DW_fp_mult       | rtl                |                |
+| u_dut/ub           | DW_fp_i2flt      | rtl                |                |
+| u_dut/ua           | DW_fp_i2flt      | rtl                |                |
+| U1                 | DW_fp_addsub     | str                |                |
+| ash_4              | DW_leftsh        | astr (area)        |                |
+| ash_4              | DW_leftsh        | astr (area)        |                |
+| U2                 | DW01_ash         | astr (area)        |                |
+| lt_x_1             | DW_cmp           | apparch (area)     |                |
+| ashr_5             | DW_rightsh       | astr (area)        |                |
+| ash_6              | DW_leftsh        | astr (area)        |                |
+| ash_8              | DW_leftsh        | astr (area)        |                |
+| add_x_9            | DW01_add         | apparch (area)     |                |
+| add_x_16           | DW01_inc         | pparch (area,speed)                 |
+| U2                 | DW_lzd           | cla                |                |
+| U1                 | DW_norm          | rtl                |                |
+| add_x_2            | DW01_inc         | apparch (area)     |                |
+| lte_x_3            | DW_cmp           | apparch (area)     |                |
+| gte_x_5            | DW_cmp           | apparch (area)     |                |
+| gte_x_7            | DW_cmp           | apparch (area)     |                |
+| add_x_12           | DW01_add         | apparch (area)     |                |
+| mult_x_13          | DW_mult_uns      | apparch (area)     |                |
+|                    |                  | mult_arch: and     |                |
+| eq_x_14            | DW_cmp           | apparch (area)     |                |
+| lt_x_17            | DW_cmp           | apparch (area)     |                |
+| lt_x_19            | DW_cmp           | apparch (area)     |                |
+| add_x_20           | DW01_add         | apparch (area)     |                |
+| U3                 | DW_lzd           | rtl                |                |
+| U4                 | DW_lzd           | rtl                |                |
+| sub_x_33           | DW01_sub         | apparch (area)     |                |
+| add_x_34           | DW01_add         | apparch (area)     |                |
+| DP_OP_30J1_122_88  | DP_OP_30J1_122_88 | str (area)        |                |
+| DP_OP_30J1_123_88  | DP_OP_30J1_123_88 | str (area)        |                |
+| DP_OP_65_133_8201  | DP_OP_65_133_8201 | str (area,speed)  |                |
+| DP_OP_66_134_4294  | DP_OP_66_134_4294 | str (area,speed)  |                |
+| DP_OP_67_135_7124  | DP_OP_67_135_7124 | str (area,speed)  |                |
+===============================================================================
+
+1

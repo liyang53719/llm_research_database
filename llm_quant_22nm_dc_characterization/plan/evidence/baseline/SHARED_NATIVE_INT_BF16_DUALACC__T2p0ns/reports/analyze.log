@@ -1,0 +1,76 @@
+Running PRESTO HDLC
+Compiling source file <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv
+Compiling source file <PROJECT_ROOT>/plan/build_mixed/SHARED_NATIVE_INT_BF16_DUALACC__T2p0ns/char_top.sv
+Presto compilation completed successfully.
+Loading db file '<LOCAL_HOME>/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/gtech.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/standard.sldb'
+  Loading link library 'sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Presto compilation completed successfully. (char_top)
+Module: char_top, Ports: 124, Input: 43, Output: 81, Inout: 0
+Module: char_top, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module char_top report end. (ELAB-965)
+Elaborated 1 design.
+Current design is now 'char_top'.
+Information: Building the design 'hybrid_shared_mul_dual_acc' instantiated from design 'char_top' with
+	the parameters "INT_ACC_W=40,ENABLE_FP8=0,ENABLE_BF16=1". (HDL-193)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:83: Task enable in always_comb block. (VER-520)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:84: Task enable in always_comb block. (VER-520)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:54: unsigned to signed assignment occurs. (VER-318)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:57: unsigned to signed assignment occurs. (VER-318)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:95: signed to unsigned assignment occurs. (VER-318)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:149: signed to unsigned conversion occurs. (VER-318)
+Warning:  <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv:60: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+
+Inferred memory devices in process in routine 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161' in file
+	 <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|   fp_status_o_reg   | Flip-flop |   8   |  Y  | N  | None  | Async | N  | 141  |
+|     valid_o_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 141  |
+|    int_acc_o_reg    | Flip-flop |  40   |  Y  | N  | None  | Async | N  | 141  |
+|    fp_acc_o_reg     | Flip-flop |  32   |  Y  | N  | None  | Async | N  | 141  |
+==================================================================================
+Presto compilation completed successfully. (hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161)
+Module: hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161, Ports: 124, Input: 43, Output: 81, Inout: 0
+Module: hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161, Registers: 81, Async set/reset: 81, Sync set/reset: 0
+Information: Module hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161 report end. (ELAB-965)
+Current design is 'char_top'.
+
+  Linking design 'char_top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (2 designs)               <PROJECT_ROOT>/plan/build_mixed/SHARED_NATIVE_INT_BF16_DUALACC__T2p0ns/char_top.db, etc
+  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c (library) <LOCAL_HOME>/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
+  dw_foundation.sldb (library) <LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb
+
+Information: Summary of messages issued during linking: (LINK-1806)
+No messages were issued during linking.
+ 
+****************************************
+check_design summary:
+Version:     X-2025.06-SP3
+Date:        Tue Sep  1 15:33:19 2026
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Cells                                                              10
+    Cells do not drive (LINT-1)                                    10
+--------------------------------------------------------------------------------
+
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1256' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1261' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1270' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1283' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1288' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1297' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'B_42' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'B_43' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'B_44' does not drive any nets. (LINT-1)
+Warning: In design 'hybrid_shared_mul_dual_acc_INT_ACC_W40_ENABLE_FP80_ENABLE_BF161', cell 'C1385' does not drive any nets. (LINT-1)
+1

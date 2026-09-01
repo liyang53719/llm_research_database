@@ -75,13 +75,20 @@ def main() -> None:
                 else None
             )
             timing_ok = integer(candidate.get("timing_met_1ghz"))
+            reference_timing = [
+                integer(row.get("timing_met_1ghz")) for row in typed_references
+            ]
             throughput_match = comparison["throughput_match"].lower()
             if throughput_match == "false":
                 status = "not_throughput_equivalent"
+            elif throughput_match != "true":
+                status = "partial_throughput_match"
             elif candidate_area is None or reference_sum is None:
                 status = "missing_area"
             elif area_key == "area_1ghz_um2" and timing_ok != 1:
                 status = "candidate_1ghz_timing_fail"
+            elif area_key == "area_1ghz_um2" and any(value != 1 for value in reference_timing):
+                status = "reference_1ghz_timing_fail"
             else:
                 status = "comparable"
 
@@ -104,6 +111,9 @@ def main() -> None:
                     "throughput_contract": comparison["throughput_contract"],
                     "throughput_match": comparison["throughput_match"],
                     "candidate_timing_met_1ghz": timing_ok,
+                    "reference_timing_met_1ghz": ";".join(
+                        "" if value is None else str(value) for value in reference_timing
+                    ),
                     "candidate_accumulator_contract": candidate.get(
                         "accumulator_contract", ""
                     ),

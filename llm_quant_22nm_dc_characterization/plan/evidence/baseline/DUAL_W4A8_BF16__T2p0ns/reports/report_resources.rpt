@@ -1,0 +1,232 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 15:13:39 2026
+****************************************
+
+
+Resource Report for this hierarchy in file
+        <PROJECT_ROOT>/plan/rtl/dual_domain_int_fp_reference.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| u_dut/u_fp/u_dw_fp_mac          |            |                            |
+|                | DW_fp_mac      | sig_width=7 | u_dut/u_fp/u_dw_fp_mac (fp_mac_dw.sv:20) |
+  |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+| DP_OP_26J1_122_9010             |            |                            |
+|                | DP_OP_26J1_122_9010 |       |                            |
+| DP_OP_34_138_7211               |            |                            |
+|                | DP_OP_34_138_7211 |         |                            |
+=============================================================================
+
+Datapath Report for DP_OP_26J1_122_9010
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_26J1_122_9010  | u_dut/u_int/mult_28 (packed_dot_pe.sv:28)           |
+|                      | u_dut/u_int/add_28_I2 (packed_dot_pe.sv:28)         |
+|                      | u_dut/u_int/add_28_I3 (packed_dot_pe.sv:28)         |
+|                      | u_dut/u_int/add_28_I4 (packed_dot_pe.sv:28)         |
+|                      | u_dut/u_int/add_41 (packed_dot_pe.sv:41)            |
+|                      | u_dut/u_int/mult_28_I2 (packed_dot_pe.sv:28)        |
+|                      | u_dut/u_int/mult_28_I3 (packed_dot_pe.sv:28)        |
+|                      | u_dut/u_int/mult_28_I4 (packed_dot_pe.sv:28)        |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Signed   | 4     |                                          |
+| I2    | PI   | Signed   | 8     |                                          |
+| I3    | PI   | Signed   | 40    |                                          |
+| I4    | PI   | Signed   | 4     |                                          |
+| I5    | PI   | Signed   | 8     |                                          |
+| I6    | PI   | Signed   | 4     |                                          |
+| I7    | PI   | Signed   | 8     |                                          |
+| I8    | PI   | Signed   | 4     |                                          |
+| I9    | PI   | Signed   | 8     |                                          |
+| T1    | IFO  | Signed   | 12    | I1 * I2 (packed_dot_pe.sv:28)            |
+| T2    | IFO  | Signed   | 12    | I4 * I5 (packed_dot_pe.sv:28)            |
+| T4    | IFO  | Signed   | 12    | I6 * I7 (packed_dot_pe.sv:28)            |
+| T6    | IFO  | Signed   | 12    | I8 * I9 (packed_dot_pe.sv:28)            |
+| O1    | PO   | Signed   | 40    | T1 + T2 + T4 + T6 + I3 ( packed_dot_pe.sv:28 packed_dot_pe.sv:41 ) |
+==============================================================================
+
+Datapath Report for DP_OP_34_138_7211
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_34_138_7211    | add_441 sub_441                                     |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 21    |                                          |
+| I2    | PI   | Unsigned | 21    |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Signed   | 23    | addsub(I1,I2,I3)                         |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_fp/u_dw_fp_mac in file
+        ./DW_fp_mac__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| mult_x_9       | DW_mult_uns    | a_width=8  | mult_400                   |
+|                |                | b_width=8  |                            |
+| ashr_14        | DW_rightsh     | A_width=20 | srl_430                    |
+|                |                | SH_width=9 |                            |
+| ash_15         | DW_leftsh      | A_width=20 | sll_432                    |
+|                |                | SH_width=9 |                            |
+| add_x_20       | DW01_add       | width=23   | add_495                    |
+| add_x_23       | DW01_add       | width=8    | add_500                    |
+| gte_x_24       | DW_cmp         | width=10   | gte_520                    |
+| U1             | DW_fp_ifp_conv | sig_widthi=7 | U1                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=9 |                          |
+|                |                | exp_widtho=8 |                          |
+|                |                | use_denormal=0 |                        |
+|                |                | use_1scmpl=0 |                          |
+| U2             | DW_fp_ifp_conv | sig_widthi=7 | U2                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=9 |                          |
+|                |                | exp_widtho=8 |                          |
+|                |                | use_denormal=0 |                        |
+|                |                | use_1scmpl=0 |                          |
+| U3             | DW_fp_ifp_conv | sig_widthi=7 | U3                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=9 |                          |
+|                |                | exp_widtho=8 |                          |
+|                |                | use_denormal=0 |                        |
+|                |                | use_1scmpl=0 |                          |
+| U4             | DW_fp_ifp_conv | sig_widthi=7 | U4                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=9 |                          |
+|                |                | exp_widtho=8 |                          |
+|                |                | use_denormal=0 |                        |
+|                |                | use_1scmpl=0 |                          |
+| U5             | DW_ifp_mult    | sig_widthi=9 | U5                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=15 |                         |
+|                |                | exp_widtho=9 |                          |
+| U6             | DW_ifp_mult    | sig_widthi=9 | U6                       |
+|                |                | exp_widthi=8 |                          |
+|                |                | sig_widtho=15 |                         |
+|                |                | exp_widtho=9 |                          |
+| U7             | DW_ifp_addsub  | sig_widthi=15 | U7                      |
+|                |                | exp_widthi=9 |                          |
+|                |                | sig_widtho=16 |                         |
+|                |                | exp_widtho=10 |                         |
+|                |                | use_denormal=0 |                        |
+|                |                | use_1scmpl=0 |                          |
+| U8             | DW_ifp_fp_conv | sig_widthi=16 | U8                      |
+|                |                | exp_widthi=10 |                         |
+|                |                | sig_width=7 |                           |
+|                |                | exp_width=8 |                           |
+|                |                | use_denormal=0 |                        |
+| U9             | DW_lzd         | a_width=20 | U9                         |
+| U10            | DW01_ash       | A_width=22 | U10                        |
+|                |                | SH_width=10 |                           |
+| DP_OP_103J1_123_7494            |            |                            |
+|                | DP_OP_103J1_123_7494 |      |                            |
+| DP_OP_104J1_124_5498            |            |                            |
+|                | DP_OP_104J1_124_5498 |      |                            |
+| sub_x_29       | DW01_sub       | width=22   | add_447_ni sub_add_447     |
+=============================================================================
+
+Datapath Report for DP_OP_103J1_123_7494
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_103J1_123_7494 | add_403 lt_421 add_405 sub_429 add_451              |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 8     |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| I4    | PI   | Unsigned | 1     |                                          |
+| I5    | PI   | Unsigned | 1     |                                          |
+| I6    | PI   | Unsigned | 1     |                                          |
+| I7    | PI   | Unsigned | 8     |                                          |
+| I8    | PI   | Unsigned | 1     |                                          |
+| I9    | PI   | Unsigned | 1     |                                          |
+| T10   | IFO  | Unsigned | 9     | I1 + I2                                  |
+| T11   | IFO  | Unsigned | 9     | { I3, I4 } ? $unsigned(1'b0) : T10       |
+| T12   | IFO  | Unsigned | 9     | I7 + $unsigned(7'b1111111)               |
+| T13   | IFO  | Unsigned | 9     | { I5, I6 } ? $unsigned(1'b0) : T12       |
+| T15   | IFO  | Signed   | 9     | { I8, I9 } ? T13 : T11                   |
+| T18   | IFO  | Signed   | 9     | { I8, I9 } ? T11 : T13                   |
+| O1    | PO   | Unsigned | 1     | T11 < T13                                |
+| O2    | PO   | Signed   | 9     | T15 - T18                                |
+| O3    | PO   | Unsigned | 9     | T15 + $unsigned(2'b10)                   |
+==============================================================================
+
+Datapath Report for DP_OP_104J1_124_5498
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_104J1_124_5498 | sub_451 gt_456 lt_456 sub_456 gte_470 sub_470       |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 9     |                                          |
+| I2    | PI   | Signed   | 6     |                                          |
+| I3    | PI   | Signed   | 10    |                                          |
+| T30   | IFO  | Signed   | 10    | I1 - $unsigned(7'b1111111)               |
+| O1    | PO   | Signed   | 1     | T30 > I2                                 |
+| O2    | PO   | Signed   | 1     | T30 < $signed(2'b01)                     |
+| O3    | PO   | Signed   | 10    | T30 - $unsigned(1'b1)                    |
+| O4    | PO   | Signed   | 1     | T30 >= $signed(1'b0)                     |
+| O5    | PO   | Signed   | 10    | T30 - I3                                 |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_fp/u_dw_fp_mac/U9
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| u_dut/u_fp/u_dw_fp_mac                |                    |                |
+|                    | DW_fp_mac        | rtl                |                |
+| mult_x_9           | DW_mult_uns      | pparch (area,speed)                 |
+|                    |                  | mult_arch: benc_radix4              |
+| ashr_14            | DW_rightsh       | astr (area)        |                |
+| ash_15             | DW_leftsh        | astr (area)        |                |
+| add_x_20           | DW01_add         | apparch (area)     |                |
+| add_x_23           | DW01_add         | apparch (area)     |                |
+| gte_x_24           | DW_cmp           | apparch (area)     |                |
+| U9                 | DW_lzd           | cla                |                |
+| U10                | DW01_ash         | astr (area)        |                |
+| sub_x_29           | DW01_sub         | pparch (area,speed)                 |
+| DP_OP_26J1_122_9010                   |                    |                |
+|                    | DP_OP_26J1_122_9010 | str (area,speed)                 |
+|                    |                  | mult_arch: benc_radix4              |
+| DP_OP_34_138_7211  | DP_OP_34_138_7211 | str (area,speed)  |                |
+| DP_OP_103J1_123_7494                  |                    |                |
+|                    | DP_OP_103J1_123_7494 | str (area,speed)                |
+| DP_OP_104J1_124_5498                  |                    |                |
+|                    | DP_OP_104J1_124_5498 | str (area,speed)                |
+===============================================================================
+
+1

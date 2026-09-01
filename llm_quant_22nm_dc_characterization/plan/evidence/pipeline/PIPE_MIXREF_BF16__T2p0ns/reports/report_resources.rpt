@@ -1,0 +1,172 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 13:58:22 2026
+****************************************
+
+
+Resource Report for this hierarchy
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| u_dut/u_add    | DW_fp_add      | sig_width=7 | u_dut/u_add (pipelined_fp_mac_dw.sv:24) |
+   |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+| u_dut/u_mult   | DW_fp_mult     | sig_width=7 | u_dut/u_mult (pipelined_fp_mac_dw.sv:21) |
+  |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+|                |                | en_ubr_flag=0 |                         |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_add
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U1             | DW_fp_addsub   | sig_width=7 | U1                        |
+|                |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_mult/U4
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_mult/U3
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_mult in file
+        ./DW_fp_mult__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| add_x_2        | DW01_inc       | width=8    | add_376                    |
+| lte_x_3        | DW_cmp         | width=10   | lte_384                    |
+| gte_x_5        | DW_cmp         | width=9    | gte_394                    |
+| gte_x_7        | DW_cmp         | width=9    | gte_396                    |
+| add_x_12       | DW01_add       | width=5    | add_481_4                  |
+| mult_x_13      | DW_mult_uns    | a_width=8  | mult_487                   |
+|                |                | b_width=8  |                            |
+| eq_x_14        | DW_cmp         | width=10   | eq_488                     |
+| lt_x_17        | DW_cmp         | width=6    | lt_502                     |
+| lt_x_19        | DW_cmp         | width=6    | lt_507                     |
+| add_x_20       | DW01_add       | width=8    | add_511                    |
+| U1             | DW_lzd         | a_width=8  | U1                         |
+| U2             | DW_lzd         | a_width=8  | U2                         |
+| U3             | DW_lzd         | a_width=8  | U3                         |
+| U4             | DW_lzd         | a_width=8  | U4                         |
+| sub_x_33       | DW01_sub       | width=9    | add_373 sub_373            |
+| add_x_34       | DW01_add       | width=10   | add_373 sub_373            |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_add/U1/U1
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_add/U1 in file
+        ./DW_fp_addsub__rtl.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| lt_x_1         | DW_cmp         | width=15   | lt_189                     |
+| sub_x_4        | DW01_sub       | width=8    | sub_230                    |
+| ashr_5         | DW_rightsh     | A_width=10 | srl_235_lsb_trim           |
+|                |                | SH_width=8 |                            |
+| ash_6          | DW_leftsh      | A_width=10 | sll_237                    |
+|                |                | SH_width=8 |                            |
+| ash_8          | DW_leftsh      | A_width=10 | sll_264                    |
+|                |                | SH_width=4 |                            |
+| add_x_12       | DW01_inc       | width=7    | add_301                    |
+| U1             | DW_lzd         | a_width=11 | U1                         |
+| DP_OP_49J1_124_4294             |            |                            |
+|                | DP_OP_49J1_124_4294 |       |                            |
+| DP_OP_50J1_125_7124             |            |                            |
+|                | DP_OP_50J1_125_7124 |       |                            |
+=============================================================================
+
+Datapath Report for DP_OP_49J1_124_4294
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_49J1_124_4294  | add_247 add_247_2                                   |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 11    |                                          |
+| I2    | PI   | Unsigned | 12    |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Unsigned | 12    | I1 + I2 + I3                             |
+==============================================================================
+
+Datapath Report for DP_OP_50J1_125_7124
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_50J1_125_7124  | add_304 sub_305                                     |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 4     |                                          |
+| O1    | PO   | Unsigned | 9     | I1 + $unsigned(1'b1)                     |
+| O2    | PO   | Signed   | 10    | O1 - I2                                  |
+==============================================================================
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| u_dut/u_add        | DW_fp_add        | rtl                |                |
+| u_dut/u_mult       | DW_fp_mult       | rtl                |                |
+| U1                 | DW_fp_addsub     | rtl                |                |
+| add_x_2            | DW01_inc         | apparch (area)     |                |
+| lte_x_3            | DW_cmp           | apparch (area)     |                |
+| gte_x_5            | DW_cmp           | apparch (area)     |                |
+| gte_x_7            | DW_cmp           | apparch (area)     |                |
+| add_x_12           | DW01_add         | apparch (area)     |                |
+| mult_x_13          | DW_mult_uns      | apparch (area)     |                |
+|                    |                  | mult_arch: and     |                |
+| eq_x_14            | DW_cmp           | apparch (area)     |                |
+| lt_x_17            | DW_cmp           | apparch (area)     |                |
+| lt_x_19            | DW_cmp           | apparch (area)     |                |
+| add_x_20           | DW01_add         | apparch (area)     |                |
+| U3                 | DW_lzd           | rtl                |                |
+| U4                 | DW_lzd           | rtl                |                |
+| sub_x_33           | DW01_sub         | apparch (area)     |                |
+| add_x_34           | DW01_add         | apparch (area)     |                |
+| lt_x_1             | DW_cmp           | apparch (area)     |                |
+| sub_x_4            | DW01_sub         | apparch (area)     |                |
+| ashr_5             | DW_rightsh       | astr (area)        |                |
+| ash_6              | DW_leftsh        | astr (area)        |                |
+| ash_8              | DW_leftsh        | astr (area)        |                |
+| add_x_12           | DW01_inc         | apparch (area)     |                |
+| U1                 | DW_lzd           | rtl                |                |
+| DP_OP_49J1_124_4294                   |                    |                |
+|                    | DP_OP_49J1_124_4294 | str (area)      |                |
+| DP_OP_50J1_125_7124                   |                    |                |
+|                    | DP_OP_50J1_125_7124 | str (area)      |                |
+===============================================================================
+
+1

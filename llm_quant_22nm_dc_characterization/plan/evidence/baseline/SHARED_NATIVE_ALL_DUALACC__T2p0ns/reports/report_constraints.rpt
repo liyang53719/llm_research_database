@@ -1,0 +1,36 @@
+ 
+****************************************
+Report : constraint
+        -all_violators
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 15:38:47 2026
+****************************************
+
+
+   min_delay/hold ('clk' group)
+
+                             Required        Actual
+   Endpoint                 Path Delay     Path Delay        Slack
+   -----------------------------------------------------------------
+   u_dut/fp_status_o_reg[2]/D
+                                0.10           0.09 r         0.00  (VIOLATED: increase significant digits)
+
+
+   max_area
+
+                             Required        Actual
+   Design                      Area           Area           Slack
+   -----------------------------------------------------------------
+   char_top                     0.00        1905.45       -1905.45  (VIOLATED)
+
+
+   max_leakage_power
+
+                             Required        Actual
+   Design                   Leakage Power  Leakage Power     Slack
+   -----------------------------------------------------------------
+   char_top                     0.00           2.36          -2.36  (VIOLATED)
+
+
+1

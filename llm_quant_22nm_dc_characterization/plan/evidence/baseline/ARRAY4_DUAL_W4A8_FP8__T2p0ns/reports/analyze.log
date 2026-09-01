@@ -1,0 +1,232 @@
+Running PRESTO HDLC
+Compiling source file <PROJECT_ROOT>/rtl/packed_dot_pe.sv
+Compiling source file <PROJECT_ROOT>/rtl/fp_mac_dw.sv
+Compiling source file <PROJECT_ROOT>/plan/rtl/dual_domain_int_fp_reference.sv
+Compiling source file <PROJECT_ROOT>/plan/build_mixed/ARRAY4_DUAL_W4A8_FP8__T2p0ns/char_top.sv
+Presto compilation completed successfully.
+Loading db file '<LOCAL_HOME>/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/gtech.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/standard.sldb'
+  Loading link library 'sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Warning:  <PROJECT_ROOT>/plan/build_mixed/ARRAY4_DUAL_W4A8_FP8__T2p0ns/char_top.sv:17: signed to unsigned part selection occurs. (VER-318)
+Presto compilation completed successfully. (char_top)
+Module: char_top, Ports: 1458, Input: 674, Output: 784, Inout: 0
+Module: char_top, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module char_top report end. (ELAB-965)
+Elaborated 1 design.
+Current design is now 'char_top'.
+Information: Building the design 'dual_domain_int_fp_reference' instantiated from design 'char_top' with
+	the parameters "INT_W_W=4,INT_A_W=8,INT_LANES=1,INT_ACC_W=40,FP_SIG_WIDTH=3,FP_EXP_WIDTH=4". (HDL-193)
+Presto compilation completed successfully. (dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4)
+Module: dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4, Ports: 93, Input: 44, Output: 49, Inout: 0
+Module: dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4 report end. (ELAB-965)
+Information: Building the design 'packed_dot_pe' instantiated from design 'dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4' with
+	the parameters "W_W=4,A_W=8,LANES=1,ACC_W=40". (HDL-193)
+
+Inferred memory devices in process in routine 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40' in file
+	 <PROJECT_ROOT>/rtl/packed_dot_pe.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|     valid_o_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  32  |
+|      acc_o_reg      | Flip-flop |  40   |  Y  | N  | None  | Async | N  |  32  |
+==================================================================================
+Presto compilation completed successfully. (packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40)
+Module: packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40, Ports: 57, Input: 16, Output: 41, Inout: 0
+Module: packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40, Registers: 41, Async set/reset: 41, Sync set/reset: 0
+Information: Module packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40 report end. (ELAB-965)
+Information: Building the design 'fp_mac_dw' instantiated from design 'dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4' with
+	the parameters "SIG_WIDTH=3,EXP_WIDTH=4,IEEE_COMPLIANCE=0". (HDL-193)
+
+Inferred memory devices in process in routine 'fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0' in file
+	 <PROJECT_ROOT>/rtl/fp_mac_dw.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|     valid_o_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  29  |
+|       z_o_reg       | Flip-flop |   8   |  Y  | N  | None  | Async | N  |  29  |
+|    status_o_reg     | Flip-flop |   8   |  Y  | N  | None  | Async | N  |  29  |
+==================================================================================
+Presto compilation completed successfully. (fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0)
+Module: fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0, Ports: 47, Input: 30, Output: 17, Inout: 0
+Module: fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0, Registers: 17, Async set/reset: 17, Sync set/reset: 0
+Information: Module fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0 report end. (ELAB-965)
+Current design is 'char_top'.
+
+  Linking design 'char_top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (4 designs)               <PROJECT_ROOT>/plan/build_mixed/ARRAY4_DUAL_W4A8_FP8__T2p0ns/char_top.db, etc
+  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c (library) <LOCAL_HOME>/tools/arm/tsmc/cln22ul/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
+  dw_foundation.sldb (library) <LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb
+
+Information: Summary of messages issued during linking: (LINK-1806)
+No messages were issued during linking.
+Information: Uniquified 16 instances of design 'dual_domain_int_fp_reference_INT_W_W4_INT_A_W8_INT_LANES1_INT_ACC_W40_FP_SIG_WIDTH3_FP_EXP_WIDTH4'. (OPT-1056)
+Information: Uniquified 16 instances of design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40'. (OPT-1056)
+Information: Uniquified 16 instances of design 'fp_mac_dw_SIG_WIDTH3_EXP_WIDTH4_IEEE_COMPLIANCE0'. (OPT-1056)
+ 
+****************************************
+check_design summary:
+Version:     X-2025.06-SP3
+Date:        Tue Sep  1 14:35:41 2026
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Cells                                                              16
+    Cells do not drive (LINT-1)                                    16
+
+Nets                                                              128
+    Unloaded nets (LINT-2)                                        128
+--------------------------------------------------------------------------------
+
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_15', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_0', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_1', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_2', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_3', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_4', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_5', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_6', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_7', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_8', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_9', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_10', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_11', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_12', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_13', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'packed_dot_pe_W_W4_A_W8_LANES1_ACC_W40_14', cell 'C199' does not drive any nets. (LINT-1)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[0]' driven by pin 'G[0].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[1]' driven by pin 'G[0].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[2]' driven by pin 'G[0].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[3]' driven by pin 'G[0].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[4]' driven by pin 'G[0].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[5]' driven by pin 'G[0].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[6]' driven by pin 'G[0].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[0].u_cell/unused[7]' driven by pin 'G[0].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[0]' driven by pin 'G[15].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[1]' driven by pin 'G[15].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[2]' driven by pin 'G[15].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[3]' driven by pin 'G[15].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[4]' driven by pin 'G[15].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[5]' driven by pin 'G[15].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[6]' driven by pin 'G[15].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[15].u_cell/unused[7]' driven by pin 'G[15].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[0]' driven by pin 'G[14].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[1]' driven by pin 'G[14].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[2]' driven by pin 'G[14].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[3]' driven by pin 'G[14].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[4]' driven by pin 'G[14].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[5]' driven by pin 'G[14].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[6]' driven by pin 'G[14].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[14].u_cell/unused[7]' driven by pin 'G[14].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[0]' driven by pin 'G[13].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[1]' driven by pin 'G[13].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[2]' driven by pin 'G[13].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[3]' driven by pin 'G[13].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[4]' driven by pin 'G[13].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[5]' driven by pin 'G[13].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[6]' driven by pin 'G[13].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[13].u_cell/unused[7]' driven by pin 'G[13].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[0]' driven by pin 'G[12].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[1]' driven by pin 'G[12].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[2]' driven by pin 'G[12].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[3]' driven by pin 'G[12].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[4]' driven by pin 'G[12].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[5]' driven by pin 'G[12].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[6]' driven by pin 'G[12].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[12].u_cell/unused[7]' driven by pin 'G[12].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[0]' driven by pin 'G[11].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[1]' driven by pin 'G[11].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[2]' driven by pin 'G[11].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[3]' driven by pin 'G[11].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[4]' driven by pin 'G[11].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[5]' driven by pin 'G[11].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[6]' driven by pin 'G[11].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[11].u_cell/unused[7]' driven by pin 'G[11].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[0]' driven by pin 'G[10].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[1]' driven by pin 'G[10].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[2]' driven by pin 'G[10].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[3]' driven by pin 'G[10].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[4]' driven by pin 'G[10].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[5]' driven by pin 'G[10].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[6]' driven by pin 'G[10].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[10].u_cell/unused[7]' driven by pin 'G[10].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[0]' driven by pin 'G[9].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[1]' driven by pin 'G[9].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[2]' driven by pin 'G[9].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[3]' driven by pin 'G[9].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[4]' driven by pin 'G[9].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[5]' driven by pin 'G[9].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[6]' driven by pin 'G[9].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[9].u_cell/unused[7]' driven by pin 'G[9].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[0]' driven by pin 'G[8].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[1]' driven by pin 'G[8].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[2]' driven by pin 'G[8].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[3]' driven by pin 'G[8].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[4]' driven by pin 'G[8].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[5]' driven by pin 'G[8].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[6]' driven by pin 'G[8].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[8].u_cell/unused[7]' driven by pin 'G[8].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[0]' driven by pin 'G[7].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[1]' driven by pin 'G[7].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[2]' driven by pin 'G[7].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[3]' driven by pin 'G[7].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[4]' driven by pin 'G[7].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[5]' driven by pin 'G[7].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[6]' driven by pin 'G[7].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[7].u_cell/unused[7]' driven by pin 'G[7].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[0]' driven by pin 'G[6].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[1]' driven by pin 'G[6].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[2]' driven by pin 'G[6].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[3]' driven by pin 'G[6].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[4]' driven by pin 'G[6].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[5]' driven by pin 'G[6].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[6]' driven by pin 'G[6].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[6].u_cell/unused[7]' driven by pin 'G[6].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[0]' driven by pin 'G[5].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[1]' driven by pin 'G[5].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[2]' driven by pin 'G[5].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[3]' driven by pin 'G[5].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[4]' driven by pin 'G[5].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[5]' driven by pin 'G[5].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[6]' driven by pin 'G[5].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[5].u_cell/unused[7]' driven by pin 'G[5].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[0]' driven by pin 'G[4].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[1]' driven by pin 'G[4].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[2]' driven by pin 'G[4].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[3]' driven by pin 'G[4].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[4]' driven by pin 'G[4].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[5]' driven by pin 'G[4].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[6]' driven by pin 'G[4].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[4].u_cell/unused[7]' driven by pin 'G[4].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[0]' driven by pin 'G[3].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[1]' driven by pin 'G[3].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[2]' driven by pin 'G[3].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[3]' driven by pin 'G[3].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[4]' driven by pin 'G[3].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[5]' driven by pin 'G[3].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[6]' driven by pin 'G[3].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[3].u_cell/unused[7]' driven by pin 'G[3].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[0]' driven by pin 'G[2].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[1]' driven by pin 'G[2].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[2]' driven by pin 'G[2].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[3]' driven by pin 'G[2].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[4]' driven by pin 'G[2].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[5]' driven by pin 'G[2].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[6]' driven by pin 'G[2].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[2].u_cell/unused[7]' driven by pin 'G[2].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[0]' driven by pin 'G[1].u_cell/u_fp/status_o[0]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[1]' driven by pin 'G[1].u_cell/u_fp/status_o[1]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[2]' driven by pin 'G[1].u_cell/u_fp/status_o[2]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[3]' driven by pin 'G[1].u_cell/u_fp/status_o[3]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[4]' driven by pin 'G[1].u_cell/u_fp/status_o[4]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[5]' driven by pin 'G[1].u_cell/u_fp/status_o[5]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[6]' driven by pin 'G[1].u_cell/u_fp/status_o[6]' has no loads. (LINT-2)
+Warning: In design 'char_top', net 'G[1].u_cell/unused[7]' driven by pin 'G[1].u_cell/u_fp/status_o[7]' has no loads. (LINT-2)
+1

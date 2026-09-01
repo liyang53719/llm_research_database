@@ -1,0 +1,287 @@
+ 
+****************************************
+Report : resources
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 14:04:38 2026
+****************************************
+
+
+Resource Report for this hierarchy in file
+        <PROJECT_ROOT>/plan/rtl/hybrid_shared_mul_dual_acc.sv
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| sub_x_1        | DW01_sub       | width=5    | u_dut/sub_54_S3_C83 (hybrid_shared_mul_dual_acc.sv:54) |
+| sub_x_2        | DW01_sub       | width=8    | u_dut/sub_57_S3_C83 (hybrid_shared_mul_dual_acc.sv:57) |
+| sub_x_3        | DW01_sub       | width=5    | u_dut/sub_54_S3_C84 (hybrid_shared_mul_dual_acc.sv:54) |
+| sub_x_4        | DW01_sub       | width=8    | u_dut/sub_57_S3_C84 (hybrid_shared_mul_dual_acc.sv:57) |
+| lte_x_5        | DW_cmp         | width=2    | u_dut/lte_87 (hybrid_shared_mul_dual_acc.sv:87) |
+| lte_x_6        | DW_cmp         | width=2    | u_dut/lte_87_2 (hybrid_shared_mul_dual_acc.sv:87) |
+| sub_x_7        | DW01_sub       | width=6    | u_dut/sub_92 (hybrid_shared_mul_dual_acc.sv:92) |
+| ash_8          | DW_leftsh      | A_width=15 | u_dut/sll_92 (hybrid_shared_mul_dual_acc.sv:92) |
+             | SH_width=4 |                            |
+| ash_9          | DW_leftsh      | A_width=23 | u_dut/sll_99 (hybrid_shared_mul_dual_acc.sv:99) |
+             | SH_width=32 |                           |
+| ashr_10        | DW_rightsh     | A_width=16 | u_dut/srl_101 (hybrid_shared_mul_dual_acc.sv:101) |
+           | SH_width=32 |                           |
+| add_x_55       | DW01_add       | width=40   | u_dut/add_135 (hybrid_shared_mul_dual_acc.sv:135) |
+| u_dut/u_fp_add | DW_fp_add      | sig_width=23 | u_dut/u_fp_add (hybrid_shared_mul_dual_acc.sv:117) |
+        | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+| DP_OP_164J1_122_3608            |            |                            |
+|                | DP_OP_164J1_122_3608 |      |                            |
+| DP_OP_165J1_123_3637            |            |                            |
+|                | DP_OP_165J1_123_3637 |      |                            |
+=============================================================================
+
+Datapath Report for DP_OP_164J1_122_3608
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_164J1_122_3608 | u_dut/mult_85 (hybrid_shared_mul_dual_acc.sv:85)    |
+|                      | u_dut/sub_88 (hybrid_shared_mul_dual_acc.sv:88)     |
+|                      | u_dut/C1446 (hybrid_shared_mul_dual_acc.sv:88)      |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 8     |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| I4    | PI   | Unsigned | 1     |                                          |
+| T11   | IFO  | Signed   | 17    | $signed(1'b0) - O1 (hybrid_shared_mul_dual_acc.sv:88) |
+| O1    | PO   | Unsigned | 16    | I1 * I2 (hybrid_shared_mul_dual_acc.sv:85) |
+| O2    | PO   | Signed   | 17    | { I3, I4 } ? T11 : O1 (hybrid_shared_mul_dual_acc.sv:88) |
+==============================================================================
+
+Datapath Report for DP_OP_165J1_123_3637
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_165J1_123_3637 | u_dut/sub_64_S2_C83 (hybrid_shared_mul_dual_acc.sv:64) |
+                    | u_dut/C1417 (hybrid_shared_mul_dual_acc.sv:61)      |
+|                      | u_dut/C1426 (hybrid_shared_mul_dual_acc.sv:53)      |
+|                      | u_dut/C1422 (hybrid_shared_mul_dual_acc.sv:67)      |
+|                      | u_dut/sub_74_C83 (hybrid_shared_mul_dual_acc.sv:74) |
+|                      | u_dut/add_93 (hybrid_shared_mul_dual_acc.sv:93)     |
+|                      | u_dut/add_93_2 (hybrid_shared_mul_dual_acc.sv:93)   |
+|                      | u_dut/add_97 (hybrid_shared_mul_dual_acc.sv:97)     |
+|                      | u_dut/add_97_2 (hybrid_shared_mul_dual_acc.sv:97)   |
+|                      | u_dut/C1443 (hybrid_shared_mul_dual_acc.sv:53)      |
+|                      | u_dut/C1434 (hybrid_shared_mul_dual_acc.sv:61)      |
+|                      | u_dut/sub_64_S2_C84 (hybrid_shared_mul_dual_acc.sv:64) |
+                    | u_dut/C1439 (hybrid_shared_mul_dual_acc.sv:67)      |
+|                      | u_dut/sub_74_C84 (hybrid_shared_mul_dual_acc.sv:74) |
+|                      | u_dut/add_95 (hybrid_shared_mul_dual_acc.sv:95)     |
+|                      | u_dut/lt_106 (hybrid_shared_mul_dual_acc.sv:106)    |
+|                      | u_dut/lt_108 (hybrid_shared_mul_dual_acc.sv:108)    |
+|                      | u_dut/gt_110 (hybrid_shared_mul_dual_acc.sv:110)    |
+|                      | u_dut/gte_98 (hybrid_shared_mul_dual_acc.sv:98)     |
+|                      | u_dut/sub_101 (hybrid_shared_mul_dual_acc.sv:101)   |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 4     |                                          |
+| I2    | PI   | Unsigned | 1     |                                          |
+| I3    | PI   | Signed   | 6     |                                          |
+| I4    | PI   | Unsigned | 1     |                                          |
+| I5    | PI   | Unsigned | 1     |                                          |
+| I6    | PI   | Unsigned | 1     |                                          |
+| I7    | PI   | Unsigned | 1     |                                          |
+| I8    | PI   | Unsigned | 1     |                                          |
+| I9    | PI   | Signed   | 10    |                                          |
+| I10   | PI   | Unsigned | 1     |                                          |
+| I11   | PI   | Unsigned | 8     |                                          |
+| I12   | PI   | Unsigned | 1     |                                          |
+| I13   | PI   | Unsigned | 1     |                                          |
+| I14   | PI   | Unsigned | 1     |                                          |
+| I15   | PI   | Unsigned | 1     |                                          |
+| I16   | PI   | Signed   | 6     |                                          |
+| I17   | PI   | Unsigned | 1     |                                          |
+| I18   | PI   | Unsigned | 4     |                                          |
+| I19   | PI   | Unsigned | 1     |                                          |
+| I20   | PI   | Signed   | 10    |                                          |
+| I21   | PI   | Unsigned | 1     |                                          |
+| I22   | PI   | Unsigned | 8     |                                          |
+| I23   | PI   | Unsigned | 4     |                                          |
+| T2    | IFO  | Signed   | 6     | I1 - $unsigned(4'b1110) (hybrid_shared_mul_dual_acc.sv:64) |
+| T147  | IFO  | Signed   | 6     | { I2, I4 } ? T2 : I3 (hybrid_shared_mul_dual_acc.sv:61) |
+| T3    | IFO  | Signed   | 10    | I11 - $unsigned(8'b10000110) (hybrid_shared_mul_dual_acc.sv:74) |
+| T152  | IFO  | Signed   | 10    | { I8, I10 } ? T3 : I9 (hybrid_shared_mul_dual_acc.sv:67) |
+| T140  | IFO  | Signed   | 12    | { I5, I6, I7 } ? $signed(12'b000000000000) : T147 : T152 (hybrid_shared_mul_dual_acc.sv:53) |
+| T6    | IFO  | Signed   | 6     | I18 - $unsigned(4'b1110) (hybrid_shared_mul_dual_acc.sv:64) |
+| T157  | IFO  | Signed   | 6     | { I15, I17 } ? T6 : I16 (hybrid_shared_mul_dual_acc.sv:61) |
+| T7    | IFO  | Signed   | 10    | I22 - $unsigned(8'b10000110) (hybrid_shared_mul_dual_acc.sv:74) |
+| T162  | IFO  | Signed   | 10    | { I19, I21 } ? T7 : I20 (hybrid_shared_mul_dual_acc.sv:67) |
+| T142  | IFO  | Signed   | 12    | { I12, I13, I14 } ? $signed(12'b000000000000) : T157 : T162 (hybrid_shared_mul_dual_acc.sv:53) |
+| T139  | IFO  | Signed   | 13    | T140 + T142 ( hybrid_shared_mul_dual_acc.sv:93 hybrid_shared_mul_dual_acc.sv:97 ) |
+| T135  | IFO  | Signed   | 14    | I23 + T139 (hybrid_shared_mul_dual_acc.sv:93) |
+| T94   | IFO  | Signed   | 8     | T135[7:0]                                |
+| O1    | PO   | Unsigned | 8     | T94 + $unsigned(7'b1111111) (hybrid_shared_mul_dual_acc.sv:95) |
+| O2    | PO   | Signed   | 1     | T135 < $signed(9'b101101011) (hybrid_shared_mul_dual_acc.sv:106) |
+| O3    | PO   | Signed   | 1     | T135 < $signed(8'b10000010) (hybrid_shared_mul_dual_acc.sv:108) |
+| O4    | PO   | Signed   | 1     | T135 > $signed(8'b01111111) (hybrid_shared_mul_dual_acc.sv:110) |
+| O5    | PO   | Signed   | 14    | $unsigned(8'b10010101) + T139 (hybrid_shared_mul_dual_acc.sv:97) |
+| O6    | PO   | Signed   | 1     | O5 >= $signed(1'b0) (hybrid_shared_mul_dual_acc.sv:98) |
+| O7    | PO   | Signed   | 15    | $signed(1'b0) - O5 (hybrid_shared_mul_dual_acc.sv:101) |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_fp_add
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U1             | DW_fp_addsub   | sig_width=23 | U1                       |
+|                |                | exp_width=8 |                           |
+|                |                | ieee_compliance=0 |                     |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy *cell*7864/U1 in file
+        ./DW_norm_rtl.vhd.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| U2             | DW01_ash       | A_width=27 | U2                         |
+|                |                | SH_width=3 |                            |
+=============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_fp_add/U1 in file
+        ./DW_fp_addsub__str.v.e
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+| lt_x_1         | DW_cmp         | width=31   | lt_224                     |
+| ashr_5         | DW_rightsh     | A_width=26 | srl_284_lsb_trim           |
+|                |                | SH_width=8 |                            |
+| ash_6          | DW_leftsh      | A_width=26 | sll_286                    |
+|                |                | SH_width=8 |                            |
+| ash_8          | DW_leftsh      | A_width=27 | sll_338                    |
+|                |                | SH_width=6 |                            |
+| add_x_9        | DW01_add       | width=5    | add_340                    |
+| add_x_16       | DW01_inc       | width=23   | add_399                    |
+| U2             | DW_lzd         | a_width=28 | U2                         |
+| U1             | DW_norm        | a_width=27 | U1                         |
+|                |                | srch_wind=3 |                           |
+|                |                | exp_width=6 |                           |
+|                |                | exp_ctr=0  |                            |
+| DP_OP_65_133_7885               |            |                            |
+|                | DP_OP_65_133_7885 |         |                            |
+| DP_OP_66_134_3163               |            |                            |
+|                | DP_OP_66_134_3163 |         |                            |
+| DP_OP_67_135_9752               |            |                            |
+|                | DP_OP_67_135_9752 |         |                            |
+=============================================================================
+
+Datapath Report for DP_OP_65_133_7885
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_65_133_7885    | sub_278 sub_add_280 add_280_ni                      |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 8     |                                          |
+| T64   | IFO  | Signed   | 8     | O1[7:0]                                  |
+| O1    | PO   | Signed   | 9     | I1 - I2                                  |
+| O2    | PO   | Signed   | 8     | -T64 + $unsigned(8'b00000000)            |
+==============================================================================
+
+Datapath Report for DP_OP_66_134_3163
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_66_134_3163    | add_295 add_295_2                                   |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 27    |                                          |
+| I2    | PI   | Unsigned | 28    |                                          |
+| I3    | PI   | Unsigned | 1     |                                          |
+| O1    | PO   | Unsigned | 28    | I1 + I2 + I3                             |
+==============================================================================
+
+Datapath Report for DP_OP_67_135_9752
+==============================================================================
+| Cell                 | Contained Operations                                |
+==============================================================================
+| DP_OP_67_135_9752    | add_403 sub_404                                     |
+==============================================================================
+
+==============================================================================
+|       |      | Data     |       |                                          |
+| Var   | Type | Class    | Width | Expression                               |
+==============================================================================
+| I1    | PI   | Unsigned | 8     |                                          |
+| I2    | PI   | Unsigned | 5     |                                          |
+| O1    | PO   | Unsigned | 9     | I1 + $unsigned(1'b1)                     |
+| O2    | PO   | Signed   | 10    | O1 - I2                                  |
+==============================================================================
+
+
+Resource Report for Ungrouped Hierarchy u_dut/u_fp_add/U1/U2
+=============================================================================
+| Cell           | Module         | Parameters | Contained Operations       |
+=============================================================================
+=============================================================================
+
+
+Datapath Extraction Report
+
+Information: Operator associated with resources 'u_dut/sub_57_S3_C83 (hybrid_shared_mul_dual_acc.sv:57)' in design 'char_top' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'u_dut/C1413 (hybrid_shared_mul_dual_acc.sv:57)'.  (HDL-120)
+
+Information: Operator associated with resources 'u_dut/sub_57_S3_C84 (hybrid_shared_mul_dual_acc.sv:57)' in design 'char_top' breaks the datapath extraction because there is leakage due to truncation on its fanout to operator of resources 'u_dut/C1430 (hybrid_shared_mul_dual_acc.sv:57)'.  (HDL-120)
+
+
+Implementation Report
+===============================================================================
+|                    |                  | Current            | Set            |
+| Cell               | Module           | Implementation     | Implementation |
+===============================================================================
+| sub_x_1            | DW01_sub         | apparch (area)     |                |
+| sub_x_2            | DW01_sub         | apparch (area)     |                |
+| sub_x_3            | DW01_sub         | apparch (area)     |                |
+| sub_x_4            | DW01_sub         | apparch (area)     |                |
+| lte_x_5            | DW_cmp           | apparch (area)     |                |
+| lte_x_6            | DW_cmp           | apparch (area)     |                |
+| sub_x_7            | DW01_sub         | apparch (area)     |                |
+| ash_8              | DW_leftsh        | astr (area)        |                |
+| ash_9              | DW_leftsh        | astr (area)        |                |
+| ashr_10            | DW_rightsh       | astr (area)        |                |
+| add_x_55           | DW01_add         | pparch (area,speed)                 |
+| u_dut/u_fp_add     | DW_fp_add        | rtl                |                |
+| U1                 | DW_fp_addsub     | str                |                |
+| U2                 | DW01_ash         | astr (area)        |                |
+| lt_x_1             | DW_cmp           | pparch (area,speed)                 |
+| ashr_5             | DW_rightsh       | astr (area)        |                |
+| ash_6              | DW_leftsh        | astr (area)        |                |
+| ash_8              | DW_leftsh        | astr (area)        |                |
+| add_x_9            | DW01_add         | apparch (area)     |                |
+| add_x_16           | DW01_inc         | pparch (area,speed)                 |
+| U2                 | DW_lzd           | cla                |                |
+| U1                 | DW_norm          | rtl                |                |
+| DP_OP_164J1_122_3608                  |                    |                |
+|                    | DP_OP_164J1_122_3608 | str (area,speed)                |
+|                    |                  | mult_arch: benc_radix4              |
+| DP_OP_165J1_123_3637                  |                    |                |
+|                    | DP_OP_165J1_123_3637 | str (area,speed)                |
+| DP_OP_65_133_7885  | DP_OP_65_133_7885 | str (area,speed)  |                |
+| DP_OP_66_134_3163  | DP_OP_66_134_3163 | str (area,speed)  |                |
+| DP_OP_67_135_9752  | DP_OP_67_135_9752 | str (area,speed)  |                |
+===============================================================================
+
+1
