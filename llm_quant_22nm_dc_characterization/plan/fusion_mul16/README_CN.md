@@ -101,17 +101,46 @@ FusionMul16 cluster
 
 FP8 模式下，每 fusion lane 形成一个 `dot4`，整个 cluster 每周期完成 16 个 product、输出 4 个 dot partial sum。BF16 模式下，每 lane 的 4 个 brick 组成一个 8×8 significand product。
 
-## 7. 运行
+## 7. Git 源码 Bundle
+
+Git 分支保存的是校验型分片源码包：
+
+```text
+source_bundle_v2/chunk_00.b64 ... chunk_20.b64
+source_bundle_v2/manifest.json
+extract_source_bundle.py
+```
+
+校验值：
+
+```text
+Base64 SHA-256  771d461b2505f579c851023dd171d3e660e5bd54cefb99175072cda8f82b0960
+Archive SHA-256 6e213a968b0a208aa16598b735a576f55f940a7c60ff7f590b2a3ae0a2520fb1
+```
+
+仓库中旧的 `bundle_parts/` 仅保留审计历史，`extract_source_bundle.py` 不读取它。
+
+## 8. 运行
 
 ```bash
 cd llm_quant_22nm_dc_characterization/plan/fusion_mul16
-python3 SOURCE_BUNDLE.py
+python3 extract_source_bundle.py
 python3 scripts/run_sandbox_validation.py
 python3 scripts/gen_test_vectors.py
 python3 scripts/gen_dc_runs.py
 python3 scripts/run_dc.py --lib-setup ../config/library_setup.local.tcl --jobs 1
 python3 scripts/collect_dc_results.py
 python3 scripts/validate_dc_results.py
+```
+
+从 Git 分片重新解包后，已复现：
+
+```text
+17 tests PASS
+18 RTL files
+11 DC groups / 33 runs
+2560 RTL vectors
+vector SHA-256 = 24f1c3874e4a6fefdb7e33f249ab0ff4434b6d7509d809cfca21b810e0eb5211
 ```
 
 DC 并行数不得超过本地 license token 数。
