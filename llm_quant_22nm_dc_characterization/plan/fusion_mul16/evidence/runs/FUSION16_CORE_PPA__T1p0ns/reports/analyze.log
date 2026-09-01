@@ -1,0 +1,635 @@
+Running PRESTO HDLC
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:18: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:19: signed to unsigned assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:26: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:27: signed to unsigned assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:34: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:35: signed to unsigned assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:96: signed to unsigned assignment occurs. (VER-318)
+Compiling source file <FUSION_MUL16_ROOT>/rtl/mul4x4_brick.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_product_core.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_int_accum.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_fp32_accum_dw.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_cluster_dw.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_cluster_dw_pipe.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_proof_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/mul4x4_array16_proof.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_int_accum_proof_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_fp_accum_proof_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_int_only_pipe_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_fp8_only_pipe_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_bf16_only_pipe_top.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_separate_reference_dw.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_separate_reference_pipe_dw.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_dual_cluster_dw.sv
+Compiling source file <FUSION_MUL16_ROOT>/rtl/fusion_mul16_dual_cluster_pipe_dw.sv
+Presto compilation completed successfully.
+Loading db file '<LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db'
+Loading db file '<SYNOPSYS_DC_ROOT>/libraries/syn/dw_foundation.sldb'
+Loading db file '<SYNOPSYS_DC_ROOT>/libraries/syn/gtech.db'
+Loading db file '<SYNOPSYS_DC_ROOT>/libraries/syn/standard.sldb'
+  Loading link library 'sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_proof_top.sv:33: signed to unsigned part selection occurs. (VER-318)
+
+Inferred memory devices in process in routine 'fusion_mul16_proof_top' in file
+	 <FUSION_MUL16_ROOT>/rtl/fusion_mul16_proof_top.sv'.
+====================================================================================
+|     Register Name     |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+====================================================================================
+| valid_signature_o_reg | Flip-flop |  16   |  Y  | N  | None  | Async | N  |  38  |
+|  int_signature_o_reg  | Flip-flop |  32   |  Y  | N  | None  | Async | N  |  38  |
+|  fp_signature_o_reg   | Flip-flop |  32   |  Y  | N  | None  | Async | N  |  38  |
+====================================================================================
+Presto compilation completed successfully. (fusion_mul16_proof_top)
+Module: fusion_mul16_proof_top, Ports: 598, Input: 518, Output: 80, Inout: 0
+Module: fusion_mul16_proof_top, Registers: 80, Async set/reset: 80, Sync set/reset: 0
+Information: Module fusion_mul16_proof_top report end. (ELAB-965)
+Elaborated 1 design.
+Current design is now 'fusion_mul16_proof_top'.
+Information: Building the design 'fusion_mul16_product_core'. (HDL-193)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:34: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:26: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_ROOT>/rtl/fusion_mul16_pkg.sv:18: unsigned to signed assignment occurs. (VER-318)
+
+Statistics for case statements in always block in file
+	'<FUSION_MUL16_ROOT>/rtl/fusion_mul16_product_core.sv'
+============================================================
+|    Line    |  full/ parallel  |      block location      |
+============================================================
+|    138     |    user/user     | always block at line 132 |
+|    246     |    user/user     | always block at line 236 |
+============================================================
+Statistics for MUX_OPs
+===================================================================
+|       block name/line         | Inputs | Outputs | # sel inputs |
+===================================================================
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+| fusion_mul16_product_core/107 |   32   |    1    |      5       |
+===================================================================
+Presto compilation completed successfully. (fusion_mul16_product_core)
+Module: fusion_mul16_product_core, Ports: 1577, Input: 516, Output: 1061, Inout: 0
+Module: fusion_mul16_product_core, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module fusion_mul16_product_core report end. (ELAB-965)
+Information: Building the design 'mul4x4_brick'. (HDL-193)
+Presto compilation completed successfully. (mul4x4_brick)
+Module: mul4x4_brick, Ports: 16, Input: 8, Output: 8, Inout: 0
+Module: mul4x4_brick, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module mul4x4_brick report end. (ELAB-965)
+Current design is 'fusion_mul16_proof_top'.
+
+  Linking design 'fusion_mul16_proof_top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (3 designs)               <FUSION_MUL16_ROOT>/build_dc/FUSION16_CORE_PPA__T1p0ns/fusion_mul16_proof_top.db, etc
+  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c (library) <LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
+  dw_foundation.sldb (library) <SYNOPSYS_DC_ROOT>/libraries/syn/dw_foundation.sldb
+
+Information: Summary of messages issued during linking: (LINK-1806)
+No messages were issued during linking.
+Information: Uniquified 16 instances of design 'mul4x4_brick'. (OPT-1056)
+ 
+****************************************
+check_design summary:
+Version:     X-2025.06-SP3
+Date:        Tue Sep  1 20:35:40 2026
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Inputs/Outputs                                                    161
+    Unconnected ports (LINT-28)                                   160
+    Constant outputs (LINT-52)                                      1
+
+Cells                                                             291
+    Cells do not drive (LINT-1)                                   291
+
+Nets                                                               16
+    Unloaded nets (LINT-2)                                         16
+--------------------------------------------------------------------------------
+
+Warning: In design 'fusion_mul16_product_core', cell 'B_1640' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1641' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1642' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1643' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1644' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1645' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1646' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1647' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1648' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1649' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1650' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1651' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1652' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1653' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1654' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1655' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1656' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1657' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1658' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1659' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1660' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1661' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1662' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1663' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1664' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1665' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1666' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1667' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1668' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1669' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1670' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1671' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1672' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1673' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1674' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1675' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1676' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1677' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1678' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1679' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1680' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1681' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1682' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1683' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1684' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1685' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1686' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1687' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1688' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1689' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1690' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1691' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1692' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1693' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1694' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1695' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1696' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1697' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1698' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1699' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1700' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1701' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1702' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1703' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1704' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1705' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1706' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1707' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1708' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1709' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1710' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1711' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1712' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1713' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1714' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1715' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1716' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1717' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1718' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1719' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1720' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1721' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1722' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1723' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1724' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1725' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1726' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1727' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1728' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1729' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1730' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1731' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1732' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'B_1733' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40257' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40262' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40267' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40272' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40277' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40282' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40287' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40292' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40297' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40302' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40307' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40312' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40317' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40322' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40327' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40332' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40337' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40341' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40345' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40349' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40353' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40357' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40361' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40365' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40370' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40374' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40378' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40382' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40387' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40419' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40420' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40478' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40479' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40537' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40538' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40596' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40597' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40655' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40656' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40714' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40715' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40773' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40774' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40832' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40833' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40891' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40892' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40950' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C40951' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41009' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41010' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41068' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41069' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41127' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41128' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41186' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41187' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41245' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41246' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41304' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41305' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41389' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41390' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41500' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41501' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41611' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41612' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41722' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41723' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41808' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41809' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41866' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41867' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41924' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41925' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41982' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C41983' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42040' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42041' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42098' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42099' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42156' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42157' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42214' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42215' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42272' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42273' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42330' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42331' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42388' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42389' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42446' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42447' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42504' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42505' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42562' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42563' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42620' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42621' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42678' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42679' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42746' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42747' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42828' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42829' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42910' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42911' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42992' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C42993' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43074' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43075' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43156' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43157' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43238' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43239' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43320' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43321' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43408' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43409' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43495' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43496' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43582' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43583' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43669' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43670' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43756' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43757' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43843' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43844' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43930' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C43931' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44017' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44018' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44113' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44114' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44220' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44221' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44327' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44328' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44434' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44435' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44504' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44513' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44522' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44531' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44540' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44549' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44558' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44567' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44576' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44585' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44594' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44603' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44612' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44621' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44630' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44639' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44651' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44663' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44675' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44687' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44696' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44705' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44714' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44723' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44732' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44741' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44750' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44759' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44768' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44777' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44786' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44795' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44804' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44813' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44822' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44831' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44840' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44849' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44858' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44867' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44876' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44885' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44894' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44903' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44915' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44927' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44939' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44951' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44963' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44975' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44987' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C44999' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C45011' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C45023' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C45035' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_product_core', cell 'C45047' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[15][32]' driven by pin 'u_core/int_product_o[15][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[14][32]' driven by pin 'u_core/int_product_o[14][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[13][32]' driven by pin 'u_core/int_product_o[13][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[12][32]' driven by pin 'u_core/int_product_o[12][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[11][32]' driven by pin 'u_core/int_product_o[11][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[10][32]' driven by pin 'u_core/int_product_o[10][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[9][32]' driven by pin 'u_core/int_product_o[9][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[8][32]' driven by pin 'u_core/int_product_o[8][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[7][32]' driven by pin 'u_core/int_product_o[7][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[6][32]' driven by pin 'u_core/int_product_o[6][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[5][32]' driven by pin 'u_core/int_product_o[5][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[4][32]' driven by pin 'u_core/int_product_o[4][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[3][32]' driven by pin 'u_core/int_product_o[3][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[2][32]' driven by pin 'u_core/int_product_o[2][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[1][32]' driven by pin 'u_core/int_product_o[1][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_proof_top', net 'int_product[0][32]' driven by pin 'u_core/int_product_o[0][32]' has no loads. (LINT-2)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[4][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[5][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[6][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[7][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[8][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[9][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[10][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[11][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[12][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[13][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[14][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'lhs_i[15][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[8][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[9][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[10][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[11][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[12][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[13][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[14][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][15]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][14]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][13]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][12]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][11]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][10]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][9]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', port 'rhs_i[15][8]' is not connected to any nets. (LINT-28)
+Warning: In design 'fusion_mul16_product_core', output port 'product_count_o[1]' is connected directly to 'logic 0'. (LINT-52)
+1

@@ -1,0 +1,12 @@
+group_id,top_module,category,keep_brick_hierarchy,expected_4x4_bricks,throughput_contract,comparison_role,notes
+BRICK16_BARE_PROOF,mul4x4_array16_proof,proof,1,16,16 unsigned 4x4 products/cycle,bare_multiplier_anchor,Explicit 16-brick lower-level area anchor
+FUSION16_CORE_PROOF,fusion_mul16_proof_top,proof,1,16,Mode dependent 16/8/4/1 logical products per cycle,structural_proof,Must retain exactly 16 DW_mult_uns 4x4 and no additional multiplier
+FUSION16_CORE_PPA,fusion_mul16_proof_top,core,0,16,Mode dependent 16/8/4/1 logical products per cycle,product_core_area,Flattened PPA run for decode and partial-product fusion overhead
+FUSION16_INT_ACC_ONLY,fusion_mul16_int_accum_proof_top,accumulator,0,0,Four integer dot accumulators/cycle,int_accumulator_area,No multiplier expected
+FUSION16_FP_ACC_ONLY,fusion_mul16_fp_accum_proof_top,accumulator,0,0,Four FP32 dot accumulators/cycle,fp_accumulator_area,No multiplier expected; 16 DW_fp_add operations expected
+FUSION16_INT_ONLY_PIPE,fusion_mul16_int_only_pipe_top,dedicated,0,16,I4xI8 8 MAC/cycle or I8xI8 4 MAC/cycle,dedicated_integer_reference,Integer-only optimized cluster
+FUSION16_FP8_ONLY_PIPE,fusion_mul16_fp8_only_pipe_top,dedicated,0,16,FP8 16 products and four dot4 accumulations/cycle,dedicated_fp8_reference,FP8 significand uses each 4x4 brick independently
+FUSION16_BF16_ONLY_PIPE,fusion_mul16_bf16_only_pipe_top,dedicated,0,16,BF16 4 products and four accumulations/cycle,dedicated_bf16_reference,Four bricks form each 8x8 BF16 significand multiplier
+FUSION16_SHARED_FULL_PIPE,fusion_mul16_cluster_dw_pipe,shared,0,16,One selected mode per cycle,shared_candidate,One brick array plus integer and floating accumulator domains
+FUSION16_SEPARATE_FULL_PIPE,fusion_mul16_separate_reference_pipe_dw,separate,0,48,Integer plus FP8 plus BF16 may execute concurrently,matched_separate_reference,Three dedicated 16-brick cores and separate accumulators
+FUSION16_DUAL_SHARED_PIPE,fusion_mul16_dual_cluster_pipe_dw,shared_dual,0,32,Two independently selected modes per cycle,dual_cluster_candidate,Two shared clusters for limited concurrency

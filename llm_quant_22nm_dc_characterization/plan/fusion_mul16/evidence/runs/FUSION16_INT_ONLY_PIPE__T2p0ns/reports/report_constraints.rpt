@@ -1,0 +1,38 @@
+ 
+****************************************
+Report : constraint
+        -all_violators
+Design : fusion_mul16_int_only_pipe_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 21:13:48 2026
+****************************************
+
+
+   min_delay/hold ('clk' group)
+
+                             Required        Actual
+   Endpoint                 Path Delay     Path Delay        Slack
+   -----------------------------------------------------------------
+   u_cluster/u_int_acc/valid_o_reg/D
+                                0.09           0.05 r        -0.04  (VIOLATED)
+
+
+   max_area
+
+                             Required        Actual
+   Design                      Area           Area           Slack
+   -----------------------------------------------------------------
+   fusion_mul16_int_only_pipe_top
+                                0.00        3228.95       -3228.95  (VIOLATED)
+
+
+   max_leakage_power
+
+                             Required        Actual
+   Design                   Leakage Power  Leakage Power     Slack
+   -----------------------------------------------------------------
+   fusion_mul16_int_only_pipe_top
+                                0.00           3.61          -3.61  (VIOLATED)
+
+
+1

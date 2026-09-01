@@ -103,34 +103,29 @@ FP8 模式下，每 fusion lane 形成一个 `dot4`，整个 cluster 每周期�
 
 ## 7. Git 源码 Bundle
 
-Git 分支保存的是校验型分片源码包：
+Git 分支保存的是校验型分片源码包；提取器优先使用已完成本地验证的 v3：
 
 ```text
-source_bundle_v2/chunk_00.b64 ... chunk_20.b64
-source_bundle_v2/manifest.json
+source_bundle_v3/chunk_00.b64 ... chunk_21.b64
+source_bundle_v3/manifest.json
 extract_source_bundle.py
 ```
 
 校验值：
 
 ```text
-Base64 SHA-256  771d461b2505f579c851023dd171d3e660e5bd54cefb99175072cda8f82b0960
-Archive SHA-256 6e213a968b0a208aa16598b735a576f55f940a7c60ff7f590b2a3ae0a2520fb1
+Base64 SHA-256  f31f5ef236df8acdfd41abe59e42ff08dfef7d2f0485907b72147ce4741eaa90
+Archive SHA-256 fab8a529d64efc9a05460df4255dda8a6102e828d2b6b5248c64103dd1c82040
 ```
 
-仓库中旧的 `bundle_parts/` 仅保留审计历史，`extract_source_bundle.py` 不读取它。
+`source_bundle_v2/` 与更早的 `bundle_parts/` 仅保留审计历史。
 
 ## 8. 运行
 
 ```bash
 cd llm_quant_22nm_dc_characterization/plan/fusion_mul16
 python3 extract_source_bundle.py
-python3 scripts/run_sandbox_validation.py
-python3 scripts/gen_test_vectors.py
-python3 scripts/gen_dc_runs.py
-python3 scripts/run_dc.py --lib-setup ../config/library_setup.local.tcl --jobs 1
-python3 scripts/collect_dc_results.py
-python3 scripts/validate_dc_results.py
+LIB_SETUP=/path/to/library_setup.local.tcl bash scripts/local_agent_run.sh
 ```
 
 从 Git 分片重新解包后，已复现：
@@ -144,3 +139,14 @@ vector SHA-256 = 24f1c3874e4a6fefdb7e33f249ab0ff4434b6d7509d809cfca21b810e0eb521
 ```
 
 DC 并行数不得超过本地 license token 数。
+
+## 9. 本地执行结论
+
+- 17/17 沙箱测试通过；10 种模式共 505,056 对输入，RTL 零失配。
+- 11 组/33 次 DC 扫描完整，blackbox 全部为 0，严格校验 `ERRORS=NONE`。
+- proof run：16 个 `mul4x4_brick`、16 个 `DW_mult_uns #(4,4)`、额外 multiplier 为 0。
+- 1 GHz：shared full 面积 23,201.815 µm²、WNS −0.100014 ns；separate full 面积 27,912.885 µm²、WNS −0.008636 ns；dual shared 面积 45,222.359 µm²、WNS −0.129555 ns。
+- shared exclusive-mode 面积比 separate 小 16.88%，但未达到 1 GHz；dual shared 既未过时序，也比 separate 大 62.01%。因此当前 FusionMul16 不进入 1 GHz 候选。
+- FP accumulator 使用 `DW_fp_add #(23,8,0)`；模型是否接受其 denormal 行为仍需单独确认。
+
+完整结果见 `results/local_dc/LOCAL_EXECUTION_REPORT.md`，脱敏 DC 证据见 `evidence/runs/`。

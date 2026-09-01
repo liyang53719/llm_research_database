@@ -7,7 +7,8 @@ import json
 import tarfile
 
 root = Path(__file__).resolve().parent
-bundle_dir = root / "source_bundle_v2"
+bundle_dir = root / ("source_bundle_v3" if (root / "source_bundle_v3/manifest.json").exists()
+                     else "source_bundle_v2")
 manifest = json.loads((bundle_dir / "manifest.json").read_text(encoding="utf-8"))
 chunks = sorted(bundle_dir.glob("chunk_*.b64"))
 if len(chunks) != manifest["chunk_count"]:
@@ -29,7 +30,7 @@ if archive_sha != manifest["archive_sha256"]:
         f"Source archive SHA mismatch: {archive_sha}"
     )
 with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:gz") as archive:
-    archive.extractall(root)
+    archive.extractall(root, filter="data")
 print(
     "FusionMul16 modular source extracted: "
     f"{len(chunks)} chunks, archive SHA256={archive_sha}"

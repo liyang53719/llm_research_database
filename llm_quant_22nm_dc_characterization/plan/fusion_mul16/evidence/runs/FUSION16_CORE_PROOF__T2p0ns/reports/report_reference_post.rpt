@@ -1,0 +1,692 @@
+ 
+****************************************
+Report : reference
+Design : fusion_mul16_proof_top
+Version: X-2025.06-SP3
+Date   : Tue Sep  1 20:29:22 2026
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+AOI22BB_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000       1      0.637000  
+DFFRPQA_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  1.729000       5      8.645000  n
+DFFRPQA_X2M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  1.729000      63    108.926998  n
+INV_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.182000      24      4.368000  
+INV_X3M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000       1      0.364000  
+XNOR2_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000     195    124.215005  
+XNOR3_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  1.274000     154    196.196007  
+XOR2_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000      28     17.836001  
+XOR3_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  1.274000       1      1.274000  
+fusion_mul16_product_core      3840.655069       1   3840.655069  h, u
+-----------------------------------------------------------------------------
+Total 10 references                                  4303.117080
+
+****************************************
+Design: fusion_mul16_product_core 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+ADDF_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  1.547000     354    547.638018  r
+AND2_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000      49     17.836000  
+AND3_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000      24     10.920000  
+AO12_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000      41     18.655001  
+AO21A1AI2_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.546000     187    102.102001  
+AO21B_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000      42     19.110001  
+AO22_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000       5      3.185000  
+AOI2XB1_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.546000      25     13.650000  
+AOI21_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000     107     38.947999  
+AOI21_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     836    380.380011  
+AOI22BB_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000      90     57.330002  
+AOI22_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     736    334.880010  
+AOI211_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     379    172.445005  
+BUFH_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.273000      13      3.549000  
+CGENI_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000       9      5.733000  
+INV_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.182000    1371    249.521995  
+INV_X2M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.273000       2      0.546000  
+NAND2XB_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000      79     28.755999  
+NAND2_X1A_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.273000    1039    283.647002  
+NAND2_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.273000       1      0.273000  
+NAND3_X1A_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000     159     57.875999  
+NAND4_X1A_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     173     78.715002  
+NOR2XB_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000     103     37.491999  
+NOR2_X1A_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.273000    1117    304.941002  
+NOR2_X1TA_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000       1      0.364000  
+NOR3_X1A_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000     218     79.351998  
+NOR3_X1TA_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.546000       1      0.546000  
+OA21A1OI2_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.546000     115     62.790000  
+OA21B_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000      19      8.645000  
+OA22_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000       9      5.733000  
+OAI2XB1_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.546000      31     16.926000  
+OAI21_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000      87     31.667999  
+OAI21_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     919    418.145012  
+OAI22BB_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000      25     15.925001  
+OAI22_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     378    171.990005  
+OAI211_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000     471    214.305006  
+OR2_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.364000      32     11.648000  
+OR3_X1M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.455000      17      7.735000  
+XNOR2_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000      14      8.918000  
+XOR2_X0P5M_A6P5PP140ZTS_C35
+                   sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+                                  0.637000      28     17.836001  
+mul4x4_brick_0                    0.000000       1      0.000000  h, u
+mul4x4_brick_1                    0.000000       1      0.000000  h, u
+mul4x4_brick_2                    0.000000       1      0.000000  h, u
+mul4x4_brick_3                    0.000000       1      0.000000  h, u
+mul4x4_brick_4                    0.000000       1      0.000000  h, u
+mul4x4_brick_5                    0.000000       1      0.000000  h, u
+mul4x4_brick_6                    0.000000       1      0.000000  h, u
+mul4x4_brick_7                    0.000000       1      0.000000  h, u
+mul4x4_brick_8                    0.000000       1      0.000000  h, u
+mul4x4_brick_9                    0.000000       1      0.000000  h, u
+mul4x4_brick_10                   0.000000       1      0.000000  h, u
+mul4x4_brick_11                   0.000000       1      0.000000  h, u
+mul4x4_brick_12                   0.000000       1      0.000000  h, u
+mul4x4_brick_13                   0.000000       1      0.000000  h, u
+mul4x4_brick_14                   0.000000       1      0.000000  h, u
+mul4x4_brick_15                   0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 56 references                                  3840.655069
+
+****************************************
+Design: mul4x4_brick_0 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_2 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_3 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_4 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_5 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_6 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_7 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_8 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_9 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_10 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_11 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_12 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_13 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_14 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+
+****************************************
+Design: mul4x4_brick_15 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns_param_1               0.000000       1      0.000000  u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns_param_1 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+DW_mult_uns                       0.000000       1      0.000000  h, u
+-----------------------------------------------------------------------------
+Total 1 references                                      0.000000
+
+****************************************
+Design: DW_mult_uns 
+****************************************
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+GTECH_ADD_AB       gtech          0.000000       4      0.000000  u
+GTECH_ADD_ABC      gtech          0.000000       8      0.000000  u
+GTECH_BUF          gtech          0.000000       1      0.000000  u
+GTECH_NOR2         gtech          0.000000      16      0.000000  u
+GTECH_NOT          gtech          0.000000       8      0.000000  u
+-----------------------------------------------------------------------------
+Total 5 references                                      0.000000
+1
