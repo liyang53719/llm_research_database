@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "source_bundle": {
+    "chunk_count": 21,
+    "base64_chars": 41000,
+    "base64_sha256": "771d461b2505f579c851023dd171d3e660e5bd54cefb99175072cda8f82b0960",
+    "archive_bytes": 30749,
+    "archive_sha256": "6e213a968b0a208aa16598b735a576f55f940a7c60ff7f590b2a3ae0a2520fb1"
+  },
+  "reproduced_contents": {
+    "rtl_files": 18,
+    "unit_tests": 17,
+    "dc_groups": 11,
+    "dc_runs": 33,
+    "rtl_vectors": 2560,
+    "rtl_vectors_sha256": "24f1c3874e4a6fefdb7e33f249ab0ff4434b6d7509d809cfca21b810e0eb5211"
+  },
+  "commands": [
+    "python3 extract_source_bundle.py",
+    "python3 scripts/run_sandbox_validation.py",
+    "python3 scripts/gen_test_vectors.py",
+    "python3 scripts/gen_dc_runs.py"
+  ],
+  "note": "The reproduction was executed from the validated source_bundle_v2 byte stream corresponding to the Git branch chunk blob SHAs. No DC, proprietary library or SystemVerilog simulator was available in the sandbox."
+}

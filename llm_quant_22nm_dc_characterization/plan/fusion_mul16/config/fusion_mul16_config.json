@@ -1,0 +1,46 @@
+{
+  "characterization": {
+    "clock_periods_ns": [2.0, 1.0, 0.9],
+    "expected_groups": 11,
+    "expected_runs": 33,
+    "library_contract": {
+      "library_set_id": "cln22ul_sc6p5mcpp140z_base_svt_c35_r3p0_tt_0p80v_25c",
+      "pvt": "TT typical_max, 0.80 V, 25 C",
+      "compile_mode": "compile_ultra",
+      "dc_version_reference": "X-2025.06-SP3",
+      "dw_version_reference": "X-2025.06-DWBB_202506.3"
+    },
+    "proof_requirements": {
+      "brick_instance_count_precompile": 16,
+      "dw_mult_4x4_instance_count_precompile": 16,
+      "additional_multiplier_operations": 0,
+      "blackbox_count": 0
+    },
+    "area_scope": "mapped standard-cell area only"
+  },
+  "experiments": [
+    {"group_id":"BRICK16_BARE_PROOF","top_module":"mul4x4_array16_proof","category":"proof","keep_brick_hierarchy":1,"expected_4x4_bricks":16,"throughput_contract":"16 unsigned 4x4 products/cycle","comparison_role":"bare_multiplier_anchor"},
+    {"group_id":"FUSION16_CORE_PROOF","top_module":"fusion_mul16_proof_top","category":"proof","keep_brick_hierarchy":1,"expected_4x4_bricks":16,"throughput_contract":"Mode dependent 16/8/4/1 logical products per cycle","comparison_role":"structural_proof"},
+    {"group_id":"FUSION16_CORE_PPA","top_module":"fusion_mul16_proof_top","category":"core","keep_brick_hierarchy":0,"expected_4x4_bricks":16,"throughput_contract":"Mode dependent 16/8/4/1 logical products per cycle","comparison_role":"product_core_area"},
+    {"group_id":"FUSION16_INT_ACC_ONLY","top_module":"fusion_mul16_int_accum_proof_top","category":"accumulator","keep_brick_hierarchy":0,"expected_4x4_bricks":0,"throughput_contract":"Four integer dot accumulators/cycle","comparison_role":"int_accumulator_area"},
+    {"group_id":"FUSION16_FP_ACC_ONLY","top_module":"fusion_mul16_fp_accum_proof_top","category":"accumulator","keep_brick_hierarchy":0,"expected_4x4_bricks":0,"throughput_contract":"Four FP32 dot accumulators/cycle","comparison_role":"fp_accumulator_area"},
+    {"group_id":"FUSION16_INT_ONLY_PIPE","top_module":"fusion_mul16_int_only_pipe_top","category":"dedicated","keep_brick_hierarchy":0,"expected_4x4_bricks":16,"throughput_contract":"I4xI8 8 MAC/cycle or I8xI8 4 MAC/cycle","comparison_role":"dedicated_integer_reference"},
+    {"group_id":"FUSION16_FP8_ONLY_PIPE","top_module":"fusion_mul16_fp8_only_pipe_top","category":"dedicated","keep_brick_hierarchy":0,"expected_4x4_bricks":16,"throughput_contract":"FP8 16 products and four dot4 accumulations/cycle","comparison_role":"dedicated_fp8_reference"},
+    {"group_id":"FUSION16_BF16_ONLY_PIPE","top_module":"fusion_mul16_bf16_only_pipe_top","category":"dedicated","keep_brick_hierarchy":0,"expected_4x4_bricks":16,"throughput_contract":"BF16 4 products and four accumulations/cycle","comparison_role":"dedicated_bf16_reference"},
+    {"group_id":"FUSION16_SHARED_FULL_PIPE","top_module":"fusion_mul16_cluster_dw_pipe","category":"shared","keep_brick_hierarchy":0,"expected_4x4_bricks":16,"throughput_contract":"One selected mode per cycle","comparison_role":"shared_candidate"},
+    {"group_id":"FUSION16_SEPARATE_FULL_PIPE","top_module":"fusion_mul16_separate_reference_pipe_dw","category":"separate","keep_brick_hierarchy":0,"expected_4x4_bricks":48,"throughput_contract":"Integer plus FP8 plus BF16 may execute concurrently","comparison_role":"matched_separate_reference"},
+    {"group_id":"FUSION16_DUAL_SHARED_PIPE","top_module":"fusion_mul16_dual_cluster_pipe_dw","category":"shared_dual","keep_brick_hierarchy":0,"expected_4x4_bricks":32,"throughput_contract":"Two independently selected modes per cycle","comparison_role":"dual_cluster_candidate"}
+  ],
+  "hard_fail": [
+    "mapped_cell_area_nonpositive",
+    "blackbox_count_nonzero",
+    "inconsistent_library_set_id",
+    "incomplete_period_sweep",
+    "proof_brick_instance_count_not_16",
+    "proof_dw_mult_4x4_count_not_16",
+    "proof_additional_multiplier_detected",
+    "integer_rtl_mismatch",
+    "fp8_rtl_mismatch",
+    "bf16_rtl_mismatch"
+  ]
+}
