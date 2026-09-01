@@ -1,0 +1,121 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 17: Kimi K3 Hybrid MoE
+%% 18_KimiK3_Hybrid_MLA_MoE: 同构/同拓扑模型 | Representative long-tail Kimi K3 / DSpark family page. Drawn as an MLA + sparse MoE block, the closest public open-weight topology class in the snapshot.
+flowchart TB
+  subgraph family_17["Kimi K3 Hybrid MoE"]
+    direction TB
+    subgraph variant_17_01["Representative MLA + sparse MoE block"]
+      direction TB
+      subgraph p25_g01["Shared expert body × 1"]
+        direction LR
+        p25_n030["gate_proj<br/>X · Wg"]:::mac
+        p25_n031["up_proj<br/>X · Wu"]:::mac
+        p25_n032("SiLU<br/>u·σ(u)"):::other
+        p25_n033("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p25_n034["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p25_g02["Routed expert body × E=128; 8 active/token"]
+        direction LR
+        p25_n023["gate_proj<br/>X · Wg"]:::mac
+        p25_n024["up_proj<br/>X · Wu"]:::mac
+        p25_n025("SiLU<br/>u·σ(u)"):::other
+        p25_n026("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p25_n027["down_proj<br/>Z · Wd"]:::mac
+      end
+      p25_n001["X<br/>[T=1024,H=7168]"]:::input
+      p25_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p25_n003["Q low-rank A<br/>H → rank1536"]:::mac
+      p25_n006["KV compression<br/>H → latent512 + K_rope64"]:::mac
+      p25_n004("Q LoRA RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p25_n007("KV latent RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p25_n005["Q low-rank B<br/>rank → 128×(128+64)"]:::mac
+      p25_n008["KV expansion<br/>latent → K_nope + V128/head"]:::mac
+      p25_n009("Split Q<br/>Q_nope128 + Q_rope64"):::other
+      p25_n010("Split KV<br/>K_nope128 + K_rope64 + V128"):::other
+      p25_n011("YaRN RoPE<br/>apply only 64 rotary dims"):::other
+      p25_n012["MLA Q × Kᵀ<br/>128 heads; latent KV reconstruction/fusion"]:::mac
+      p25_n013("Softmax FP32<br/>full causal attention"):::other
+      p25_n014["P × V<br/>latent/value GEMM"]:::mac
+      p25_n015["O Proj<br/>[128×128] → H"]:::mac
+      p25_n016((+)):::plus
+      p25_n017["X + MLA"]:::output
+      p25_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p25_n019["Router projection<br/>logits = X · Wrouter"]:::mac
+      p25_n020("Router scoring<br/>p = sigmoid_FP32(logits)"):::other
+      p25_n021("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p25_n022("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p25_n035["Shared gate projection<br/>s = X · ws"]:::mac
+      p25_n036("Sigmoid<br/>σ(s)"):::other
+      p25_n037("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p25_n028("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p25_n029("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p25_n038((+)):::plus
+      p25_n039((+)):::plus
+      p25_n040["Block output"]:::output
+      p25_n041["Layer variation<br/>First 3 layers use dense SwiGLU I=18432; later layers use 256 routed experts top-8 + one shared expert."]:::note
+      p25_n001 --> p25_n002
+      p25_n002 --> p25_n003
+      p25_n003 --> p25_n004
+      p25_n004 --> p25_n005
+      p25_n002 --> p25_n006
+      p25_n006 --> p25_n007
+      p25_n007 --> p25_n008
+      p25_n005 --> p25_n009
+      p25_n008 --> p25_n010
+      p25_n009 --> p25_n011
+      p25_n010 --> p25_n011
+      p25_n011 --> p25_n012
+      p25_n012 --> p25_n013
+      p25_n013 --> p25_n014
+      p25_n014 --> p25_n015
+      p25_n015 --> p25_n016
+      p25_n001 --> p25_n016
+      p25_n016 --> p25_n017
+      p25_n017 --> p25_n018
+      p25_n023 --> p25_n025
+      p25_n025 --> p25_n026
+      p25_n024 --> p25_n026
+      p25_n026 --> p25_n027
+      p25_n018 --> p25_n019
+      p25_n019 --> p25_n020
+      p25_n020 --> p25_n021
+      p25_n021 --> p25_n022
+      p25_n022 --> p25_n023
+      p25_n022 --> p25_n024
+      p25_n027 --> p25_n028
+      p25_n021 --> p25_n028
+      p25_n028 --> p25_n029
+      p25_n030 --> p25_n032
+      p25_n032 --> p25_n033
+      p25_n031 --> p25_n033
+      p25_n033 --> p25_n034
+      p25_n018 --> p25_n030
+      p25_n018 --> p25_n031
+      p25_n018 --> p25_n035
+      p25_n035 --> p25_n036
+      p25_n036 --> p25_n037
+      p25_n034 --> p25_n037
+      p25_n029 --> p25_n038
+      p25_n037 --> p25_n038
+      p25_n038 --> p25_n039
+      p25_n039 --> p25_n040
+      p25_n017 --> p25_n039
+    end
+  end
+style family_17 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p25_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p25_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_17_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 16,46 stroke:#777777,stroke-width:1.3px;

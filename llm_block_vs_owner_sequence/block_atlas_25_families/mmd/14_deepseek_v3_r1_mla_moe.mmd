@@ -1,0 +1,121 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 14: DeepSeek V3 / R1 MLA MoE
+%% 15_DeepSeekV3_R1_MLA_MoE: 同构/同拓扑模型 | DeepSeek-V3, V3.2 and DeepSeek-R1 share MLA plus 256-expert top-8 MoE; this supplemental family lifts drawn sample coverage from 91.60% to 93.45%.
+flowchart TB
+  subgraph family_14["DeepSeek V3 / R1 MLA MoE"]
+    direction TB
+    subgraph variant_14_01["MLA + routed/shared MoE block"]
+      direction TB
+      subgraph p21_g01["Shared expert body × 1"]
+        direction LR
+        p21_n030["gate_proj<br/>X · Wg"]:::mac
+        p21_n031["up_proj<br/>X · Wu"]:::mac
+        p21_n032("SiLU<br/>u·σ(u)"):::other
+        p21_n033("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p21_n034["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p21_g02["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p21_n023["gate_proj<br/>X · Wg"]:::mac
+        p21_n024["up_proj<br/>X · Wu"]:::mac
+        p21_n025("SiLU<br/>u·σ(u)"):::other
+        p21_n026("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p21_n027["down_proj<br/>Z · Wd"]:::mac
+      end
+      p21_n001["X<br/>[T=1024,H=7168]"]:::input
+      p21_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p21_n003["Q low-rank A<br/>H → rank1536"]:::mac
+      p21_n006["KV compression<br/>H → latent512 + K_rope64"]:::mac
+      p21_n004("Q LoRA RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p21_n007("KV latent RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p21_n005["Q low-rank B<br/>rank → 128×(128+64)"]:::mac
+      p21_n008["KV expansion<br/>latent → K_nope + V128/head"]:::mac
+      p21_n009("Split Q<br/>Q_nope128 + Q_rope64"):::other
+      p21_n010("Split KV<br/>K_nope128 + K_rope64 + V128"):::other
+      p21_n011("YaRN RoPE<br/>apply only 64 rotary dims"):::other
+      p21_n012["MLA Q × Kᵀ<br/>128 heads; latent KV reconstruction/fusion"]:::mac
+      p21_n013("Softmax FP32<br/>full causal attention"):::other
+      p21_n014["P × V<br/>latent/value GEMM"]:::mac
+      p21_n015["O Proj<br/>[128×128] → H"]:::mac
+      p21_n016((+)):::plus
+      p21_n017["X + MLA"]:::output
+      p21_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p21_n019["Router projection<br/>logits = X · Wrouter"]:::mac
+      p21_n020("Router scoring<br/>p = sigmoid_FP32(logits)"):::other
+      p21_n021("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p21_n022("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p21_n035["Shared gate projection<br/>s = X · ws"]:::mac
+      p21_n036("Sigmoid<br/>σ(s)"):::other
+      p21_n037("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p21_n028("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p21_n029("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p21_n038((+)):::plus
+      p21_n039((+)):::plus
+      p21_n040["Block output"]:::output
+      p21_n041["Layer variation<br/>First 3 layers use dense SwiGLU I=18432; later layers use 256 routed experts top-8 + one shared expert."]:::note
+      p21_n001 --> p21_n002
+      p21_n002 --> p21_n003
+      p21_n003 --> p21_n004
+      p21_n004 --> p21_n005
+      p21_n002 --> p21_n006
+      p21_n006 --> p21_n007
+      p21_n007 --> p21_n008
+      p21_n005 --> p21_n009
+      p21_n008 --> p21_n010
+      p21_n009 --> p21_n011
+      p21_n010 --> p21_n011
+      p21_n011 --> p21_n012
+      p21_n012 --> p21_n013
+      p21_n013 --> p21_n014
+      p21_n014 --> p21_n015
+      p21_n015 --> p21_n016
+      p21_n001 --> p21_n016
+      p21_n016 --> p21_n017
+      p21_n017 --> p21_n018
+      p21_n023 --> p21_n025
+      p21_n025 --> p21_n026
+      p21_n024 --> p21_n026
+      p21_n026 --> p21_n027
+      p21_n018 --> p21_n019
+      p21_n019 --> p21_n020
+      p21_n020 --> p21_n021
+      p21_n021 --> p21_n022
+      p21_n022 --> p21_n023
+      p21_n022 --> p21_n024
+      p21_n027 --> p21_n028
+      p21_n021 --> p21_n028
+      p21_n028 --> p21_n029
+      p21_n030 --> p21_n032
+      p21_n032 --> p21_n033
+      p21_n031 --> p21_n033
+      p21_n033 --> p21_n034
+      p21_n018 --> p21_n030
+      p21_n018 --> p21_n031
+      p21_n018 --> p21_n035
+      p21_n035 --> p21_n036
+      p21_n036 --> p21_n037
+      p21_n034 --> p21_n037
+      p21_n029 --> p21_n038
+      p21_n037 --> p21_n038
+      p21_n038 --> p21_n039
+      p21_n039 --> p21_n040
+      p21_n017 --> p21_n039
+    end
+  end
+style family_14 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p21_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p21_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_14_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 16,46 stroke:#777777,stroke-width:1.3px;

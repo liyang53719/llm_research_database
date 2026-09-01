@@ -1,0 +1,98 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 23: PowerMoE
+%% 24_PowerMoE: 同构/同拓扑模型 | Representative IBM PowerMoE family page. Standard self-attention followed by sparse top-k MoE.
+flowchart TB
+  subgraph family_23["PowerMoE"]
+    direction TB
+    subgraph variant_23_01["Attention + sparse MoE block"]
+      direction TB
+      subgraph p31_g01["Routed expert body × E=64; 4 active/token"]
+        direction LR
+        p31_n023["gate_proj<br/>X · Wg"]:::mac
+        p31_n024["up_proj<br/>X · Wu"]:::mac
+        p31_n025("SiLU<br/>u·σ(u)"):::other
+        p31_n026("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p31_n027["down_proj<br/>Z · Wd"]:::mac
+      end
+      p31_n001["X<br/>[T=1024, H=2048]"]:::input
+      p31_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p31_n003["K Proj<br/>X · Wk"]:::mac
+      p31_n004["Q Proj<br/>X · Wq"]:::mac
+      p31_n005["V Proj<br/>X · Wv"]:::mac
+      p31_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p31_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p31_n008[("K cache")]:::state
+      p31_n009[("V cache")]:::state
+      p31_n010("K head repeat ×4<br/>view/expand GQA heads"):::other
+      p31_n011("V head repeat ×4<br/>view/expand GQA heads"):::other
+      p31_n012["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p31_n013("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p31_n014["P × V<br/>batched head GEMM"]:::mac
+      p31_n015["O Proj<br/>C · Wo"]:::mac
+      p31_n016((+)):::plus
+      p31_n017["X + Attention"]:::output
+      p31_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p31_n019["Router projection<br/>logits = X · Wrouter"]:::mac
+      p31_n020("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p31_n021("Top-4 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p31_n022("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p31_n028("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p31_n029("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p31_n030((+)):::plus
+      p31_n032["Attention dimensions<br/>Q=32×64; K/V=8×64; logical score rows=32×T×T"]:::note
+      p31_n031["Block output"]:::output
+      p31_n001 --> p31_n002
+      p31_n002 --> p31_n003
+      p31_n002 --> p31_n004
+      p31_n002 --> p31_n005
+      p31_n003 --> p31_n006
+      p31_n004 --> p31_n007
+      p31_n006 --> p31_n008
+      p31_n005 -.-> p31_n009
+      p31_n008 --> p31_n010
+      p31_n009 --> p31_n011
+      p31_n007 --> p31_n012
+      p31_n010 --> p31_n012
+      p31_n012 --> p31_n013
+      p31_n013 --> p31_n014
+      p31_n011 --> p31_n014
+      p31_n014 --> p31_n015
+      p31_n015 --> p31_n016
+      p31_n001 --> p31_n016
+      p31_n016 --> p31_n017
+      p31_n017 --> p31_n018
+      p31_n023 --> p31_n025
+      p31_n025 --> p31_n026
+      p31_n024 --> p31_n026
+      p31_n026 --> p31_n027
+      p31_n018 --> p31_n019
+      p31_n019 --> p31_n020
+      p31_n020 --> p31_n021
+      p31_n021 --> p31_n022
+      p31_n022 --> p31_n023
+      p31_n022 --> p31_n024
+      p31_n027 --> p31_n028
+      p31_n021 --> p31_n028
+      p31_n028 --> p31_n029
+      p31_n029 --> p31_n030
+      p31_n030 --> p31_n031
+      p31_n017 --> p31_n030
+    end
+  end
+style family_23 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p31_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_23_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,35 stroke:#777777,stroke-width:1.3px;

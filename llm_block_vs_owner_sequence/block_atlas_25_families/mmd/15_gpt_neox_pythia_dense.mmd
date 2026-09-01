@@ -1,0 +1,65 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 15: GPT-NeoX / Pythia Dense
+%% 16_GPTNeoX_Pythia_Dense: 同构/同拓扑模型 | Pythia and GPT-NeoX representative family page. Same topology also describes GPT-NeoX derivatives that keep LayerNorm + causal RoPE attention + GELU FFN with parallel residual.
+flowchart TB
+  subgraph family_15["GPT-NeoX / Pythia Dense"]
+    direction TB
+    subgraph variant_15_01["Parallel-residual dense block"]
+      direction TB
+      p22_n001["X<br/>[T=1024, H=768]"]:::input
+      p22_n002("LayerNorm (attn)<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p22_n003("LayerNorm (MLP)<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p22_n004["K Proj<br/>X · Wk"]:::mac
+      p22_n005["Q Proj<br/>X · Wq"]:::mac
+      p22_n013["fc1<br/>X · W1 + b1"]:::mac
+      p22_n006["V Proj<br/>X · Wv"]:::mac
+      p22_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p22_n008("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p22_n014("GELU<br/>0.5u[1+erf(u/√2)]"):::other
+      p22_n015["fc2<br/>A · W2 + b2"]:::mac
+      p22_n009["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p22_n010("Softmax FP32<br/>p_i = exp(s_i−m)/Σexp(s_j−m)"):::other
+      p22_n011["P × V<br/>batched head GEMM"]:::mac
+      p22_n012["O Proj<br/>C · Wo"]:::mac
+      p22_n016((+)):::plus
+      p22_n017((+)):::plus
+      p22_n018["Block output"]:::output
+      p22_n019["GPT-NeoX/Pythia topology<br/>Parallel residual: Y = X + Attention(LN₁(X)) + MLP(LN₂(X))"]:::note
+      p22_n001 --> p22_n002
+      p22_n001 --> p22_n003
+      p22_n002 --> p22_n004
+      p22_n002 --> p22_n005
+      p22_n002 --> p22_n006
+      p22_n004 --> p22_n007
+      p22_n005 --> p22_n008
+      p22_n008 --> p22_n009
+      p22_n007 --> p22_n009
+      p22_n009 --> p22_n010
+      p22_n010 --> p22_n011
+      p22_n006 --> p22_n011
+      p22_n011 --> p22_n012
+      p22_n003 --> p22_n013
+      p22_n013 --> p22_n014
+      p22_n014 --> p22_n015
+      p22_n012 --> p22_n016
+      p22_n001 --> p22_n016
+      p22_n016 --> p22_n017
+      p22_n015 --> p22_n017
+      p22_n017 --> p22_n018
+    end
+  end
+style family_15 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_15_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 17 stroke:#777777,stroke-width:1.3px;

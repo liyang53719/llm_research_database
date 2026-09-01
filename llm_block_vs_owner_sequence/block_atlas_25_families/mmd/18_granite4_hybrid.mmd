@@ -1,0 +1,81 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 18: Granite 4 Hybrid
+%% 19_Granite4_Hybrid_Dense: 同构/同拓扑模型 | Representative Granite 4 family page. Uses grouped-query sliding attention plus SwiGLU at this abstraction level.
+flowchart TB
+  subgraph family_18["Granite 4 Hybrid"]
+    direction TB
+    subgraph variant_18_01["Representative grouped-query hybrid dense block"]
+      direction TB
+      p26_n001["X<br/>[T=1024, H=4096]"]:::input
+      p26_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p26_n003["K Proj<br/>X · Wk"]:::mac
+      p26_n004["Q Proj<br/>X · Wq"]:::mac
+      p26_n005["V Proj<br/>X · Wv"]:::mac
+      p26_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p26_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p26_n008[("K cache")]:::state
+      p26_n009[("V cache")]:::state
+      p26_n010("K head repeat ×4<br/>view/expand GQA heads"):::other
+      p26_n011("V head repeat ×4<br/>view/expand GQA heads"):::other
+      p26_n012["Q × Kᵀ<br/>batched head GEMM; causal sliding window W=4096"]:::mac
+      p26_n013("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p26_n014["P × V<br/>batched head GEMM"]:::mac
+      p26_n015["O Proj<br/>C · Wo"]:::mac
+      p26_n016((+)):::plus
+      p26_n017["X + Attention"]:::output
+      p26_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p26_n019["gate_proj<br/>X · Wgate"]:::mac
+      p26_n020["up_proj<br/>X · Wup"]:::mac
+      p26_n021("SiLU<br/>u·σ(u)"):::other
+      p26_n022("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+      p26_n023["down_proj<br/>Z · Wdown"]:::mac
+      p26_n024((+)):::plus
+      p26_n025["Block output"]:::output
+      p26_n026["Attention dimensions<br/>Q=32×128; K/V=8×128; logical score rows=32×T×4096"]:::note
+      p26_n001 --> p26_n002
+      p26_n002 --> p26_n003
+      p26_n002 --> p26_n004
+      p26_n002 --> p26_n005
+      p26_n003 --> p26_n006
+      p26_n004 --> p26_n007
+      p26_n006 --> p26_n008
+      p26_n005 -.-> p26_n009
+      p26_n008 --> p26_n010
+      p26_n009 --> p26_n011
+      p26_n007 --> p26_n012
+      p26_n010 --> p26_n012
+      p26_n012 --> p26_n013
+      p26_n013 --> p26_n014
+      p26_n011 --> p26_n014
+      p26_n014 --> p26_n015
+      p26_n015 --> p26_n016
+      p26_n001 --> p26_n016
+      p26_n016 --> p26_n017
+      p26_n017 --> p26_n018
+      p26_n018 --> p26_n019
+      p26_n018 --> p26_n020
+      p26_n019 --> p26_n021
+      p26_n021 --> p26_n022
+      p26_n020 --> p26_n022
+      p26_n022 --> p26_n023
+      p26_n023 --> p26_n024
+      p26_n024 --> p26_n025
+      p26_n017 --> p26_n024
+    end
+  end
+style family_18 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_18_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,28 stroke:#777777,stroke-width:1.3px;

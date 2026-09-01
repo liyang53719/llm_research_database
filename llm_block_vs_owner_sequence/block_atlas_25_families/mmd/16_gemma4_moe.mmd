@@ -1,0 +1,229 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 16: Gemma 4 MoE
+%% 17A_Gemma4_MoE_Sliding: 同构/同拓扑模型 | Representative Gemma 4 MoE family page for Gemma-4-26B-A4B and OTel-LLM-E4B-IT. Sliding block.
+%% 17B_Gemma4_MoE_Full: 同构/同拓扑模型 | Representative Gemma 4 MoE family page for Gemma-4-26B-A4B and OTel-LLM-E4B-IT. Global/full block.
+flowchart TB
+  subgraph family_16["Gemma 4 MoE"]
+    direction TB
+    subgraph variant_16_01["Sliding-attention + sparse MoE block"]
+      direction TB
+      subgraph p23_g01["Shared expert body × 1"]
+        direction LR
+        p23_n032["gate_proj<br/>X · Wg"]:::mac
+        p23_n033["up_proj<br/>X · Wu"]:::mac
+        p23_n034("GELU-tanh<br/>GELU_tanh(u)"):::other
+        p23_n035("Elementwise gate<br/>GELU-tanh(gate) ⊙ up"):::other
+        p23_n036["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p23_g02["Routed expert body × E=64; 8 active/token"]
+        direction LR
+        p23_n025["gate_proj<br/>X · Wg"]:::mac
+        p23_n026["up_proj<br/>X · Wu"]:::mac
+        p23_n027("GELU-tanh<br/>GELU_tanh(u)"):::other
+        p23_n028("Elementwise gate<br/>GELU-tanh(gate) ⊙ up"):::other
+        p23_n029["down_proj<br/>Z · Wd"]:::mac
+      end
+      p23_n001["X<br/>[T=1024, H=5376]"]:::input
+      p23_n003("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p23_n004["K=V shared Proj<br/>X · Wkv"]:::mac
+      p23_n005["Q Proj<br/>X · Wq"]:::mac
+      p23_n006("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p23_n007("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p23_n008("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p23_n009("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p23_n010[("K cache")]:::state
+      p23_n011[("V cache")]:::state
+      p23_n012("K head repeat ×2<br/>view/expand GQA heads"):::other
+      p23_n013("V head repeat ×2<br/>view/expand GQA heads"):::other
+      p23_n014["Q × Kᵀ<br/>batched head GEMM; causal sliding window W=1024"]:::mac
+      p23_n015("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p23_n016["P × V<br/>batched head GEMM"]:::mac
+      p23_n017["O Proj<br/>C · Wo"]:::mac
+      p23_n018((+)):::plus
+      p23_n019["X + Attention"]:::output
+      p23_n020("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p23_n021["Router projection<br/>logits = X · Wrouter"]:::mac
+      p23_n022("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p23_n023("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p23_n024("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p23_n037["Shared gate projection<br/>s = X · ws"]:::mac
+      p23_n038("Sigmoid<br/>σ(s)"):::other
+      p23_n039("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p23_n030("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p23_n031("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p23_n040((+)):::plus
+      p23_n041((+)):::plus
+      p23_n002["Attention dimensions<br/>Q=32×256; K/V=16×256; logical score rows=32×T×1024"]:::note
+      p23_n042["Block output"]:::output
+      p23_n001 --> p23_n003
+      p23_n003 --> p23_n004
+      p23_n003 --> p23_n005
+      p23_n004 --> p23_n006
+      p23_n005 --> p23_n007
+      p23_n006 --> p23_n008
+      p23_n007 --> p23_n009
+      p23_n008 --> p23_n010
+      p23_n004 -.-> p23_n011
+      p23_n010 --> p23_n012
+      p23_n011 --> p23_n013
+      p23_n009 --> p23_n014
+      p23_n012 --> p23_n014
+      p23_n014 --> p23_n015
+      p23_n015 --> p23_n016
+      p23_n013 --> p23_n016
+      p23_n016 --> p23_n017
+      p23_n017 --> p23_n018
+      p23_n001 --> p23_n018
+      p23_n018 --> p23_n019
+      p23_n019 --> p23_n020
+      p23_n025 --> p23_n027
+      p23_n027 --> p23_n028
+      p23_n026 --> p23_n028
+      p23_n028 --> p23_n029
+      p23_n020 --> p23_n021
+      p23_n021 --> p23_n022
+      p23_n022 --> p23_n023
+      p23_n023 --> p23_n024
+      p23_n024 --> p23_n025
+      p23_n024 --> p23_n026
+      p23_n029 --> p23_n030
+      p23_n023 --> p23_n030
+      p23_n030 --> p23_n031
+      p23_n032 --> p23_n034
+      p23_n034 --> p23_n035
+      p23_n033 --> p23_n035
+      p23_n035 --> p23_n036
+      p23_n020 --> p23_n032
+      p23_n020 --> p23_n033
+      p23_n020 --> p23_n037
+      p23_n037 --> p23_n038
+      p23_n038 --> p23_n039
+      p23_n036 --> p23_n039
+      p23_n031 --> p23_n040
+      p23_n039 --> p23_n040
+      p23_n040 --> p23_n041
+      p23_n041 --> p23_n042
+      p23_n019 --> p23_n041
+    end
+    subgraph variant_16_02["Full-attention + sparse MoE block"]
+      direction TB
+      subgraph p24_g01["Shared expert body × 1"]
+        direction LR
+        p24_n032["gate_proj<br/>X · Wg"]:::mac
+        p24_n033["up_proj<br/>X · Wu"]:::mac
+        p24_n034("GELU-tanh<br/>GELU_tanh(u)"):::other
+        p24_n035("Elementwise gate<br/>GELU-tanh(gate) ⊙ up"):::other
+        p24_n036["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p24_g02["Routed expert body × E=64; 8 active/token"]
+        direction LR
+        p24_n025["gate_proj<br/>X · Wg"]:::mac
+        p24_n026["up_proj<br/>X · Wu"]:::mac
+        p24_n027("GELU-tanh<br/>GELU_tanh(u)"):::other
+        p24_n028("Elementwise gate<br/>GELU-tanh(gate) ⊙ up"):::other
+        p24_n029["down_proj<br/>Z · Wd"]:::mac
+      end
+      p24_n001["X<br/>[T=1024, H=5376]"]:::input
+      p24_n003("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p24_n004["K=V shared Proj<br/>X · Wkv"]:::mac
+      p24_n005["Q Proj<br/>X · Wq"]:::mac
+      p24_n006("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p24_n007("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p24_n008("Partial RoPE<br/>rotate first 0.25·d dims; pass rest"):::other
+      p24_n009("Partial RoPE<br/>rotate first 0.25·d dims; pass rest"):::other
+      p24_n010[("K cache")]:::state
+      p24_n011[("V cache")]:::state
+      p24_n012("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p24_n013("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p24_n014["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p24_n015("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p24_n016["P × V<br/>batched head GEMM"]:::mac
+      p24_n017["O Proj<br/>C · Wo"]:::mac
+      p24_n018((+)):::plus
+      p24_n019["X + Attention"]:::output
+      p24_n020("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p24_n021["Router projection<br/>logits = X · Wrouter"]:::mac
+      p24_n022("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p24_n023("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p24_n024("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p24_n037["Shared gate projection<br/>s = X · ws"]:::mac
+      p24_n038("Sigmoid<br/>σ(s)"):::other
+      p24_n039("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p24_n030("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p24_n031("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p24_n040((+)):::plus
+      p24_n041((+)):::plus
+      p24_n002["Attention dimensions<br/>Q=32×512; K/V=4×512; logical score rows=32×T×T"]:::note
+      p24_n042["Block output"]:::output
+      p24_n001 --> p24_n003
+      p24_n003 --> p24_n004
+      p24_n003 --> p24_n005
+      p24_n004 --> p24_n006
+      p24_n005 --> p24_n007
+      p24_n006 --> p24_n008
+      p24_n007 --> p24_n009
+      p24_n008 --> p24_n010
+      p24_n004 -.-> p24_n011
+      p24_n010 --> p24_n012
+      p24_n011 --> p24_n013
+      p24_n009 --> p24_n014
+      p24_n012 --> p24_n014
+      p24_n014 --> p24_n015
+      p24_n015 --> p24_n016
+      p24_n013 --> p24_n016
+      p24_n016 --> p24_n017
+      p24_n017 --> p24_n018
+      p24_n001 --> p24_n018
+      p24_n018 --> p24_n019
+      p24_n019 --> p24_n020
+      p24_n025 --> p24_n027
+      p24_n027 --> p24_n028
+      p24_n026 --> p24_n028
+      p24_n028 --> p24_n029
+      p24_n020 --> p24_n021
+      p24_n021 --> p24_n022
+      p24_n022 --> p24_n023
+      p24_n023 --> p24_n024
+      p24_n024 --> p24_n025
+      p24_n024 --> p24_n026
+      p24_n029 --> p24_n030
+      p24_n023 --> p24_n030
+      p24_n030 --> p24_n031
+      p24_n032 --> p24_n034
+      p24_n034 --> p24_n035
+      p24_n033 --> p24_n035
+      p24_n035 --> p24_n036
+      p24_n020 --> p24_n032
+      p24_n020 --> p24_n033
+      p24_n020 --> p24_n037
+      p24_n037 --> p24_n038
+      p24_n038 --> p24_n039
+      p24_n036 --> p24_n039
+      p24_n031 --> p24_n040
+      p24_n039 --> p24_n040
+      p24_n040 --> p24_n041
+      p24_n041 --> p24_n042
+      p24_n019 --> p24_n041
+    end
+  end
+style family_16 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p23_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p23_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_16_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p24_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p24_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_16_02 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 8,57 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 18,48,67,97 stroke:#777777,stroke-width:1.3px;

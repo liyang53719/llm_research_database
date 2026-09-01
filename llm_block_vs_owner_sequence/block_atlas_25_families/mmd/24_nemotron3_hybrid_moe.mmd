@@ -1,0 +1,123 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 24: Nemotron 3 Hybrid MoE
+%% 25_Nemotron3_Hybrid_MoE: 同构/同拓扑模型 | Representative NVIDIA Nemotron3 hybrid MoE family page. Drawn with long-context attention plus sparse MoE at the same abstraction level as other atlas pages.
+flowchart TB
+  subgraph family_24["Nemotron 3 Hybrid MoE"]
+    direction TB
+    subgraph variant_24_01["Representative long-context sparse MoE block"]
+      direction TB
+      subgraph p32_g01["Shared expert body × 1"]
+        direction LR
+        p32_n031["gate_proj<br/>X · Wg"]:::mac
+        p32_n032["up_proj<br/>X · Wu"]:::mac
+        p32_n033("SiLU<br/>u·σ(u)"):::other
+        p32_n034("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p32_n035["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p32_g02["Routed expert body × E=128; 8 active/token"]
+        direction LR
+        p32_n024["gate_proj<br/>X · Wg"]:::mac
+        p32_n025["up_proj<br/>X · Wu"]:::mac
+        p32_n026("SiLU<br/>u·σ(u)"):::other
+        p32_n027("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p32_n028["down_proj<br/>Z · Wd"]:::mac
+      end
+      p32_n001["X<br/>[T=1024, H=6144]"]:::input
+      p32_n003("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p32_n004["K Proj<br/>X · Wk"]:::mac
+      p32_n005["Q Proj<br/>X · Wq"]:::mac
+      p32_n006["V Proj<br/>X · Wv"]:::mac
+      p32_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p32_n008("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p32_n009[("K cache")]:::state
+      p32_n010[("V cache")]:::state
+      p32_n011("K head repeat ×6<br/>view/expand GQA heads"):::other
+      p32_n012("V head repeat ×6<br/>view/expand GQA heads"):::other
+      p32_n013["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p32_n014("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p32_n015["P × V<br/>batched head GEMM"]:::mac
+      p32_n016["O Proj<br/>C · Wo"]:::mac
+      p32_n017((+)):::plus
+      p32_n018["X + Attention"]:::output
+      p32_n019("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p32_n020["Router projection<br/>logits = X · Wrouter"]:::mac
+      p32_n021("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p32_n022("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p32_n023("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p32_n036["Shared gate projection<br/>s = X · ws"]:::mac
+      p32_n037("Sigmoid<br/>σ(s)"):::other
+      p32_n038("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p32_n029("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p32_n030("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p32_n039((+)):::plus
+      p32_n040((+)):::plus
+      p32_n002["Attention dimensions<br/>Q=48×128; K/V=8×128; logical score rows=48×T×T"]:::note
+      p32_n041["Block output"]:::output
+      p32_n001 --> p32_n003
+      p32_n003 --> p32_n004
+      p32_n003 --> p32_n005
+      p32_n003 --> p32_n006
+      p32_n004 --> p32_n007
+      p32_n005 --> p32_n008
+      p32_n007 --> p32_n009
+      p32_n006 -.-> p32_n010
+      p32_n009 --> p32_n011
+      p32_n010 --> p32_n012
+      p32_n008 --> p32_n013
+      p32_n011 --> p32_n013
+      p32_n013 --> p32_n014
+      p32_n014 --> p32_n015
+      p32_n012 --> p32_n015
+      p32_n015 --> p32_n016
+      p32_n016 --> p32_n017
+      p32_n001 --> p32_n017
+      p32_n017 --> p32_n018
+      p32_n018 --> p32_n019
+      p32_n024 --> p32_n026
+      p32_n026 --> p32_n027
+      p32_n025 --> p32_n027
+      p32_n027 --> p32_n028
+      p32_n019 --> p32_n020
+      p32_n020 --> p32_n021
+      p32_n021 --> p32_n022
+      p32_n022 --> p32_n023
+      p32_n023 --> p32_n024
+      p32_n023 --> p32_n025
+      p32_n028 --> p32_n029
+      p32_n022 --> p32_n029
+      p32_n029 --> p32_n030
+      p32_n031 --> p32_n033
+      p32_n033 --> p32_n034
+      p32_n032 --> p32_n034
+      p32_n034 --> p32_n035
+      p32_n019 --> p32_n031
+      p32_n019 --> p32_n032
+      p32_n019 --> p32_n036
+      p32_n036 --> p32_n037
+      p32_n037 --> p32_n038
+      p32_n035 --> p32_n038
+      p32_n030 --> p32_n039
+      p32_n038 --> p32_n039
+      p32_n039 --> p32_n040
+      p32_n040 --> p32_n041
+      p32_n018 --> p32_n040
+    end
+  end
+style family_24 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p32_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p32_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_24_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,47 stroke:#777777,stroke-width:1.3px;

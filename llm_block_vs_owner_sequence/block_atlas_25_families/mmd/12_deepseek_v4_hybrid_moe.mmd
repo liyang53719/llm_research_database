@@ -1,0 +1,389 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 12: DeepSeek V4 Hybrid MoE
+%% 13A_DeepSeekV4_Slidingonly: 同构/同拓扑模型 | DeepSeek-V4-Flash, DeepSeek-V4-Flash-0731 and GGUF/quantized derivatives. The stack mixes sliding-only, CSA and HCA blocks with mHC residual streams.
+%% 13B_DeepSeekV4_CSA: 同构/同拓扑模型 | DeepSeek-V4-Flash, DeepSeek-V4-Flash-0731 and GGUF/quantized derivatives. The stack mixes sliding-only, CSA and HCA blocks with mHC residual streams.
+%% 13C_DeepSeekV4_HCA: 同构/同拓扑模型 | DeepSeek-V4-Flash, DeepSeek-V4-Flash-0731 and GGUF/quantized derivatives. The stack mixes sliding-only, CSA and HCA blocks with mHC residual streams.
+flowchart TB
+  subgraph family_12["DeepSeek V4 Hybrid MoE"]
+    direction TB
+    subgraph variant_12_01["Sliding-only + mHC + MoE block"]
+      direction TB
+      subgraph p16_g01["Sliding-only attention branch + supplementary local window"]
+        direction LR
+        p16_n014["Sliding Q × Kᵀ<br/>window W=128"]:::mac
+        p16_n015("Local Softmax<br/>FP32 over W=128"):::other
+        p16_n016["Local P × V<br/>batched GEMM"]:::mac
+        p16_n017("Attention sink<br/>learned head logit in denominator"):::other
+      end
+      subgraph p16_g02["Shared expert body × 1"]
+        direction LR
+        p16_n035["gate_proj<br/>X · Wg"]:::mac
+        p16_n036["up_proj<br/>X · Wu"]:::mac
+        p16_n037("SiLU<br/>u·σ(u)"):::other
+        p16_n038("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p16_n039["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p16_g03["Routed expert body × E=256; 6 active/token"]
+        direction LR
+        p16_n028["gate_proj<br/>X · Wg"]:::mac
+        p16_n029["up_proj<br/>X · Wu"]:::mac
+        p16_n030("SiLU<br/>u·σ(u)"):::other
+        p16_n031("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p16_n032["down_proj<br/>Z · Wd"]:::mac
+      end
+      p16_n001["4 residual streams X₁…X₄<br/>each [T=1024,H=4096]"]:::input
+      p16_n005("mHC Sinkhorn matrix<br/>M = Sinkhorn(learned logits), 20 iterations"):::other
+      p16_n006("mHC input mixing<br/>Xin = Σj Mij Xj"):::other
+      p16_n007("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p16_n008["Q LoRA A<br/>H → rank1024"]:::mac
+      p16_n011["Shared K=V projection<br/>H → one 512-d head"]:::mac
+      p16_n009("Q LoRA RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p16_n012("Partial RoPE split<br/>448 content + 64 rotary"):::other
+      p16_n010["Q LoRA B<br/>rank → 64×512"]:::mac
+      p16_n013("YaRN RoPE<br/>rotate 64 dims"):::other
+      p16_n018["Grouped O low-rank A<br/>64×512 → rank1024; 8 groups"]:::mac
+      p16_n019["O low-rank B<br/>rank1024 → H"]:::mac
+      p16_n020("mHC output mixing<br/>redistribute branch output to 4 streams"):::other
+      p16_n021((+)):::plus
+      p16_n022["4 streams + Sliding-only"]:::output
+      p16_n023("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p16_n024["Router projection<br/>logits = X · Wrouter"]:::mac
+      p16_n025("Router scoring<br/>p = √softplus(logits)"):::other
+      p16_n026("Top-6 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p16_n027("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p16_n040["Shared gate projection<br/>s = X · ws"]:::mac
+      p16_n041("Sigmoid<br/>σ(s)"):::other
+      p16_n042("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p16_n033("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p16_n034("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p16_n043((+)):::plus
+      p16_n002((+)):::plus
+      p16_n003["Block output"]:::output
+      p16_n004["MoE variation<br/>First 3 layers use hash routing; later layers use learned no-aux top-6 routing. Experts use clamped SwiGLU (limit=10)."]:::note
+      p16_n001 --> p16_n005
+      p16_n005 --> p16_n006
+      p16_n006 --> p16_n007
+      p16_n007 --> p16_n008
+      p16_n008 --> p16_n009
+      p16_n009 --> p16_n010
+      p16_n007 --> p16_n011
+      p16_n011 --> p16_n012
+      p16_n012 --> p16_n013
+      p16_n010 --> p16_n014
+      p16_n013 --> p16_n014
+      p16_n014 --> p16_n015
+      p16_n015 --> p16_n016
+      p16_n011 --> p16_n016
+      p16_n007 --> p16_n017
+      p16_n017 -.-> p16_n015
+      p16_n016 --> p16_n018
+      p16_n018 --> p16_n019
+      p16_n019 --> p16_n020
+      p16_n020 --> p16_n021
+      p16_n001 --> p16_n021
+      p16_n021 --> p16_n022
+      p16_n022 --> p16_n023
+      p16_n028 --> p16_n030
+      p16_n030 --> p16_n031
+      p16_n029 --> p16_n031
+      p16_n031 --> p16_n032
+      p16_n023 --> p16_n024
+      p16_n024 --> p16_n025
+      p16_n025 --> p16_n026
+      p16_n026 --> p16_n027
+      p16_n027 --> p16_n028
+      p16_n027 --> p16_n029
+      p16_n032 --> p16_n033
+      p16_n026 --> p16_n033
+      p16_n033 --> p16_n034
+      p16_n035 --> p16_n037
+      p16_n037 --> p16_n038
+      p16_n036 --> p16_n038
+      p16_n038 --> p16_n039
+      p16_n023 --> p16_n035
+      p16_n023 --> p16_n036
+      p16_n023 --> p16_n040
+      p16_n040 --> p16_n041
+      p16_n041 --> p16_n042
+      p16_n039 --> p16_n042
+      p16_n034 --> p16_n043
+      p16_n042 --> p16_n043
+      p16_n043 --> p16_n002
+      p16_n002 --> p16_n003
+      p16_n022 --> p16_n002
+    end
+    subgraph variant_12_02["Compressed Sparse Attention + mHC + MoE block"]
+      direction TB
+      subgraph p17_g01["CSA attention branch + supplementary local window"]
+        direction LR
+        p17_n022["Sliding Q × Kᵀ<br/>window W=128"]:::mac
+        p17_n025["Block KV compressor<br/>C = Pool₄(KV) · Wc; causal summaries"]:::mac
+        p17_n026["Lightning indexer<br/>score = (X·Wq) · (C·Wk)ᵀ; 64×128"]:::mac
+        p17_n023("Local Softmax<br/>FP32 over W=128"):::other
+        p17_n027("Top-512 blocks<br/>select compressed candidates"):::other
+        p17_n024["Local P × V<br/>batched GEMM"]:::mac
+        p17_n028["Sparse Q × Kᵀ<br/>selected compressed KV"]:::mac
+        p17_n029("Sparse Softmax<br/>FP32 over selected keys"):::other
+        p17_n030["Sparse P × V<br/>selected value GEMM"]:::mac
+        p17_n032("Attention sink<br/>learned head logit in denominator"):::other
+        p17_n031((+)):::plus
+      end
+      subgraph p17_g02["Shared expert body × 1"]
+        direction LR
+        p17_n050["gate_proj<br/>X · Wg"]:::mac
+        p17_n002["up_proj<br/>X · Wu"]:::mac
+        p17_n003("SiLU<br/>u·σ(u)"):::other
+        p17_n004("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p17_n005["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p17_g03["Routed expert body × E=256; 6 active/token"]
+        direction LR
+        p17_n043["gate_proj<br/>X · Wg"]:::mac
+        p17_n044["up_proj<br/>X · Wu"]:::mac
+        p17_n045("SiLU<br/>u·σ(u)"):::other
+        p17_n046("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p17_n047["down_proj<br/>Z · Wd"]:::mac
+      end
+      p17_n001["4 residual streams X₁…X₄<br/>each [T=1024,H=4096]"]:::input
+      p17_n008("mHC Sinkhorn matrix<br/>M = Sinkhorn(learned logits), 20 iterations"):::other
+      p17_n011("mHC input mixing<br/>Xin = Σj Mij Xj"):::other
+      p17_n015("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p17_n016["Q LoRA A<br/>H → rank1024"]:::mac
+      p17_n019["Shared K=V projection<br/>H → one 512-d head"]:::mac
+      p17_n017("Q LoRA RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p17_n020("Partial RoPE split<br/>448 content + 64 rotary"):::other
+      p17_n018["Q LoRA B<br/>rank → 64×512"]:::mac
+      p17_n021("YaRN RoPE<br/>rotate 64 dims"):::other
+      p17_n033["Grouped O low-rank A<br/>64×512 → rank1024; 8 groups"]:::mac
+      p17_n034["O low-rank B<br/>rank1024 → H"]:::mac
+      p17_n035("mHC output mixing<br/>redistribute branch output to 4 streams"):::other
+      p17_n036((+)):::plus
+      p17_n037["4 streams + CSA"]:::output
+      p17_n038("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p17_n039["Router projection<br/>logits = X · Wrouter"]:::mac
+      p17_n040("Router scoring<br/>p = √softplus(logits)"):::other
+      p17_n041("Top-6 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p17_n042("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p17_n006["Shared gate projection<br/>s = X · ws"]:::mac
+      p17_n007("Sigmoid<br/>σ(s)"):::other
+      p17_n009("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p17_n048("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p17_n049("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p17_n010((+)):::plus
+      p17_n012((+)):::plus
+      p17_n013["Block output"]:::output
+      p17_n014["MoE variation<br/>First 3 layers use hash routing; later layers use learned no-aux top-6 routing. Experts use clamped SwiGLU (limit=10)."]:::note
+      p17_n001 --> p17_n008
+      p17_n008 --> p17_n011
+      p17_n011 --> p17_n015
+      p17_n015 --> p17_n016
+      p17_n016 --> p17_n017
+      p17_n017 --> p17_n018
+      p17_n015 --> p17_n019
+      p17_n019 --> p17_n020
+      p17_n020 --> p17_n021
+      p17_n018 --> p17_n022
+      p17_n021 --> p17_n022
+      p17_n022 --> p17_n023
+      p17_n023 --> p17_n024
+      p17_n019 --> p17_n024
+      p17_n019 --> p17_n025
+      p17_n018 --> p17_n026
+      p17_n025 --> p17_n026
+      p17_n026 --> p17_n027
+      p17_n027 --> p17_n028
+      p17_n025 --> p17_n028
+      p17_n028 --> p17_n029
+      p17_n029 --> p17_n030
+      p17_n025 --> p17_n030
+      p17_n024 --> p17_n031
+      p17_n030 --> p17_n031
+      p17_n015 --> p17_n032
+      p17_n032 -.-> p17_n023
+      p17_n032 -.-> p17_n029
+      p17_n031 --> p17_n033
+      p17_n033 --> p17_n034
+      p17_n034 --> p17_n035
+      p17_n035 --> p17_n036
+      p17_n001 --> p17_n036
+      p17_n036 --> p17_n037
+      p17_n037 --> p17_n038
+      p17_n043 --> p17_n045
+      p17_n045 --> p17_n046
+      p17_n044 --> p17_n046
+      p17_n046 --> p17_n047
+      p17_n038 --> p17_n039
+      p17_n039 --> p17_n040
+      p17_n040 --> p17_n041
+      p17_n041 --> p17_n042
+      p17_n042 --> p17_n043
+      p17_n042 --> p17_n044
+      p17_n047 --> p17_n048
+      p17_n041 --> p17_n048
+      p17_n048 --> p17_n049
+      p17_n050 --> p17_n003
+      p17_n003 --> p17_n004
+      p17_n002 --> p17_n004
+      p17_n004 --> p17_n005
+      p17_n038 --> p17_n050
+      p17_n038 --> p17_n002
+      p17_n038 --> p17_n006
+      p17_n006 --> p17_n007
+      p17_n007 --> p17_n009
+      p17_n005 --> p17_n009
+      p17_n049 --> p17_n010
+      p17_n009 --> p17_n010
+      p17_n010 --> p17_n012
+      p17_n012 --> p17_n013
+      p17_n037 --> p17_n012
+    end
+    subgraph variant_12_03["Hierarchical Compressed Attention + mHC + MoE block"]
+      direction TB
+      subgraph p18_g01["HCA attention branch + supplementary local window"]
+        direction LR
+        p18_n019["Sliding Q × Kᵀ<br/>window W=128"]:::mac
+        p18_n022["Hierarchical compressor L1<br/>C1 = Pool₄(KV) · Wc1"]:::mac
+        p18_n023["Hierarchical compressor L2<br/>C2 = Pool₃₂(C1) · Wc2; total ratio 128"]:::mac
+        p18_n020("Local Softmax<br/>FP32 over W=128"):::other
+        p18_n024["Q × compressed Kᵀ<br/>dense over heavily-compressed memory"]:::mac
+        p18_n025("Compressed Softmax<br/>FP32"):::other
+        p18_n021["Local P × V<br/>batched GEMM"]:::mac
+        p18_n026["P × compressed V<br/>compressed value GEMM"]:::mac
+        p18_n028("Attention sink<br/>learned head logit in denominator"):::other
+        p18_n027((+)):::plus
+      end
+      subgraph p18_g02["Shared expert body × 1"]
+        direction LR
+        p18_n046["gate_proj<br/>X · Wg"]:::mac
+        p18_n047["up_proj<br/>X · Wu"]:::mac
+        p18_n048("SiLU<br/>u·σ(u)"):::other
+        p18_n049("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p18_n002["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p18_g03["Routed expert body × E=256; 6 active/token"]
+        direction LR
+        p18_n039["gate_proj<br/>X · Wg"]:::mac
+        p18_n040["up_proj<br/>X · Wu"]:::mac
+        p18_n041("SiLU<br/>u·σ(u)"):::other
+        p18_n042("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p18_n043["down_proj<br/>Z · Wd"]:::mac
+      end
+      p18_n001["4 residual streams X₁…X₄<br/>each [T=1024,H=4096]"]:::input
+      p18_n006("mHC Sinkhorn matrix<br/>M = Sinkhorn(learned logits), 20 iterations"):::other
+      p18_n010("mHC input mixing<br/>Xin = Σj Mij Xj"):::other
+      p18_n012("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p18_n013["Q LoRA A<br/>H → rank1024"]:::mac
+      p18_n016["Shared K=V projection<br/>H → one 512-d head"]:::mac
+      p18_n014("Q LoRA RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p18_n017("Partial RoPE split<br/>448 content + 64 rotary"):::other
+      p18_n015["Q LoRA B<br/>rank → 64×512"]:::mac
+      p18_n018("YaRN RoPE<br/>rotate 64 dims"):::other
+      p18_n029["Grouped O low-rank A<br/>64×512 → rank1024; 8 groups"]:::mac
+      p18_n030["O low-rank B<br/>rank1024 → H"]:::mac
+      p18_n031("mHC output mixing<br/>redistribute branch output to 4 streams"):::other
+      p18_n032((+)):::plus
+      p18_n033["4 streams + HCA"]:::output
+      p18_n034("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p18_n035["Router projection<br/>logits = X · Wrouter"]:::mac
+      p18_n036("Router scoring<br/>p = √softplus(logits)"):::other
+      p18_n037("Top-6 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p18_n038("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p18_n003["Shared gate projection<br/>s = X · ws"]:::mac
+      p18_n004("Sigmoid<br/>σ(s)"):::other
+      p18_n005("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p18_n044("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p18_n045("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p18_n007((+)):::plus
+      p18_n008((+)):::plus
+      p18_n009["Block output"]:::output
+      p18_n011["MoE variation<br/>First 3 layers use hash routing; later layers use learned no-aux top-6 routing. Experts use clamped SwiGLU (limit=10)."]:::note
+      p18_n001 --> p18_n006
+      p18_n006 --> p18_n010
+      p18_n010 --> p18_n012
+      p18_n012 --> p18_n013
+      p18_n013 --> p18_n014
+      p18_n014 --> p18_n015
+      p18_n012 --> p18_n016
+      p18_n016 --> p18_n017
+      p18_n017 --> p18_n018
+      p18_n015 --> p18_n019
+      p18_n018 --> p18_n019
+      p18_n019 --> p18_n020
+      p18_n020 --> p18_n021
+      p18_n016 --> p18_n021
+      p18_n016 --> p18_n022
+      p18_n022 --> p18_n023
+      p18_n015 --> p18_n024
+      p18_n023 --> p18_n024
+      p18_n024 --> p18_n025
+      p18_n025 --> p18_n026
+      p18_n023 --> p18_n026
+      p18_n021 --> p18_n027
+      p18_n026 --> p18_n027
+      p18_n012 --> p18_n028
+      p18_n028 -.-> p18_n020
+      p18_n028 -.-> p18_n025
+      p18_n027 --> p18_n029
+      p18_n029 --> p18_n030
+      p18_n030 --> p18_n031
+      p18_n031 --> p18_n032
+      p18_n001 --> p18_n032
+      p18_n032 --> p18_n033
+      p18_n033 --> p18_n034
+      p18_n039 --> p18_n041
+      p18_n041 --> p18_n042
+      p18_n040 --> p18_n042
+      p18_n042 --> p18_n043
+      p18_n034 --> p18_n035
+      p18_n035 --> p18_n036
+      p18_n036 --> p18_n037
+      p18_n037 --> p18_n038
+      p18_n038 --> p18_n039
+      p18_n038 --> p18_n040
+      p18_n043 --> p18_n044
+      p18_n037 --> p18_n044
+      p18_n044 --> p18_n045
+      p18_n046 --> p18_n048
+      p18_n048 --> p18_n049
+      p18_n047 --> p18_n049
+      p18_n049 --> p18_n002
+      p18_n034 --> p18_n046
+      p18_n034 --> p18_n047
+      p18_n034 --> p18_n003
+      p18_n003 --> p18_n004
+      p18_n004 --> p18_n005
+      p18_n002 --> p18_n005
+      p18_n045 --> p18_n007
+      p18_n005 --> p18_n007
+      p18_n007 --> p18_n008
+      p18_n008 --> p18_n009
+      p18_n033 --> p18_n008
+    end
+  end
+style family_12 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p16_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p16_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p16_g03 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_12_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p17_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p17_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p17_g03 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_12_02 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p18_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p18_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p18_g03 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_12_03 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 20,50,83,113,144,174 stroke:#777777,stroke-width:1.3px;
+linkStyle 15,77,78,138,139 stroke:#777777,stroke-width:1.2px,stroke-dasharray:5 3;

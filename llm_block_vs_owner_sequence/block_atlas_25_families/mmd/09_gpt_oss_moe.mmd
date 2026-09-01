@@ -1,0 +1,175 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 9: GPT-OSS MoE
+%% 10A_GPT_OSS_Sliding: 同构/同拓扑模型 | gpt-oss-20b and gpt-oss-120b share alternating sliding/full attention, learned attention sinks and top-4 MoE; layer count/expert dimensions differ.
+%% 10B_GPT_OSS_Full: 同构/同拓扑模型 | Same GPT-OSS family; this is the alternating full-attention block.
+flowchart TB
+  subgraph family_09["GPT-OSS MoE"]
+    direction TB
+    subgraph variant_09_01["Sliding-attention + top-4 MoE block"]
+      direction TB
+      subgraph p11_g01["Routed expert body × E=32; 4 active/token"]
+        direction LR
+        p11_n023["gate_proj<br/>X · Wg"]:::mac
+        p11_n024["up_proj<br/>X · Wu"]:::mac
+        p11_n025("SiLU<br/>u·σ(u)"):::other
+        p11_n026("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p11_n027["down_proj<br/>Z · Wd"]:::mac
+      end
+      p11_n001["X<br/>[T=1024, H=2880]"]:::input
+      p11_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p11_n003["K Proj<br/>X · Wk"]:::mac
+      p11_n004["Q Proj<br/>X · Wq"]:::mac
+      p11_n005["V Proj<br/>X · Wv"]:::mac
+      p11_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p11_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p11_n008[("K cache")]:::state
+      p11_n009[("V cache")]:::state
+      p11_n010("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p11_n011("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p11_n012["Q × Kᵀ<br/>batched head GEMM; causal sliding window W=128"]:::mac
+      p11_n013("Softmax FP32 + sink<br/>P = softmax([QKᵀ/√d, learned sink_head]); discard sink output"):::other
+      p11_n014["P × V<br/>batched head GEMM"]:::mac
+      p11_n015["O Proj<br/>C · Wo"]:::mac
+      p11_n016((+)):::plus
+      p11_n017["X + Attention"]:::output
+      p11_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p11_n019["Router projection<br/>logits = X · Wrouter"]:::mac
+      p11_n020("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p11_n021("Top-4 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p11_n022("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p11_n028("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p11_n029("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p11_n030((+)):::plus
+      p11_n032["Attention dimensions<br/>Q=64×64; K/V=8×64; logical score rows=64×T×128"]:::note
+      p11_n031["Block output"]:::output
+      p11_n001 --> p11_n002
+      p11_n002 --> p11_n003
+      p11_n002 --> p11_n004
+      p11_n002 --> p11_n005
+      p11_n003 --> p11_n006
+      p11_n004 --> p11_n007
+      p11_n006 --> p11_n008
+      p11_n005 -.-> p11_n009
+      p11_n008 --> p11_n010
+      p11_n009 --> p11_n011
+      p11_n007 --> p11_n012
+      p11_n010 --> p11_n012
+      p11_n012 --> p11_n013
+      p11_n013 --> p11_n014
+      p11_n011 --> p11_n014
+      p11_n014 --> p11_n015
+      p11_n015 --> p11_n016
+      p11_n001 --> p11_n016
+      p11_n016 --> p11_n017
+      p11_n017 --> p11_n018
+      p11_n023 --> p11_n025
+      p11_n025 --> p11_n026
+      p11_n024 --> p11_n026
+      p11_n026 --> p11_n027
+      p11_n018 --> p11_n019
+      p11_n019 --> p11_n020
+      p11_n020 --> p11_n021
+      p11_n021 --> p11_n022
+      p11_n022 --> p11_n023
+      p11_n022 --> p11_n024
+      p11_n027 --> p11_n028
+      p11_n021 --> p11_n028
+      p11_n028 --> p11_n029
+      p11_n029 --> p11_n030
+      p11_n030 --> p11_n031
+      p11_n017 --> p11_n030
+    end
+    subgraph variant_09_02["Full-attention + top-4 MoE block"]
+      direction TB
+      subgraph p12_g01["Routed expert body × E=32; 4 active/token"]
+        direction LR
+        p12_n023["gate_proj<br/>X · Wg"]:::mac
+        p12_n024["up_proj<br/>X · Wu"]:::mac
+        p12_n025("SiLU<br/>u·σ(u)"):::other
+        p12_n026("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p12_n027["down_proj<br/>Z · Wd"]:::mac
+      end
+      p12_n001["X<br/>[T=1024, H=2880]"]:::input
+      p12_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p12_n003["K Proj<br/>X · Wk"]:::mac
+      p12_n004["Q Proj<br/>X · Wq"]:::mac
+      p12_n005["V Proj<br/>X · Wv"]:::mac
+      p12_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p12_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p12_n008[("K cache")]:::state
+      p12_n009[("V cache")]:::state
+      p12_n010("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p12_n011("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p12_n012["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p12_n013("Softmax FP32 + sink<br/>P = softmax([QKᵀ/√d, learned sink_head]); discard sink output"):::other
+      p12_n014["P × V<br/>batched head GEMM"]:::mac
+      p12_n015["O Proj<br/>C · Wo"]:::mac
+      p12_n016((+)):::plus
+      p12_n017["X + Attention"]:::output
+      p12_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p12_n019["Router projection<br/>logits = X · Wrouter"]:::mac
+      p12_n020("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p12_n021("Top-4 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p12_n022("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p12_n028("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p12_n029("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p12_n030((+)):::plus
+      p12_n032["Attention dimensions<br/>Q=64×64; K/V=8×64; logical score rows=64×T×T"]:::note
+      p12_n031["Block output"]:::output
+      p12_n001 --> p12_n002
+      p12_n002 --> p12_n003
+      p12_n002 --> p12_n004
+      p12_n002 --> p12_n005
+      p12_n003 --> p12_n006
+      p12_n004 --> p12_n007
+      p12_n006 --> p12_n008
+      p12_n005 -.-> p12_n009
+      p12_n008 --> p12_n010
+      p12_n009 --> p12_n011
+      p12_n007 --> p12_n012
+      p12_n010 --> p12_n012
+      p12_n012 --> p12_n013
+      p12_n013 --> p12_n014
+      p12_n011 --> p12_n014
+      p12_n014 --> p12_n015
+      p12_n015 --> p12_n016
+      p12_n001 --> p12_n016
+      p12_n016 --> p12_n017
+      p12_n017 --> p12_n018
+      p12_n023 --> p12_n025
+      p12_n025 --> p12_n026
+      p12_n024 --> p12_n026
+      p12_n026 --> p12_n027
+      p12_n018 --> p12_n019
+      p12_n019 --> p12_n020
+      p12_n020 --> p12_n021
+      p12_n021 --> p12_n022
+      p12_n022 --> p12_n023
+      p12_n022 --> p12_n024
+      p12_n027 --> p12_n028
+      p12_n021 --> p12_n028
+      p12_n028 --> p12_n029
+      p12_n029 --> p12_n030
+      p12_n030 --> p12_n031
+      p12_n017 --> p12_n030
+    end
+  end
+style family_09 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p11_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_09_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p12_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_09_02 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7,43 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,35,53,71 stroke:#777777,stroke-width:1.3px;

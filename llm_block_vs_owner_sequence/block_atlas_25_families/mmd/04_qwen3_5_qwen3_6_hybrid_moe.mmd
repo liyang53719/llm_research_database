@@ -1,0 +1,286 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 4: Qwen3.5 / Qwen3.6 Hybrid MoE
+%% 06_Qwen3.5_MoE_GDN: 同构/同拓扑模型 | Qwen3.5-35B-A3B, Qwen3.6-35B-A3B, Ornith-1.0-35B and coder-next/quantized variants.
+%% 07_Qwen3.5_MoE_FullAttention: 同构/同拓扑模型 | Same models as the MoE-GDN page; 3:1 GDN/full-attention layer pattern.
+flowchart TB
+  subgraph family_04["Qwen3.5 / Qwen3.6 Hybrid MoE"]
+    direction TB
+    subgraph variant_04_01["GDN + routed/shared MoE block"]
+      direction TB
+      subgraph p07_g01["Chunk Gated Delta Rule — expanded logical prefill dataflow"]
+        direction TB
+        p07_n040["Token-equivalent recurrence<br/>r_t = v_t − k_tᵀS_{t−1}<br/>S_t = α_tS_{t−1}+β_t k_t r_tᵀ<br/>o_t = q_tᵀS_t"]:::note
+        p07_n041("Chunk partition<br/>T=1024; representative C=64"):::other
+        p07_n042("Decay matrix Γ<br/>Γij = exp(Σr=j+1..i g_r)"):::other
+        p07_n043["K Kᵀ<br/>batched head GEMM"]:::mac
+        p07_n044("Build strict-lower L<br/>L = I + tril(β·Γ·KKᵀ, −1)"):::other
+        p07_n045("Triangular solve<br/>U = L⁻¹(β ⊙ V)"):::other
+        p07_n046["Q Kᵀ<br/>batched head GEMM"]:::mac
+        p07_n047["Intra-chunk output<br/>Ointra=(Γ⊙QKᵀ)·U"]:::mac
+        p07_n048["State read<br/>Ostate = Q · Sin"]:::mac
+        p07_n049("Output combine<br/>O = Ostate + Ointra"):::other
+        p07_n053[("Recurrent state S<br/>[heads,dK,dV] FP32")]:::state
+        p07_n050["Kᵀ U<br/>state-delta GEMM"]:::mac
+        p07_n051("State decay<br/>Sdecay = αend ⊙ Sin"):::other
+        p07_n052((+)):::plus
+      end
+      subgraph p07_g02["Shared expert body × 1"]
+        direction LR
+        p07_n012["gate_proj<br/>X · Wg"]:::mac
+        p07_n013["up_proj<br/>X · Wu"]:::mac
+        p07_n014("SiLU<br/>u·σ(u)"):::other
+        p07_n015("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p07_n016["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p07_g03["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p07_n004["gate_proj<br/>X · Wg"]:::mac
+        p07_n005["up_proj<br/>X · Wu"]:::mac
+        p07_n006("SiLU<br/>u·σ(u)"):::other
+        p07_n007("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p07_n008["down_proj<br/>Z · Wd"]:::mac
+      end
+      p07_n001["X<br/>[T=1024, H=2048]"]:::input
+      p07_n009("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p07_n017["in_proj_qkv<br/>X · Wqkv"]:::mac
+      p07_n021["in_proj_z<br/>X · Wz"]:::mac
+      p07_n025["in_proj_a<br/>X · Wa"]:::mac
+      p07_n026["in_proj_b<br/>X · Wb"]:::mac
+      p07_n027("Depthwise Conv1D<br/>causal, k=4; channelwise"):::other
+      p07_n030("Decay preactivation<br/>g = −exp(A_log)·softplus(a+dt_bias)"):::other
+      p07_n028("SiLU<br/>u·σ(u)"):::other
+      p07_n031("Decay factor<br/>α = exp(g)"):::other
+      p07_n032("Update gate<br/>β = sigmoid(b)"):::other
+      p07_n029("Split Q / K / V<br/>reshape mixed projection into three tensors"):::other
+      p07_n033("Q reshape<br/>[16,T,128]"):::other
+      p07_n034("K reshape<br/>[16,T,128]"):::other
+      p07_n035("V reshape<br/>[32,T,128]"):::other
+      p07_n036("Q head repeat ×2<br/>repeat_interleave to V-head count"):::other
+      p07_n037("K head repeat ×2<br/>repeat_interleave to V-head count"):::other
+      p07_n038("Q L2Norm<br/>x̂ = x / max(‖x‖₂, ε)"):::other
+      p07_n039("K L2Norm<br/>x̂ = x / max(‖x‖₂, ε)"):::other
+      p07_n054("RMSNormGated<br/>Y = RMSNorm(O) ⊙ SiLU(z)"):::other
+      p07_n055["out_proj<br/>Y · Wout"]:::mac
+      p07_n056((+)):::plus
+      p07_n057["X + GDN"]:::output
+      p07_n058("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p07_n059["Router projection<br/>logits = X · Wrouter"]:::mac
+      p07_n060("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p07_n002("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p07_n003("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p07_n018["Shared gate projection<br/>s = X · ws"]:::mac
+      p07_n019("Sigmoid<br/>σ(s)"):::other
+      p07_n020("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p07_n010("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p07_n011("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p07_n022((+)):::plus
+      p07_n023((+)):::plus
+      p07_n024["Block output"]:::output
+      p07_n001 --> p07_n009
+      p07_n009 --> p07_n017
+      p07_n009 --> p07_n021
+      p07_n009 --> p07_n025
+      p07_n009 --> p07_n026
+      p07_n017 --> p07_n027
+      p07_n027 --> p07_n028
+      p07_n028 --> p07_n029
+      p07_n025 --> p07_n030
+      p07_n030 --> p07_n031
+      p07_n026 --> p07_n032
+      p07_n029 --> p07_n033
+      p07_n029 --> p07_n034
+      p07_n029 --> p07_n035
+      p07_n033 --> p07_n036
+      p07_n034 --> p07_n037
+      p07_n036 --> p07_n038
+      p07_n037 --> p07_n039
+      p07_n031 --> p07_n042
+      p07_n038 --> p07_n041
+      p07_n039 --> p07_n041
+      p07_n035 --> p07_n041
+      p07_n041 --> p07_n043
+      p07_n043 --> p07_n044
+      p07_n032 --> p07_n044
+      p07_n042 --> p07_n044
+      p07_n044 --> p07_n045
+      p07_n041 --> p07_n046
+      p07_n046 --> p07_n047
+      p07_n042 --> p07_n047
+      p07_n045 --> p07_n047
+      p07_n038 --> p07_n048
+      p07_n047 --> p07_n049
+      p07_n048 --> p07_n049
+      p07_n041 --> p07_n050
+      p07_n045 --> p07_n050
+      p07_n042 --> p07_n051
+      p07_n050 --> p07_n052
+      p07_n051 --> p07_n052
+      p07_n052 -.-> p07_n053
+      p07_n053 -.-> p07_n048
+      p07_n053 -.-> p07_n051
+      p07_n049 --> p07_n054
+      p07_n021 --> p07_n054
+      p07_n054 --> p07_n055
+      p07_n055 --> p07_n056
+      p07_n001 --> p07_n056
+      p07_n056 --> p07_n057
+      p07_n057 --> p07_n058
+      p07_n004 --> p07_n006
+      p07_n006 --> p07_n007
+      p07_n005 --> p07_n007
+      p07_n007 --> p07_n008
+      p07_n058 --> p07_n059
+      p07_n059 --> p07_n060
+      p07_n060 --> p07_n002
+      p07_n002 --> p07_n003
+      p07_n003 --> p07_n004
+      p07_n003 --> p07_n005
+      p07_n008 --> p07_n010
+      p07_n002 --> p07_n010
+      p07_n010 --> p07_n011
+      p07_n012 --> p07_n014
+      p07_n014 --> p07_n015
+      p07_n013 --> p07_n015
+      p07_n015 --> p07_n016
+      p07_n058 --> p07_n012
+      p07_n058 --> p07_n013
+      p07_n058 --> p07_n018
+      p07_n018 --> p07_n019
+      p07_n019 --> p07_n020
+      p07_n016 --> p07_n020
+      p07_n011 --> p07_n022
+      p07_n020 --> p07_n022
+      p07_n022 --> p07_n023
+      p07_n023 --> p07_n024
+      p07_n057 --> p07_n023
+    end
+    subgraph variant_04_02["Gated full-attention + routed/shared MoE block"]
+      direction TB
+      subgraph p08_g01["Shared expert body × 1"]
+        direction LR
+        p08_n038["gate_proj<br/>X · Wg"]:::mac
+        p08_n039["up_proj<br/>X · Wu"]:::mac
+        p08_n040("SiLU<br/>u·σ(u)"):::other
+        p08_n041("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p08_n042["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p08_g02["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p08_n031["gate_proj<br/>X · Wg"]:::mac
+        p08_n032["up_proj<br/>X · Wu"]:::mac
+        p08_n033("SiLU<br/>u·σ(u)"):::other
+        p08_n034("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p08_n035["down_proj<br/>Z · Wd"]:::mac
+      end
+      p08_n001["X<br/>[T=1024, H=2048]"]:::input
+      p08_n006("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p08_n007["K Proj<br/>X · Wk"]:::mac
+      p08_n008["Q Proj + gate<br/>X · Wq"]:::mac
+      p08_n009["V Proj<br/>X · Wv"]:::mac
+      p08_n010("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p08_n011("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p08_n012("Partial RoPE<br/>rotate first 0.25·d dims; pass rest"):::other
+      p08_n013("Partial RoPE<br/>rotate first 0.25·d dims; pass rest"):::other
+      p08_n014[("K cache")]:::state
+      p08_n015[("V cache")]:::state
+      p08_n016("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p08_n017("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p08_n018["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p08_n019("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p08_n021("Q-gate sigmoid<br/>gq = σ(q_gate)"):::other
+      p08_n020["P × V<br/>batched head GEMM"]:::mac
+      p08_n022("Context gating<br/>C ← C ⊙ gq"):::other
+      p08_n023["O Proj<br/>C · Wo"]:::mac
+      p08_n024((+)):::plus
+      p08_n025["X + Attention"]:::output
+      p08_n026("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p08_n027["Router projection<br/>logits = X · Wrouter"]:::mac
+      p08_n028("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p08_n029("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p08_n030("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p08_n043["Shared gate projection<br/>s = X · ws"]:::mac
+      p08_n044("Sigmoid<br/>σ(s)"):::other
+      p08_n045("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p08_n036("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p08_n037("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p08_n002((+)):::plus
+      p08_n003((+)):::plus
+      p08_n005["Attention dimensions<br/>Q=16×256; K/V=2×256; logical score rows=16×T×T"]:::note
+      p08_n004["Block output"]:::output
+      p08_n001 --> p08_n006
+      p08_n006 --> p08_n007
+      p08_n006 --> p08_n008
+      p08_n006 --> p08_n009
+      p08_n007 --> p08_n010
+      p08_n008 --> p08_n011
+      p08_n010 --> p08_n012
+      p08_n011 --> p08_n013
+      p08_n012 --> p08_n014
+      p08_n009 -.-> p08_n015
+      p08_n014 --> p08_n016
+      p08_n015 --> p08_n017
+      p08_n013 --> p08_n018
+      p08_n016 --> p08_n018
+      p08_n018 --> p08_n019
+      p08_n019 --> p08_n020
+      p08_n017 --> p08_n020
+      p08_n008 --> p08_n021
+      p08_n020 --> p08_n022
+      p08_n021 --> p08_n022
+      p08_n022 --> p08_n023
+      p08_n023 --> p08_n024
+      p08_n001 --> p08_n024
+      p08_n024 --> p08_n025
+      p08_n025 --> p08_n026
+      p08_n031 --> p08_n033
+      p08_n033 --> p08_n034
+      p08_n032 --> p08_n034
+      p08_n034 --> p08_n035
+      p08_n026 --> p08_n027
+      p08_n027 --> p08_n028
+      p08_n028 --> p08_n029
+      p08_n029 --> p08_n030
+      p08_n030 --> p08_n031
+      p08_n030 --> p08_n032
+      p08_n035 --> p08_n036
+      p08_n029 --> p08_n036
+      p08_n036 --> p08_n037
+      p08_n038 --> p08_n040
+      p08_n040 --> p08_n041
+      p08_n039 --> p08_n041
+      p08_n041 --> p08_n042
+      p08_n026 --> p08_n038
+      p08_n026 --> p08_n039
+      p08_n026 --> p08_n043
+      p08_n043 --> p08_n044
+      p08_n044 --> p08_n045
+      p08_n042 --> p08_n045
+      p08_n037 --> p08_n002
+      p08_n045 --> p08_n002
+      p08_n002 --> p08_n003
+      p08_n003 --> p08_n004
+      p08_n025 --> p08_n003
+    end
+  end
+style family_04 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p07_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p07_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p07_g03 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_04_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style p08_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p08_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_04_02 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 39,40,41,86 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 46,76,99,129 stroke:#777777,stroke-width:1.3px;

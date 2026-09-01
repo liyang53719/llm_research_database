@@ -1,0 +1,62 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 21: BLOOM Dense
+%% 22_BLOOM_Dense: 同构/同拓扑模型 | BLOOM/BLOOMZ representative page. Uses the Megatron-style dense decoder block with combined QKV projection, causal self-attention and GELU FFN.
+flowchart TB
+  subgraph family_21["BLOOM Dense"]
+    direction TB
+    subgraph variant_21_01["Megatron-style dense decoder block"]
+      direction TB
+      p29_n001["X<br/>[T=1024, H=1024]"]:::input
+      p29_n002("Learned absolute position<br/>X ← token_embed + pos_embed"):::other
+      p29_n003("LayerNorm 1<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p29_n004["Combined QKV Proj<br/>X · Wqkv + bqkv"]:::mac
+      p29_n005("Split heads<br/>reshape Q/K/V"):::other
+      p29_n006["Q × Kᵀ<br/>MHA score GEMM + causal mask"]:::mac
+      p29_n007("Softmax FP32<br/>p_i=exp(s_i−m)/Σexp(s_j−m)"):::other
+      p29_n008["P × V<br/>batched head GEMM"]:::mac
+      p29_n009["Output Proj<br/>C·Wo+bo"]:::mac
+      p29_n010((+)):::plus
+      p29_n011["X + Attention"]:::output
+      p29_n012("LayerNorm 2<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p29_n013["fc1<br/>X · W1 + b1"]:::mac
+      p29_n014("GELU<br/>GELU(x)"):::other
+      p29_n015["fc2<br/>A · W2 + b2"]:::mac
+      p29_n016((+)):::plus
+      p29_n017["Block output"]:::output
+      p29_n001 --> p29_n002
+      p29_n002 --> p29_n003
+      p29_n003 --> p29_n004
+      p29_n004 --> p29_n005
+      p29_n005 --> p29_n006
+      p29_n005 --> p29_n006
+      p29_n006 --> p29_n007
+      p29_n007 --> p29_n008
+      p29_n005 --> p29_n008
+      p29_n008 --> p29_n009
+      p29_n009 --> p29_n010
+      p29_n002 --> p29_n010
+      p29_n010 --> p29_n011
+      p29_n011 --> p29_n012
+      p29_n012 --> p29_n013
+      p29_n013 --> p29_n014
+      p29_n014 --> p29_n015
+      p29_n015 --> p29_n016
+      p29_n016 --> p29_n017
+      p29_n011 --> p29_n016
+    end
+  end
+style family_21 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_21_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 11,19 stroke:#777777,stroke-width:1.3px;

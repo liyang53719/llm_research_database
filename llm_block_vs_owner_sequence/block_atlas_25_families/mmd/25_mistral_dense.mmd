@@ -1,0 +1,81 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 25: Mistral Dense
+%% 26_Mistral_Dense: 同构/同拓扑模型 | Mistral-7B and instruct derivatives share sliding-window grouped-query attention plus SwiGLU.
+flowchart TB
+  subgraph family_25["Mistral Dense"]
+    direction TB
+    subgraph variant_25_01["Sliding-window GQA + SwiGLU block"]
+      direction TB
+      p33_n001["X<br/>[T=1024, H=4096]"]:::input
+      p33_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p33_n003["K Proj<br/>X · Wk"]:::mac
+      p33_n004["Q Proj<br/>X · Wq"]:::mac
+      p33_n005["V Proj<br/>X · Wv"]:::mac
+      p33_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p33_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p33_n008[("K cache")]:::state
+      p33_n009[("V cache")]:::state
+      p33_n010("K head repeat ×4<br/>view/expand GQA heads"):::other
+      p33_n011("V head repeat ×4<br/>view/expand GQA heads"):::other
+      p33_n012["Q × Kᵀ<br/>batched head GEMM; causal sliding window W=4096"]:::mac
+      p33_n013("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p33_n014["P × V<br/>batched head GEMM"]:::mac
+      p33_n015["O Proj<br/>C · Wo"]:::mac
+      p33_n016((+)):::plus
+      p33_n017["X + Attention"]:::output
+      p33_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p33_n019["gate_proj<br/>X · Wgate"]:::mac
+      p33_n020["up_proj<br/>X · Wup"]:::mac
+      p33_n021("SiLU<br/>u·σ(u)"):::other
+      p33_n022("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+      p33_n023["down_proj<br/>Z · Wdown"]:::mac
+      p33_n024((+)):::plus
+      p33_n025["Block output"]:::output
+      p33_n026["Attention dimensions<br/>Q=32×128; K/V=8×128; logical score rows=32×T×4096"]:::note
+      p33_n001 --> p33_n002
+      p33_n002 --> p33_n003
+      p33_n002 --> p33_n004
+      p33_n002 --> p33_n005
+      p33_n003 --> p33_n006
+      p33_n004 --> p33_n007
+      p33_n006 --> p33_n008
+      p33_n005 -.-> p33_n009
+      p33_n008 --> p33_n010
+      p33_n009 --> p33_n011
+      p33_n007 --> p33_n012
+      p33_n010 --> p33_n012
+      p33_n012 --> p33_n013
+      p33_n013 --> p33_n014
+      p33_n011 --> p33_n014
+      p33_n014 --> p33_n015
+      p33_n015 --> p33_n016
+      p33_n001 --> p33_n016
+      p33_n016 --> p33_n017
+      p33_n017 --> p33_n018
+      p33_n018 --> p33_n019
+      p33_n018 --> p33_n020
+      p33_n019 --> p33_n021
+      p33_n021 --> p33_n022
+      p33_n020 --> p33_n022
+      p33_n022 --> p33_n023
+      p33_n023 --> p33_n024
+      p33_n024 --> p33_n025
+      p33_n017 --> p33_n024
+    end
+  end
+style family_25 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_25_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,28 stroke:#777777,stroke-width:1.3px;

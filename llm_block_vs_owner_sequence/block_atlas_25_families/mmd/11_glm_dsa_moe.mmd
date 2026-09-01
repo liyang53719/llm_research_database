@@ -1,0 +1,138 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 11: GLM DSA MoE
+%% 12_GLM5.2_DSA_MoE: 同构/同拓扑模型 | GLM-5.2, GLM-5.2-FP8/NVFP4 and GLM-4.7-Flash derivatives use the DSA/MLA + sparse MoE family topology; exact layer/indexer schedules differ.
+flowchart TB
+  subgraph family_11["GLM DSA MoE"]
+    direction TB
+    subgraph variant_11_01["DSA / MLA + routed/shared MoE block"]
+      direction TB
+      subgraph p15_g01["DeepSeek Sparse Attention indexer"]
+        direction LR
+        p15_n016["Indexer Q projection<br/>32 heads × 128"]:::mac
+        p15_n017["Indexer K projection<br/>32 heads × 128"]:::mac
+        p15_n018["Indexer Q × Kᵀ<br/>relevance score GEMM"]:::mac
+        p15_n019("Top-2048 select<br/>causal candidate indices"):::other
+        p15_n021["Selected Q × Kᵀ<br/>64-head sparse GEMM"]:::mac
+        p15_n020("Sparse gather<br/>collect selected compressed KV"):::other
+        p15_n022("Softmax FP32<br/>over selected 2048 keys"):::other
+      end
+      subgraph p15_g02["Shared expert body × 1"]
+        direction LR
+        p15_n039["gate_proj<br/>X · Wg"]:::mac
+        p15_n040["up_proj<br/>X · Wu"]:::mac
+        p15_n041("SiLU<br/>u·σ(u)"):::other
+        p15_n042("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p15_n043["down_proj<br/>Z · Wd"]:::mac
+      end
+      subgraph p15_g03["Routed expert body × E=256; 8 active/token"]
+        direction LR
+        p15_n032["gate_proj<br/>X · Wg"]:::mac
+        p15_n033["up_proj<br/>X · Wu"]:::mac
+        p15_n034("SiLU<br/>u·σ(u)"):::other
+        p15_n035("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p15_n036["down_proj<br/>Z · Wd"]:::mac
+      end
+      p15_n001["X<br/>[T=1024,H=6144]"]:::input
+      p15_n005("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p15_n007["Q down-proj<br/>X · Wq_a → rank 2048"]:::mac
+      p15_n010["KV compression<br/>X·Wkv_a → latent512 + K_rope64"]:::mac
+      p15_n008("Q low-rank RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p15_n011("KV latent RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p15_n009["Q up-proj<br/>rank → 64×(192+64)"]:::mac
+      p15_n012["KV up-proj<br/>latent → K_nope + V per head"]:::mac
+      p15_n013("Split Q<br/>Q_nope[192] + Q_rope[64]"):::other
+      p15_n014("Split KV<br/>K_nope[192], K_rope[64], V[256]"):::other
+      p15_n015("RoPE<br/>apply only 64 rotary dims"):::other
+      p15_n023["P × V<br/>sparse value GEMM"]:::mac
+      p15_n024["O Proj<br/>[64×256] → H"]:::mac
+      p15_n025((+)):::plus
+      p15_n026["X + DSA/MLA"]:::output
+      p15_n027("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p15_n028["Router projection<br/>logits = X · Wrouter"]:::mac
+      p15_n029("Router scoring<br/>p = sigmoid_FP32(logits)"):::other
+      p15_n030("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p15_n031("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p15_n044["Shared gate projection<br/>s = X · ws"]:::mac
+      p15_n045("Sigmoid<br/>σ(s)"):::other
+      p15_n046("Shared gating<br/>σ(s) ⊙ Eshared(X)"):::other
+      p15_n037("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p15_n038("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p15_n002((+)):::plus
+      p15_n003((+)):::plus
+      p15_n004["Block output"]:::output
+      p15_n006["Layer variation<br/>Layers 0–2 use dense SwiGLU I=12288. Later layers use 256 routed experts, top-8, plus one shared expert."]:::note
+      p15_n001 --> p15_n005
+      p15_n005 --> p15_n007
+      p15_n007 --> p15_n008
+      p15_n008 --> p15_n009
+      p15_n005 --> p15_n010
+      p15_n010 --> p15_n011
+      p15_n011 --> p15_n012
+      p15_n009 --> p15_n013
+      p15_n012 --> p15_n014
+      p15_n013 --> p15_n015
+      p15_n014 --> p15_n015
+      p15_n005 --> p15_n016
+      p15_n005 --> p15_n017
+      p15_n016 --> p15_n018
+      p15_n017 --> p15_n018
+      p15_n018 --> p15_n019
+      p15_n019 --> p15_n020
+      p15_n015 --> p15_n021
+      p15_n020 --> p15_n021
+      p15_n021 --> p15_n022
+      p15_n022 --> p15_n023
+      p15_n020 --> p15_n023
+      p15_n023 --> p15_n024
+      p15_n024 --> p15_n025
+      p15_n001 --> p15_n025
+      p15_n025 --> p15_n026
+      p15_n026 --> p15_n027
+      p15_n032 --> p15_n034
+      p15_n034 --> p15_n035
+      p15_n033 --> p15_n035
+      p15_n035 --> p15_n036
+      p15_n027 --> p15_n028
+      p15_n028 --> p15_n029
+      p15_n029 --> p15_n030
+      p15_n030 --> p15_n031
+      p15_n031 --> p15_n032
+      p15_n031 --> p15_n033
+      p15_n036 --> p15_n037
+      p15_n030 --> p15_n037
+      p15_n037 --> p15_n038
+      p15_n039 --> p15_n041
+      p15_n041 --> p15_n042
+      p15_n040 --> p15_n042
+      p15_n042 --> p15_n043
+      p15_n027 --> p15_n039
+      p15_n027 --> p15_n040
+      p15_n027 --> p15_n044
+      p15_n044 --> p15_n045
+      p15_n045 --> p15_n046
+      p15_n043 --> p15_n046
+      p15_n038 --> p15_n002
+      p15_n046 --> p15_n002
+      p15_n002 --> p15_n003
+      p15_n003 --> p15_n004
+      p15_n026 --> p15_n003
+    end
+  end
+style family_11 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p15_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p15_g02 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style p15_g03 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_11_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 24,54 stroke:#777777,stroke-width:1.3px;

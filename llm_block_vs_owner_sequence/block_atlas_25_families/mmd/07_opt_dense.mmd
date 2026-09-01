@@ -1,0 +1,64 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 7: OPT Dense
+%% 09_OPT_Dense: 同构/同拓扑模型 | OPT 125M through 175B keep the same learned-position, separate-QKV, pre-LN attention and ReLU FFN topology; dimensions differ.
+flowchart TB
+  subgraph family_07["OPT Dense"]
+    direction TB
+    subgraph variant_07_01["OPT pre-norm dense block"]
+      direction TB
+      p10_n001["X<br/>[T=1024, H=768]"]:::input
+      p10_n002("Learned absolute position<br/>X ← token_embed + pos_embed"):::other
+      p10_n003("LayerNorm 1<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p10_n004["Q Proj<br/>X·Wq+bq"]:::mac
+      p10_n005["K Proj<br/>X·Wk+bk"]:::mac
+      p10_n006["V Proj<br/>X·Wv+bv"]:::mac
+      p10_n007["Q × Kᵀ<br/>MHA score GEMM + causal mask"]:::mac
+      p10_n008("Softmax FP32<br/>p_i=exp(s_i−m)/Σexp(s_j−m)"):::other
+      p10_n009["P × V<br/>batched head GEMM"]:::mac
+      p10_n010["Output Proj<br/>C·Wo+bo"]:::mac
+      p10_n011((+)):::plus
+      p10_n012["X + Attention"]:::output
+      p10_n013("LayerNorm 2<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p10_n014["fc1<br/>X · W1 + b1"]:::mac
+      p10_n015("ReLU<br/>max(x,0)"):::other
+      p10_n016["fc2<br/>A · W2 + b2"]:::mac
+      p10_n017((+)):::plus
+      p10_n018["Block output"]:::output
+      p10_n001 --> p10_n002
+      p10_n002 --> p10_n003
+      p10_n003 --> p10_n004
+      p10_n003 --> p10_n005
+      p10_n003 --> p10_n006
+      p10_n004 --> p10_n007
+      p10_n005 --> p10_n007
+      p10_n007 --> p10_n008
+      p10_n008 --> p10_n009
+      p10_n006 --> p10_n009
+      p10_n009 --> p10_n010
+      p10_n010 --> p10_n011
+      p10_n002 --> p10_n011
+      p10_n011 --> p10_n012
+      p10_n012 --> p10_n013
+      p10_n013 --> p10_n014
+      p10_n014 --> p10_n015
+      p10_n015 --> p10_n016
+      p10_n016 --> p10_n017
+      p10_n017 --> p10_n018
+      p10_n012 --> p10_n017
+    end
+  end
+style family_07 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_07_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 12,20 stroke:#777777,stroke-width:1.3px;

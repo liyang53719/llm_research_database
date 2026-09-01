@@ -1,0 +1,81 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 19: Qwen1 Dense
+%% 20_Qwen1_Dense: 同构/同拓扑模型 | Qwen-72B and related Qwen1 checkpoints share the earlier dense RoPE + GQA/MQA + SwiGLU decoder-block topology.
+flowchart TB
+  subgraph family_19["Qwen1 Dense"]
+    direction TB
+    subgraph variant_19_01["Earlier Qwen dense decoder block"]
+      direction TB
+      p27_n001["X<br/>[T=1024, H=8192]"]:::input
+      p27_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p27_n003["K Proj<br/>X · Wk"]:::mac
+      p27_n004["Q Proj<br/>X · Wq"]:::mac
+      p27_n005["V Proj<br/>X · Wv"]:::mac
+      p27_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p27_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p27_n008[("K cache")]:::state
+      p27_n009[("V cache")]:::state
+      p27_n010("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p27_n011("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p27_n012["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p27_n013("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p27_n014["P × V<br/>batched head GEMM"]:::mac
+      p27_n015["O Proj<br/>C · Wo"]:::mac
+      p27_n016((+)):::plus
+      p27_n017["X + Attention"]:::output
+      p27_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p27_n019["gate_proj<br/>X · Wgate"]:::mac
+      p27_n020["up_proj<br/>X · Wup"]:::mac
+      p27_n021("SiLU<br/>u·σ(u)"):::other
+      p27_n022("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+      p27_n023["down_proj<br/>Z · Wdown"]:::mac
+      p27_n024((+)):::plus
+      p27_n025["Block output"]:::output
+      p27_n026["Attention dimensions<br/>Q=64×128; K/V=8×128; logical score rows=64×T×T"]:::note
+      p27_n001 --> p27_n002
+      p27_n002 --> p27_n003
+      p27_n002 --> p27_n004
+      p27_n002 --> p27_n005
+      p27_n003 --> p27_n006
+      p27_n004 --> p27_n007
+      p27_n006 --> p27_n008
+      p27_n005 -.-> p27_n009
+      p27_n008 --> p27_n010
+      p27_n009 --> p27_n011
+      p27_n007 --> p27_n012
+      p27_n010 --> p27_n012
+      p27_n012 --> p27_n013
+      p27_n013 --> p27_n014
+      p27_n011 --> p27_n014
+      p27_n014 --> p27_n015
+      p27_n015 --> p27_n016
+      p27_n001 --> p27_n016
+      p27_n016 --> p27_n017
+      p27_n017 --> p27_n018
+      p27_n018 --> p27_n019
+      p27_n018 --> p27_n020
+      p27_n019 --> p27_n021
+      p27_n021 --> p27_n022
+      p27_n020 --> p27_n022
+      p27_n022 --> p27_n023
+      p27_n023 --> p27_n024
+      p27_n024 --> p27_n025
+      p27_n017 --> p27_n024
+    end
+  end
+style family_19 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_19_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,28 stroke:#777777,stroke-width:1.3px;

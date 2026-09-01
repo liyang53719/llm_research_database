@@ -1,0 +1,102 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 5: Qwen3 MoE
+%% 04_Qwen3_MoE: 同构/同拓扑模型 | Qwen3-30B-A3B, Qwen3-Coder-30B-A3B, their instruct/FP8/GGUF/AWQ variants; text blocks of Qwen3-VL-30B-A3B are isomorphic.
+flowchart TB
+  subgraph family_05["Qwen3 MoE"]
+    direction TB
+    subgraph variant_05_01["Full attention + routed MoE block"]
+      direction TB
+      subgraph p04_g01["Routed expert body × E=128; 8 active/token"]
+        direction LR
+        p04_n025["gate_proj<br/>X · Wg"]:::mac
+        p04_n026["up_proj<br/>X · Wu"]:::mac
+        p04_n027("SiLU<br/>u·σ(u)"):::other
+        p04_n028("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+        p04_n029["down_proj<br/>Z · Wd"]:::mac
+      end
+      p04_n001["X<br/>[T=1024, H=2048]"]:::input
+      p04_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p04_n003["K Proj<br/>X · Wk"]:::mac
+      p04_n004["Q Proj<br/>X · Wq"]:::mac
+      p04_n005["V Proj<br/>X · Wv"]:::mac
+      p04_n006("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p04_n007("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p04_n008("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p04_n009("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p04_n010[("K cache")]:::state
+      p04_n011[("V cache")]:::state
+      p04_n012("K head repeat ×8<br/>view/expand GQA heads"):::other
+      p04_n013("V head repeat ×8<br/>view/expand GQA heads"):::other
+      p04_n014["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p04_n015("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p04_n016["P × V<br/>batched head GEMM"]:::mac
+      p04_n017["O Proj<br/>C · Wo"]:::mac
+      p04_n018((+)):::plus
+      p04_n019["X + Attention"]:::output
+      p04_n020("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p04_n021["Router projection<br/>logits = X · Wrouter"]:::mac
+      p04_n022("Router scoring<br/>p = softmax_FP32(logits)"):::other
+      p04_n023("Top-8 + renorm<br/>select experts; p ← p/ΣTopK p"):::other
+      p04_n024("Dispatch / gather<br/>group token rows by expert_id"):::other
+      p04_n030("Expert weighting<br/>p_e ⊙ E_e(X)"):::other
+      p04_n031("Scatter / weighted reduce<br/>Yroute = Σe p_e E_e(X)"):::other
+      p04_n032((+)):::plus
+      p04_n034["Attention dimensions<br/>Q=32×128; K/V=4×128; logical score rows=32×T×T"]:::note
+      p04_n033["Block output"]:::output
+      p04_n001 --> p04_n002
+      p04_n002 --> p04_n003
+      p04_n002 --> p04_n004
+      p04_n002 --> p04_n005
+      p04_n003 --> p04_n006
+      p04_n004 --> p04_n007
+      p04_n006 --> p04_n008
+      p04_n007 --> p04_n009
+      p04_n008 --> p04_n010
+      p04_n005 -.-> p04_n011
+      p04_n010 --> p04_n012
+      p04_n011 --> p04_n013
+      p04_n009 --> p04_n014
+      p04_n012 --> p04_n014
+      p04_n014 --> p04_n015
+      p04_n015 --> p04_n016
+      p04_n013 --> p04_n016
+      p04_n016 --> p04_n017
+      p04_n017 --> p04_n018
+      p04_n001 --> p04_n018
+      p04_n018 --> p04_n019
+      p04_n019 --> p04_n020
+      p04_n025 --> p04_n027
+      p04_n027 --> p04_n028
+      p04_n026 --> p04_n028
+      p04_n028 --> p04_n029
+      p04_n020 --> p04_n021
+      p04_n021 --> p04_n022
+      p04_n022 --> p04_n023
+      p04_n023 --> p04_n024
+      p04_n024 --> p04_n025
+      p04_n024 --> p04_n026
+      p04_n029 --> p04_n030
+      p04_n023 --> p04_n030
+      p04_n030 --> p04_n031
+      p04_n031 --> p04_n032
+      p04_n032 --> p04_n033
+      p04_n019 --> p04_n032
+    end
+  end
+style family_05 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style p04_g01 fill:#ffffff,stroke:#999999,stroke-width:1px,stroke-dasharray:6 4;
+style variant_05_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 9 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 19,37 stroke:#777777,stroke-width:1.3px;

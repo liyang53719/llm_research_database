@@ -1,0 +1,81 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 3: Llama / Yi / SmolLM Dense
+%% 03_Llama_Yi_SmolLM_Dense: 同构/同拓扑模型 | Llama 3/3.1/3.2, TinyLlama, Yi-1.5 and SmolLM2 share the pre-norm RoPE + GQA/MHA + SwiGLU block; head counts and dimensions vary.
+flowchart TB
+  subgraph family_03["Llama / Yi / SmolLM Dense"]
+    direction TB
+    subgraph variant_03_01["Pre-norm GQA / SwiGLU block"]
+      direction TB
+      p03_n001["X<br/>[T=1024, H=2048]"]:::input
+      p03_n002("RMSNorm 1<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p03_n003["K Proj<br/>X · Wk"]:::mac
+      p03_n004["Q Proj<br/>X · Wq"]:::mac
+      p03_n005["V Proj<br/>X · Wv"]:::mac
+      p03_n006("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p03_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p03_n008[("K cache")]:::state
+      p03_n009[("V cache")]:::state
+      p03_n010("K head repeat ×4<br/>view/expand GQA heads"):::other
+      p03_n011("V head repeat ×4<br/>view/expand GQA heads"):::other
+      p03_n012["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p03_n013("Softmax FP32<br/>p_i = exp(s_i−m)/Σj exp(s_j−m)"):::other
+      p03_n014["P × V<br/>batched head GEMM"]:::mac
+      p03_n015["O Proj<br/>C · Wo"]:::mac
+      p03_n016((+)):::plus
+      p03_n017["X + Attention"]:::output
+      p03_n018("RMSNorm 2<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p03_n019["gate_proj<br/>X · Wgate"]:::mac
+      p03_n020["up_proj<br/>X · Wup"]:::mac
+      p03_n021("SiLU<br/>u·σ(u)"):::other
+      p03_n022("Elementwise gate<br/>SiLU(gate) ⊙ up"):::other
+      p03_n023["down_proj<br/>Z · Wdown"]:::mac
+      p03_n024((+)):::plus
+      p03_n025["Block output"]:::output
+      p03_n026["Attention dimensions<br/>Q=32×64; K/V=8×64; logical score rows=32×T×T"]:::note
+      p03_n001 --> p03_n002
+      p03_n002 --> p03_n003
+      p03_n002 --> p03_n004
+      p03_n002 --> p03_n005
+      p03_n003 --> p03_n006
+      p03_n004 --> p03_n007
+      p03_n006 --> p03_n008
+      p03_n005 -.-> p03_n009
+      p03_n008 --> p03_n010
+      p03_n009 --> p03_n011
+      p03_n007 --> p03_n012
+      p03_n010 --> p03_n012
+      p03_n012 --> p03_n013
+      p03_n013 --> p03_n014
+      p03_n011 --> p03_n014
+      p03_n014 --> p03_n015
+      p03_n015 --> p03_n016
+      p03_n001 --> p03_n016
+      p03_n016 --> p03_n017
+      p03_n017 --> p03_n018
+      p03_n018 --> p03_n019
+      p03_n018 --> p03_n020
+      p03_n019 --> p03_n021
+      p03_n021 --> p03_n022
+      p03_n020 --> p03_n022
+      p03_n022 --> p03_n023
+      p03_n023 --> p03_n024
+      p03_n024 --> p03_n025
+      p03_n017 --> p03_n024
+    end
+  end
+style family_03 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_03_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 7 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 17,28 stroke:#777777,stroke-width:1.3px;

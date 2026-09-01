@@ -1,0 +1,65 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 20: Phi-2 Dense
+%% 21_Phi2_Dense: 同构/同拓扑模型 | Representative Phi-2 family page. Drawn with LayerNorm, causal attention and GELU FFN under the same parallel-residual pattern as GPT-NeoX-like blocks.
+flowchart TB
+  subgraph family_20["Phi-2 Dense"]
+    direction TB
+    subgraph variant_20_01["Parallel-residual dense block"]
+      direction TB
+      p28_n001["X<br/>[T=1024, H=2560]"]:::input
+      p28_n002("LayerNorm (attn)<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p28_n003("LayerNorm (MLP)<br/>y = γ⊙(x−μ)/√(σ²+ε)+β"):::other
+      p28_n004["K Proj<br/>X · Wk"]:::mac
+      p28_n005["Q Proj<br/>X · Wq"]:::mac
+      p28_n013["fc1<br/>X · W1 + b1"]:::mac
+      p28_n006["V Proj<br/>X · Wv"]:::mac
+      p28_n007("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p28_n008("RoPE<br/>(xe,xo) ← rotation(cosθ,sinθ)"):::other
+      p28_n014("GELU<br/>0.5u[1+erf(u/√2)]"):::other
+      p28_n015["fc2<br/>A · W2 + b2"]:::mac
+      p28_n009["Q × Kᵀ<br/>batched head GEMM; causal mask"]:::mac
+      p28_n010("Softmax FP32<br/>p_i = exp(s_i−m)/Σexp(s_j−m)"):::other
+      p28_n011["P × V<br/>batched head GEMM"]:::mac
+      p28_n012["O Proj<br/>C · Wo"]:::mac
+      p28_n016((+)):::plus
+      p28_n017((+)):::plus
+      p28_n018["Block output"]:::output
+      p28_n019["Phi-2 topology<br/>Parallel residual: Y = X + Attention(LN₁(X)) + MLP(LN₂(X))"]:::note
+      p28_n001 --> p28_n002
+      p28_n001 --> p28_n003
+      p28_n002 --> p28_n004
+      p28_n002 --> p28_n005
+      p28_n002 --> p28_n006
+      p28_n004 --> p28_n007
+      p28_n005 --> p28_n008
+      p28_n008 --> p28_n009
+      p28_n007 --> p28_n009
+      p28_n009 --> p28_n010
+      p28_n010 --> p28_n011
+      p28_n006 --> p28_n011
+      p28_n011 --> p28_n012
+      p28_n003 --> p28_n013
+      p28_n013 --> p28_n014
+      p28_n014 --> p28_n015
+      p28_n012 --> p28_n016
+      p28_n001 --> p28_n016
+      p28_n016 --> p28_n017
+      p28_n015 --> p28_n017
+      p28_n017 --> p28_n018
+    end
+  end
+style family_20 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_20_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 17 stroke:#777777,stroke-width:1.3px;

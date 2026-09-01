@@ -1,0 +1,151 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "stepAfter", "htmlLabels": true, "nodeSpacing": 36, "rankSpacing": 48, "useMaxWidth": false}, "theme": "base"}}%%
+%% Family rank 10: Gemma 4 Dense
+%% 11A_Gemma4_Sliding: 同构/同拓扑模型 | Gemma-4-31B and OTel 31B/27B derivatives; five sliding blocks precede each full-attention block.
+%% 11B_Gemma4_Full: 同构/同拓扑模型 | Same Gemma 4 dense family; global/full block uses 4 KV heads, 512-d heads and partial rotary factor 0.25.
+flowchart TB
+  subgraph family_10["Gemma 4 Dense"]
+    direction TB
+    subgraph variant_10_01["Sliding-attention dense block"]
+      direction TB
+      p13_n001["X<br/>[T=1024, H=5376]"]:::input
+      p13_n002("Pre-Attention RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p13_n004["K=V shared Proj<br/>X · Wkv"]:::mac
+      p13_n003["Q Proj<br/>X · Wq"]:::mac
+      p13_n006("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p13_n005("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p13_n008("RoPE<br/>rotate all head dims"):::other
+      p13_n007("RoPE<br/>rotate all head dims"):::other
+      p13_n009[("K cache")]:::state
+      p13_n010[("V cache")]:::state
+      p13_n011("K repeat ×2<br/>GQA expansion"):::other
+      p13_n012("V repeat ×2<br/>GQA expansion"):::other
+      p13_n013["Q × Kᵀ<br/>batched GEMM; sliding W=1024"]:::mac
+      p13_n014("Softmax FP32<br/>p_i=exp(s_i−m)/Σexp(s_j−m)"):::other
+      p13_n015["P × V<br/>batched head GEMM"]:::mac
+      p13_n016["O Proj<br/>C · Wo"]:::mac
+      p13_n017("Post-Attention RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p13_n018((+)):::plus
+      p13_n019["X + Attention"]:::output
+      p13_n020("Pre-FFN RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p13_n021["gate_proj<br/>X · Wgate"]:::mac
+      p13_n022["up_proj<br/>X · Wup"]:::mac
+      p13_n023("GELU-tanh<br/>0.5u[1+tanh(√(2/π)(u+0.044715u³))]"):::other
+      p13_n024("Elementwise gate<br/>GELU(gate) ⊙ up"):::other
+      p13_n025["down_proj<br/>Z · Wdown"]:::mac
+      p13_n026("Post-FFN RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p13_n027((+)):::plus
+      p13_n028["Block output"]:::output
+      p13_n001 --> p13_n002
+      p13_n002 --> p13_n004
+      p13_n002 --> p13_n003
+      p13_n003 --> p13_n005
+      p13_n004 --> p13_n006
+      p13_n005 --> p13_n007
+      p13_n006 --> p13_n008
+      p13_n008 --> p13_n009
+      p13_n004 -.-> p13_n010
+      p13_n009 --> p13_n011
+      p13_n010 --> p13_n012
+      p13_n007 --> p13_n013
+      p13_n011 --> p13_n013
+      p13_n013 --> p13_n014
+      p13_n014 --> p13_n015
+      p13_n012 --> p13_n015
+      p13_n015 --> p13_n016
+      p13_n016 --> p13_n017
+      p13_n017 --> p13_n018
+      p13_n001 --> p13_n018
+      p13_n018 --> p13_n019
+      p13_n019 --> p13_n020
+      p13_n020 --> p13_n021
+      p13_n020 --> p13_n022
+      p13_n021 --> p13_n023
+      p13_n023 --> p13_n024
+      p13_n022 --> p13_n024
+      p13_n024 --> p13_n025
+      p13_n025 --> p13_n026
+      p13_n026 --> p13_n027
+      p13_n019 --> p13_n027
+      p13_n027 --> p13_n028
+    end
+    subgraph variant_10_02["Full-attention dense block"]
+      direction TB
+      p14_n001["X<br/>[T=1024, H=5376]"]:::input
+      p14_n002("Pre-Attention RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p14_n004["K=V shared Proj<br/>X · Wkv"]:::mac
+      p14_n003["Q Proj<br/>X · Wq"]:::mac
+      p14_n006("K Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p14_n005("Q Head RMSNorm<br/>y = x ⊙ γ / √(mean_d(x²)+ε)"):::other
+      p14_n008("Partial RoPE<br/>rotate 0.25·d dims"):::other
+      p14_n007("Partial RoPE<br/>rotate 0.25·d dims"):::other
+      p14_n009[("K cache")]:::state
+      p14_n010[("V cache")]:::state
+      p14_n011("K repeat ×8<br/>GQA expansion"):::other
+      p14_n012("V repeat ×8<br/>GQA expansion"):::other
+      p14_n013["Q × Kᵀ<br/>batched GEMM; full causal"]:::mac
+      p14_n014("Softmax FP32<br/>p_i=exp(s_i−m)/Σexp(s_j−m)"):::other
+      p14_n015["P × V<br/>batched head GEMM"]:::mac
+      p14_n016["O Proj<br/>C · Wo"]:::mac
+      p14_n017("Post-Attention RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p14_n018((+)):::plus
+      p14_n019["X + Attention"]:::output
+      p14_n020("Pre-FFN RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p14_n021["gate_proj<br/>X · Wgate"]:::mac
+      p14_n022["up_proj<br/>X · Wup"]:::mac
+      p14_n023("GELU-tanh<br/>0.5u[1+tanh(√(2/π)(u+0.044715u³))]"):::other
+      p14_n024("Elementwise gate<br/>GELU(gate) ⊙ up"):::other
+      p14_n025["down_proj<br/>Z · Wdown"]:::mac
+      p14_n026("Post-FFN RMSNorm<br/>y = x ⊙ γ / √(mean(x²)+ε)"):::other
+      p14_n027((+)):::plus
+      p14_n028["Block output"]:::output
+      p14_n001 --> p14_n002
+      p14_n002 --> p14_n004
+      p14_n002 --> p14_n003
+      p14_n003 --> p14_n005
+      p14_n004 --> p14_n006
+      p14_n005 --> p14_n007
+      p14_n006 --> p14_n008
+      p14_n008 --> p14_n009
+      p14_n004 -.-> p14_n010
+      p14_n009 --> p14_n011
+      p14_n010 --> p14_n012
+      p14_n007 --> p14_n013
+      p14_n011 --> p14_n013
+      p14_n013 --> p14_n014
+      p14_n014 --> p14_n015
+      p14_n012 --> p14_n015
+      p14_n015 --> p14_n016
+      p14_n016 --> p14_n017
+      p14_n017 --> p14_n018
+      p14_n001 --> p14_n018
+      p14_n018 --> p14_n019
+      p14_n019 --> p14_n020
+      p14_n020 --> p14_n021
+      p14_n020 --> p14_n022
+      p14_n021 --> p14_n023
+      p14_n023 --> p14_n024
+      p14_n022 --> p14_n024
+      p14_n024 --> p14_n025
+      p14_n025 --> p14_n026
+      p14_n026 --> p14_n027
+      p14_n019 --> p14_n027
+      p14_n027 --> p14_n028
+    end
+  end
+style family_10 fill:#fafafa,stroke:#333333,stroke-width:2px;
+style variant_10_01 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+style variant_10_02 fill:#ffffff,stroke:#666666,stroke-width:1.5px,stroke-dasharray:4 3;
+
+classDef mac fill:#dae8fc,stroke:#6c8ebf,stroke-width:1.5px,color:#1f1f1f;
+classDef other fill:#e1d5e7,stroke:#9673a6,stroke-width:1.5px,color:#1f1f1f;
+classDef state fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef output fill:#d5e8d4,stroke:#82b366,stroke-width:1.5px,color:#1f1f1f;
+classDef input fill:#fff2cc,stroke:#d6b656,stroke-width:1.5px,color:#1f1f1f;
+classDef input2 fill:#ffe6cc,stroke:#d79b00,stroke-width:1.5px,color:#1f1f1f;
+classDef weight fill:#f8cecc,stroke:#b85450,stroke-width:1.5px,color:#1f1f1f;
+classDef plus fill:#ffffff,stroke:#333333,stroke-width:2px,color:#111111,font-weight:bold;
+classDef note fill:#ffffff,stroke:#b3b3b3,stroke-width:1px,stroke-dasharray:5 3,color:#555555;
+classDef neutral fill:#ffffff,stroke:#777777,stroke-width:1.2px,color:#333333;
+linkStyle default stroke:#333333,stroke-width:1.2px;
+linkStyle 8,40 stroke:#82b366,stroke-width:1.5px,stroke-dasharray:5 3;
+linkStyle 19,30,51,62 stroke:#777777,stroke-width:1.3px;
