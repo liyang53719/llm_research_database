@@ -1,0 +1,22 @@
+group_id,top_kind,fixed_mode,support_fp8,support_bf16,support_i4_fp8,support_i4_bf16,support_i8_bf16,support_specials,expected_bricks,throughput_contract,comparison_role,notes
+V2_BRICK16_BARE_PROOF,brick_proof,,0,0,0,0,0,0,16,16 unsigned 4x4 products/cycle,structural_lower_bound,Must retain exactly 16 DW_mult_uns 4x4
+V2_CORE_BASE4_FTZ,product_core,,1,1,0,0,0,0,16,I4I8/I8I8/FP8/BF16 product pipe,mode_ablation_base,No mixed integer-floating modes
+V2_CORE_PLUS_I4FP8_FTZ,product_core,,1,1,1,0,0,0,16,Base plus I4FP8,mode_ablation_i4fp8,Measures native I4FP8 increment
+V2_CORE_PLUS_I4BF16_FTZ,product_core,,1,1,1,1,0,0,16,Base plus I4FP8 plus I4BF16,mode_ablation_i4bf16,Cumulative ablation
+V2_CORE_FULL7_FTZ,product_core,,1,1,1,1,1,0,16,All seven v2 modes,product_core_goal,No I8FP8 no I16 no I4I4
+V2_CORE_FULL7_SPECIAL,product_core,,1,1,1,1,1,1,16,All seven modes plus NaN Inf,special_value_ablation,Compare with FTZ finite inference path
+V2_BF16_ACCUM_ONLY,bf16_accum,,0,0,0,0,0,0,0,Four BF16 dot reductions and four BF16 accumulations/cycle,accumulator_area,16 BF16 DW_fp_add instances
+V2_INT_I4I8_FIXED,fixed_cluster,0,0,0,0,0,0,0,16,8 I4xI8 products and four dot2 accumulations/cycle,dedicated_integer_reference,Fixed mode constant propagation
+V2_INT_I8I8_FIXED,fixed_cluster,1,0,0,0,0,0,0,16,4 I8xI8 products and four accumulations/cycle,dedicated_integer_reference,Fixed mode constant propagation
+V2_FP8_NATIVE_BF16ACC_FIXED,fixed_cluster,2,1,0,0,0,0,0,16,16 FP8 products and four BF16 dot4 accumulations/cycle,dedicated_fp8_reference,Native 4x4 significand products
+V2_BF16_ONLY_BF16ACC_FIXED,fixed_cluster,3,0,1,0,0,0,0,16,4 BF16 products and four BF16 accumulations/cycle,dedicated_bf16_reference,Four bricks per product
+V2_I4FP8_FIXED,fixed_cluster,4,1,0,1,0,0,0,16,16 I4xFP8 products and four BF16 dot4 accumulations/cycle,mixed_mode_reference,Native shared brick product
+V2_I4BF16_FIXED,fixed_cluster,5,0,1,0,1,0,0,16,8 I4xBF16 products and four BF16 dot2 accumulations/cycle,mixed_mode_reference,Two bricks per product
+V2_I8BF16_FIXED,fixed_cluster,6,0,1,0,0,1,0,16,4 I8xBF16 products and four BF16 accumulations/cycle,mixed_mode_reference,Four bricks per product
+V2_FP8_WIDEN_BF16ACC_FIXED,fp8_widen_bf16,,0,1,0,0,0,0,16,4 widened-FP8 BF16 products and four BF16 accumulations/cycle,widen_vs_native_fp8,FP8 exactly widens to BF16 but loses 4x product throughput
+V2_SHARED_BASE4_FTZ,shared_cluster,,1,1,0,0,0,0,16,Tile-configured base four modes one selected per cycle,shared_ablation_base,Mode registered before data
+V2_SHARED_PLUS_I4FP8_FTZ,shared_cluster,,1,1,1,0,0,0,16,Base plus I4FP8,shared_ablation_i4fp8,Cumulative ablation
+V2_SHARED_PLUS_I4BF16_FTZ,shared_cluster,,1,1,1,1,0,0,16,Base plus I4FP8 plus I4BF16,shared_ablation_i4bf16,Cumulative ablation
+V2_SHARED_FULL7_FTZ,shared_cluster,,1,1,1,1,1,0,16,All seven modes one selected per cycle,shared_architecture_goal,Must close 1 GHz
+V2_SHARED_FULL7_SPECIAL,shared_cluster,,1,1,1,1,1,1,16,All seven modes plus NaN Inf,special_value_ablation,Not the default product candidate
+V2_SEPARATE_FULL_FTZ,separate_full,,1,1,1,1,1,0,48,Integer FP8 and BF16 clusters may execute concurrently,matched_separate_reference,Compare against shared with concurrency declared

@@ -1,0 +1,379 @@
+Running PRESTO HDLC
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:42: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:43: signed to unsigned assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:50: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:51: signed to unsigned assignment occurs. (VER-318)
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_config.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/mul4x4_brick.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/raw16_to_bf16_rne.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fp8_to_bf16_exact.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_int_accum.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_bf16_accum_dw.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_cluster.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_fp8_widen_bf16_top.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_separate_full_top.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/build_dc_1ghz/V2_SHARED_BASE4_FTZ/char_top.sv
+Presto compilation completed successfully.
+Loading db file '<LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/gtech.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/standard.sldb'
+  Loading link library 'sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+Presto compilation completed successfully. (char_top)
+Module: char_top, Ports: 562, Input: 267, Output: 295, Inout: 0
+Module: char_top, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module char_top report end. (ELAB-965)
+Elaborated 1 design.
+Current design is now 'char_top'.
+Information: Building the design 'fusion_mul16_v2_cluster' instantiated from design 'char_top' with
+	the parameters "FIXED_MODE=-1,SUPPORT_FP8=1,SUPPORT_BF16=1,SUPPORT_I4_FP8=0,SUPPORT_I4_BF16=0,SUPPORT_I8_BF16=0,SUPPORT_SPECIALS=0". (HDL-193)
+Presto compilation completed successfully. (fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0)
+Module: fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0, Ports: 562, Input: 267, Output: 295, Inout: 0
+Module: fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0 report end. (ELAB-965)
+Information: Building the design 'fusion_mul16_v2_config' instantiated from design 'fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0' with
+	the parameters "FIXED_MODE=-1,SUPPORT_FP8=1'h1,SUPPORT_BF16=1'h1,SUPPORT_I4_FP8=1'h0,SUPPORT_I4_BF16=1'h0,SUPPORT_I8_BF16=1'h0,INFLIGHT_DEPTH=10". (HDL-193)
+
+Statistics for case statements in always block in file
+	'<FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_config.sv'
+===========================================================
+|    Line    |  full/ parallel  |      block location     |
+===========================================================
+|     35     |    auto/auto     | always block at line 33 |
+|     25     |    auto/auto     | always block at line 72 |
+===========================================================
+
+Inferred memory devices in process in routine 'fusion_mul16_v2_config_n1_1_1_0_0_0_10' in file
+	 <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_config.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|   inflight_q_reg    | Flip-flop |  10   |  Y  | N  | None  | Async | N  |  72  |
+|     mode_q_reg      | Flip-flop |   3   |  Y  | N  | None  | Async | N  |  72  |
+|  mode_onehot_q_reg  | Flip-flop |   5   |  Y  | N  | Async | Async | N  |  72  |
+|      rnd_q_reg      | Flip-flop |   3   |  Y  | N  | None  | Async | N  |  72  |
+|  cfg_loaded_q_reg   | Flip-flop |   1   |  N  | N  | None  | Async | N  |  72  |
+==================================================================================
+Presto compilation completed successfully. (fusion_mul16_v2_config_n1_1_1_0_0_0_10)
+Module: fusion_mul16_v2_config_n1_1_1_0_0_0_10, Ports: 26, Input: 10, Output: 16, Inout: 0
+Module: fusion_mul16_v2_config_n1_1_1_0_0_0_10, Registers: 24, Async set/reset: 24, Sync set/reset: 0
+Information: Module fusion_mul16_v2_config_n1_1_1_0_0_0_10 report end. (ELAB-965)
+Information: Building the design 'fusion_mul16_v2_product_pipe' instantiated from design 'fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0' with
+	the parameters "SUPPORT_FP8=1'h1,SUPPORT_BF16=1'h1,SUPPORT_I4_FP8=1'h0,SUPPORT_I4_BF16=1'h0,SUPPORT_I8_BF16=1'h0,SUPPORT_SPECIALS=1'h0". (HDL-193)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:50: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:42: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:189: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:205: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:225: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:356: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:368: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv:382: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+
+Inferred memory devices in process in routine 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0' in file
+	 <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv'.
+===================================================================================
+|    Register Name     |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+===================================================================================
+|  product_inf_q0_reg  | Flip-flop |   4   |  Y  | N  | None  | Async | N  | 230  |
+|     valid_q0_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 230  |
+|     clear_q0_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 230  |
+|  mode_onehot_q0_reg  | Flip-flop |   7   |  Y  | N  | None  | Async | N  | 230  |
+|  product_nan_q0_reg  | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 230  |
+| product_scale_q0_reg | Flip-flop |  176  |  Y  | N  | None  | Async | N  | 230  |
+|    brick_a_q_reg     | Flip-flop |  64   |  Y  | N  | None  | Async | N  | 230  |
+|    brick_b_q_reg     | Flip-flop |  64   |  Y  | N  | None  | Async | N  | 230  |
+| product_sign_q0_reg  | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 230  |
+| product_zero_q0_reg  | Flip-flop |  16   |  Y  | N  | Async | None  | N  | 230  |
+|  product_inf_q1_reg  | Flip-flop |   4   |  Y  | N  | None  | Async | N  | 261  |
+|     valid_q1_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 261  |
+|     clear_q1_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 261  |
+|  mode_onehot_q1_reg  | Flip-flop |   7   |  Y  | N  | None  | Async | N  | 261  |
+|  product_nan_q1_reg  | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 261  |
+| product_scale_q1_reg | Flip-flop |  176  |  Y  | N  | None  | Async | N  | 261  |
+|    brick_p_q_reg     | Flip-flop |  128  |  Y  | N  | None  | Async | N  | 261  |
+| product_sign_q1_reg  | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 261  |
+| product_zero_q1_reg  | Flip-flop |  16   |  Y  | N  | Async | None  | N  | 261  |
+|     fp_inf_q_reg     | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 386  |
+|     valid_q2_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 386  |
+|     clear_q2_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  | 386  |
+|  mode_onehot_q2_reg  | Flip-flop |   7   |  Y  | N  | None  | Async | N  | 386  |
+|  int_lane_sum_o_reg  | Flip-flop |  72   |  Y  | N  | None  | Async | N  | 386  |
+|     fp_nan_q_reg     | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 386  |
+|    fp_scale_q_reg    | Flip-flop |  176  |  Y  | N  | None  | Async | N  | 386  |
+|     fp_raw_q_reg     | Flip-flop |  256  |  Y  | N  | None  | Async | N  | 386  |
+|    fp_sign_q_reg     | Flip-flop |  16   |  Y  | N  | None  | Async | N  | 386  |
+|    fp_zero_q_reg     | Flip-flop |  16   |  Y  | N  | Async | None  | N  | 386  |
+|    fp_valid_o_reg    | Flip-flop |   1   |  N  | N  | None  | Async | N  | 433  |
+|    fp_clear_o_reg    | Flip-flop |   1   |  N  | N  | None  | Async | N  | 433  |
+| bf16_lane_item_o_reg | Flip-flop |  256  |  Y  | N  | None  | Async | N  | 433  |
+===================================================================================
+Presto compilation completed successfully. (fusion_mul16_v2_product_pipe_1_1_0_0_0_0)
+Module: fusion_mul16_v2_product_pipe_1_1_0_0_0_0, Ports: 599, Input: 267, Output: 332, Inout: 0
+Module: fusion_mul16_v2_product_pipe_1_1_0_0_0_0, Registers: 1565, Async set/reset: 1565, Sync set/reset: 0
+Information: Module fusion_mul16_v2_product_pipe_1_1_0_0_0_0 report end. (ELAB-965)
+Information: Building the design 'fusion_mul16_v2_int_accum' instantiated from design 'fusion_mul16_v2_cluster_FIXED_MODEn1_SUPPORT_FP81_SUPPORT_BF161_SUPPORT_I4_FP80_SUPPORT_I4_BF160_SUPPORT_I8_BF160_SUPPORT_SPECIALS0' with
+	the parameters "ACC_W=48". (HDL-193)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_int_accum.sv:25: signed to unsigned conversion occurs. (VER-318)
+
+Inferred memory devices in process in routine 'fusion_mul16_v2_int_accum_ACC_W48' in file
+	 <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_int_accum.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|      acc_o_reg      | Flip-flop |  192  |  Y  | N  | None  | Async | N  |  13  |
+|     valid_o_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  13  |
+==================================================================================
+Presto compilation completed successfully. (fusion_mul16_v2_int_accum_ACC_W48)
+Module: fusion_mul16_v2_int_accum_ACC_W48, Ports: 269, Input: 76, Output: 193, Inout: 0
+Module: fusion_mul16_v2_int_accum_ACC_W48, Registers: 193, Async set/reset: 193, Sync set/reset: 0
+Information: Module fusion_mul16_v2_int_accum_ACC_W48 report end. (ELAB-965)
+Information: Building the design 'fusion_mul16_v2_bf16_accum_dw'. (HDL-193)
+
+Inferred memory devices in process in routine 'fusion_mul16_v2_bf16_accum_dw' in file
+	 <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_bf16_accum_dw.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|    status_q1_reg    | Flip-flop |  32   |  Y  | N  | None  | Async | N  |  55  |
+|    valid_q1_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  55  |
+|    valid_q2_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  55  |
+|     valid_o_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  55  |
+|    clear_q1_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  55  |
+|    clear_q2_reg     | Flip-flop |   1   |  N  | N  | None  | Async | N  |  55  |
+|    status_q2_reg    | Flip-flop |  32   |  Y  | N  | None  | Async | N  |  55  |
+|    status_o_reg     | Flip-flop |  32   |  Y  | N  | None  | Async | N  |  55  |
+|    pair01_q_reg     | Flip-flop |  64   |  Y  | N  | None  | Async | N  |  55  |
+|    pair23_q_reg     | Flip-flop |  64   |  Y  | N  | None  | Async | N  |  55  |
+|   lane_sum_q_reg    | Flip-flop |  64   |  Y  | N  | None  | Async | N  |  55  |
+|      acc_o_reg      | Flip-flop |  64   |  Y  | N  | None  | Async | N  |  55  |
+==================================================================================
+Presto compilation completed successfully. (fusion_mul16_v2_bf16_accum_dw)
+Module: fusion_mul16_v2_bf16_accum_dw, Ports: 360, Input: 263, Output: 97, Inout: 0
+Module: fusion_mul16_v2_bf16_accum_dw, Registers: 357, Async set/reset: 357, Sync set/reset: 0
+Information: Module fusion_mul16_v2_bf16_accum_dw report end. (ELAB-965)
+Information: Building the design 'mul4x4_brick'. (HDL-193)
+Presto compilation completed successfully. (mul4x4_brick)
+Module: mul4x4_brick, Ports: 16, Input: 8, Output: 8, Inout: 0
+Module: mul4x4_brick, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module mul4x4_brick report end. (ELAB-965)
+Information: Building the design 'raw16_to_bf16_rne' instantiated from design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0' with
+	the parameters "SUPPORT_SPECIALS=1'h0". (HDL-193)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/raw16_to_bf16_rne.sv:82: signed to unsigned part selection occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/raw16_to_bf16_rne.sv:45: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/raw16_to_bf16_rne.sv:47: Statement unreachable (Branch condition impossible to meet).  (VER-61)
+Presto compilation completed successfully. (raw16_to_bf16_rne_0)
+Module: raw16_to_bf16_rne_0, Ports: 47, Input: 31, Output: 16, Inout: 0
+Module: raw16_to_bf16_rne_0, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module raw16_to_bf16_rne_0 report end. (ELAB-965)
+Current design is 'char_top'.
+
+  Linking design 'char_top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (8 designs)               <FUSION_MUL16_V2_ROOT>/build_dc_1ghz/V2_SHARED_BASE4_FTZ/char_top.db, etc
+  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c (library) <LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
+  dw_foundation.sldb (library) <LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb
+
+Information: Summary of messages issued during linking: (LINK-1806)
+No messages were issued during linking.
+Information: Uniquified 16 instances of design 'mul4x4_brick'. (OPT-1056)
+Information: Uniquified 16 instances of design 'raw16_to_bf16_rne_0'. (OPT-1056)
+ 
+****************************************
+check_design summary:
+Version:     X-2025.06-SP3
+Date:        Wed Sep  2 15:30:22 2026
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Inputs/Outputs                                                     48
+    Unconnected ports (LINT-28)                                    32
+    Feedthrough (LINT-29)                                          16
+
+Cells                                                             129
+    Cells do not drive (LINT-1)                                   129
+--------------------------------------------------------------------------------
+
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6948' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6951' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6956' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6959' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6964' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6967' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6972' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6975' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6980' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6983' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6988' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6991' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6996' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C6999' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7004' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7007' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7011' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7012' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7015' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7016' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7018' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7019' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7022' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7023' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7030' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7035' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7042' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7047' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7054' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7059' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7066' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7071' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7078' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7083' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7091' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7096' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7103' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7108' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7116' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7121' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7128' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7133' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7141' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7146' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7154' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7159' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7167' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7172' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7180' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7185' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7193' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7198' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7206' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7211' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7219' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7224' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7234' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7240' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7254' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7260' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7274' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7280' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7294' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7300' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7317' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7321' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7336' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7340' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7344' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7348' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7352' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7356' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7360' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7364' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7369' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7373' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7377' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7381' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7387' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_product_pipe_1_1_0_0_0_0', cell 'C7394' does not drive any nets. (LINT-1)
+Warning: In design 'fusion_mul16_v2_int_accum_ACC_W48', cell 'C871' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_15', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_15', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_15', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_0', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_0', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_0', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_1', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_1', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_1', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_2', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_2', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_2', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_3', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_3', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_3', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_4', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_4', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_4', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_5', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_5', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_5', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_6', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_6', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_6', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_7', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_7', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_7', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_8', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_8', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_8', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_9', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_9', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_9', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_10', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_10', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_10', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_11', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_11', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_11', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_12', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_12', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_12', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_13', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_13', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_13', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_14', cell 'C898' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_14', cell 'C899' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_14', cell 'C902' does not drive any nets. (LINT-1)
+Warning: In design 'raw16_to_bf16_rne_0_15', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_15', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_0', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_0', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_1', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_1', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_2', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_2', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_3', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_3', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_4', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_4', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_5', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_5', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_6', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_6', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_7', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_7', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_8', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_8', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_9', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_9', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_10', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_10', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_11', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_11', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_12', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_12', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_13', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_13', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_14', port 'inf_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_14', port 'nan_i' is not connected to any nets. (LINT-28)
+Warning: In design 'raw16_to_bf16_rne_0_15', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_0', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_1', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_2', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_3', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_4', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_5', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_6', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_7', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_8', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_9', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_10', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_11', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_12', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_13', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+Warning: In design 'raw16_to_bf16_rne_0_14', input port 'sign_i' is connected directly to output port 'bf16_o[15]'. (LINT-29)
+1

@@ -1,0 +1,58 @@
+Running PRESTO HDLC
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:1: The package fusion_mul16_v2_pkg has already been analyzed. It is being replaced. (VER-26)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:42: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:43: signed to unsigned assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:50: unsigned to signed assignment occurs. (VER-318)
+Warning:  <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_pkg.sv:51: signed to unsigned assignment occurs. (VER-318)
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_config.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/mul4x4_brick.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/raw16_to_bf16_rne.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fp8_to_bf16_exact.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_product_pipe.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_int_accum.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_bf16_accum_dw.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_cluster.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_fp8_widen_bf16_top.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/rtl/fusion_mul16_v2_separate_full_top.sv
+Compiling source file <FUSION_MUL16_V2_ROOT>/build_dc_1ghz/V2_BRICK16_BARE_PROOF/char_top.sv
+Presto compilation completed successfully.
+Loading db file '<LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/gtech.db'
+Loading db file '<LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/standard.sldb'
+  Loading link library 'sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+
+Inferred memory devices in process in routine 'char_top' in file
+	 <FUSION_MUL16_V2_ROOT>/build_dc_1ghz/V2_BRICK16_BARE_PROOF/char_top.sv'.
+==================================================================================
+|    Register Name    |   Type    | Width | Bus | MB |  Set  | Reset | ST | Line |
+==================================================================================
+|       p_o_reg       | Flip-flop |  128  |  Y  | N  | None  | Async | N  |  17  |
+==================================================================================
+Presto compilation completed successfully. (char_top)
+Module: char_top, Ports: 258, Input: 130, Output: 128, Inout: 0
+Module: char_top, Registers: 128, Async set/reset: 128, Sync set/reset: 0
+Information: Module char_top report end. (ELAB-965)
+Elaborated 1 design.
+Current design is now 'char_top'.
+Information: Building the design 'mul4x4_brick'. (HDL-193)
+Presto compilation completed successfully. (mul4x4_brick)
+Module: mul4x4_brick, Ports: 16, Input: 8, Output: 8, Inout: 0
+Module: mul4x4_brick, Registers: 0, Async set/reset: 0, Sync set/reset: 0
+Information: Module mul4x4_brick report end. (ELAB-965)
+Current design is 'char_top'.
+
+  Linking design 'char_top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (2 designs)               <FUSION_MUL16_V2_ROOT>/build_dc_1ghz/V2_BRICK16_BARE_PROOF/char_top.db, etc
+  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c (library) <LOCAL_HOME><CLN22UL_ROOT>/sc6p5mcpp140z_base_svt_c35/r3p0/db/sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c.db
+  dw_foundation.sldb (library) <LOCAL_HOME>/tools/synopsys/syn/X-2025.06-SP3/libraries/syn/dw_foundation.sldb
+
+Information: Summary of messages issued during linking: (LINK-1806)
+No messages were issued during linking.
+Information: Uniquified 16 instances of design 'mul4x4_brick'. (OPT-1056)
+1
