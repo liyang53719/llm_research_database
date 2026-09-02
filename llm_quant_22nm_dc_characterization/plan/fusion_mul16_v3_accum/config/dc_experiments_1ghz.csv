@@ -1,0 +1,13 @@
+﻿group_id,scope,accum_style,fixed_mode,support_fp8,support_bf16,support_i4_fp8,support_i4_bf16,support_i8_bf16,support_specials,top_kind,constraint_profile,expected_fp_add_bf16,expected_fp_add_fp32,notes
+V3_ACC_FULL_BF16,accumulator_only,0,-1,1,1,1,1,1,0,accum_full_bf16,single_cycle,16,0,Current v2 all-BF16 accumulation baseline
+V3_ACC_TREE_FP32_REC,accumulator_only,1,-1,1,1,1,1,1,0,accum_fp32_recurrent,single_cycle,12,4,BF16 pair/lane tree plus four FP32 recurrent accumulators
+V3_ACC_BLOCK64_FP32_CKPT,accumulator_only,2,-1,1,1,1,1,1,0,accum_block64,checkpoint_mc2,16,4,BF16 partial sum over 64 products plus four FP32 checkpoint accumulators
+V3_CLUSTER_FULL_BF16_FULL7,full_cluster,0,-1,1,1,1,1,1,0,cluster_dynamic,single_cycle,16,0,Full seven-mode cluster with current all-BF16 accumulation
+V3_CLUSTER_TREE_FP32_REC_FULL7,full_cluster,1,-1,1,1,1,1,1,0,cluster_dynamic,single_cycle,12,4,Full seven-mode cluster with FP32 recurrent accumulation
+V3_CLUSTER_BLOCK64_FP32_CKPT_FULL7,full_cluster,2,-1,1,1,1,1,1,0,cluster_dynamic,checkpoint_mc2,16,4,Full seven-mode cluster with Kblock64 checkpoint accumulation
+V3_FP8_FULL_BF16_FIXED,fixed_fp8,0,2,1,0,0,0,0,0,cluster_fixed,single_cycle,16,0,FP8 fixed mode all-BF16 accumulation
+V3_FP8_TREE_FP32_REC_FIXED,fixed_fp8,1,2,1,0,0,0,0,0,cluster_fixed,single_cycle,12,4,FP8 fixed mode FP32 recurrent accumulation
+V3_FP8_BLOCK64_FP32_CKPT_FIXED,fixed_fp8,2,2,1,0,0,0,0,0,cluster_fixed,checkpoint_mc2,16,4,FP8 fixed mode block64 checkpoint accumulation
+V3_BF16_FULL_BF16_FIXED,fixed_bf16,0,3,0,1,0,0,0,0,cluster_fixed,single_cycle,16,0,BF16 fixed mode all-BF16 accumulation
+V3_BF16_TREE_FP32_REC_FIXED,fixed_bf16,1,3,0,1,0,0,0,0,cluster_fixed,single_cycle,12,4,BF16 fixed mode FP32 recurrent accumulation
+V3_BF16_BLOCK64_FP32_CKPT_FIXED,fixed_bf16,2,3,0,1,0,0,0,0,cluster_fixed,checkpoint_mc2,16,4,BF16 fixed mode block64 checkpoint accumulation

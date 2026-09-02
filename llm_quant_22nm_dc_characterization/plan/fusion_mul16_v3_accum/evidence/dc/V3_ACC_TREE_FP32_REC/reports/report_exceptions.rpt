@@ -1,0 +1,167 @@
+FusionMul16 v3 timing-exception evidence
+dc_command=report_exceptions (unsupported in this DC release)
+supported_constraint_report_begin
+ 
+****************************************
+Report : constraint
+        -verbose
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Wed Sep  2 20:45:10 2026
+****************************************
+
+
+  Startpoint: lane_item_packed_i[217]
+              (input port clocked by clk)
+  Endpoint: u_dut/u_tree/pair01_q_reg[3][15]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                                                  Incr       Path
+  -----------------------------------------------------------------------------------------
+  clock clk (rise edge)                                                  0.00       0.00
+  clock network delay (ideal)                                            0.00       0.00
+  input external delay                                                   0.10       0.10 r
+  lane_item_packed_i[217] (in)                                           0.00       0.10 r
+  U2196/Y (INV_X2M_A6P5PP140ZTS_C35)                                     0.01       0.11 f
+  U2110/Y (NOR2_X3A_A6P5PP140ZTS_C35)                                    0.02       0.13 r
+  U8674/Y (OAI22_X1M_A6P5PP140ZTS_C35)                                   0.02       0.15 f
+  U8672/Y (NAND2_X1M_A6P5PP140ZTS_C35)                                   0.02       0.17 r
+  U8669/Y (NAND2_X2M_A6P5PP140ZTS_C35)                                   0.01       0.19 f
+  U8703/Y (AOI21_X3M_A6P5PP140ZTS_C35)                                   0.02       0.21 r
+  U7092/Y (NAND2_X8M_A6P5PP140ZTS_C35)                                   0.03       0.24 f
+  U3455/Y (INV_X14M_A6P5PP140ZTS_C35)                                    0.02       0.25 r
+  U7777/Y (MXIT2_X3M_A6P5PP140ZTS_C35)                                   0.02       0.28 r
+  U8678/Y (OAI21_X2M_A6P5PP140ZTS_C35)                                   0.02       0.30 f
+  U13078/Y (MXIT2_X1M_A6P5PP140ZTS_C35)                                  0.03       0.33 r
+  U8684/Y (OAI21_X2M_A6P5PP140ZTS_C35)                                   0.02       0.35 f
+  U8682/Y (AOI22_X2M_A6P5PP140ZTS_C35)                                   0.03       0.38 r
+  U4115/Y (XNOR2_X1M_A6P5PP140ZTS_C35)                                   0.03       0.41 f
+  U13082/Y (OR2_X1M_A6P5PP140ZTS_C35)                                    0.04       0.46 f
+  U1021/Y (NAND2_X2M_A6P5PP140ZTS_C35)                                   0.02       0.47 r
+  U4093/Y (OAI211_X3M_A6P5PP140ZTS_C35)                                  0.03       0.50 f
+  U3434/Y (AOI21_X6M_A6P5PP140ZTS_C35)                                   0.03       0.53 r
+  U943/Y (OAI21_X2M_A6P5PP140ZTS_C35)                                    0.02       0.55 f
+  U8819/Y (XNOR2_X4M_A6P5PP140ZTS_C35)                                   0.03       0.58 f
+  U3458/Y (NOR2_X1A_A6P5PP140ZTS_C35)                                    0.03       0.61 r
+  U2875/Y (AOI22_X3M_A6P5PP140ZTS_C35)                                   0.02       0.63 f
+  U6756/Y (NAND3_X2M_A6P5PP140ZTS_C35)                                   0.03       0.66 r
+  U4091/Y (AOI21_X3M_A6P5PP140ZTS_C35)                                   0.02       0.68 f
+  U4090/Y (XNOR2_X3M_A6P5PP140ZTS_C35)                                   0.03       0.71 f
+  U7916/Y (NOR2_X3TA_A6P5PP140ZTS_C35)                                   0.02       0.74 r
+  U2856/Y (AOI2XB1_X2M_A6P5PP140ZTS_C35)                                 0.03       0.77 r
+  U8814/Y (XNOR2_X0P5M_A6P5PP140ZTS_C35)                                 0.04       0.80 r
+  U2906/Y (NAND2_X1P4TA_A6P5PP140ZTS_C35)                                0.02       0.82 f
+  U4915/Y (NOR2_X3A_A6P5PP140ZTS_C35)                                    0.02       0.84 r
+  U4914/Y (NAND3_X4TA_A6P5PP140ZTS_C35)                                  0.02       0.87 f
+  U320/Y (NAND2_X2A_A6P5PP140ZTS_C35)                                    0.01       0.88 r
+  U262/Y (NAND2_X1P4TA_A6P5PP140ZTS_C35)                                 0.01       0.89 f
+  U257/Y (AO21A1AI2_X1M_A6P5PP140ZTS_C35)                                0.02       0.91 r
+  u_dut/u_tree/pair01_q_reg[3][15]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)      0.00       0.91 r
+  data arrival time                                                                 0.91
+
+  clock clk (rise edge)                                                  1.00       1.00
+  clock network delay (ideal)                                            0.00       1.00
+  clock uncertainty                                                     -0.05       0.95
+  u_dut/u_tree/pair01_q_reg[3][15]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)     0.00       0.95 r
+  library setup time                                                    -0.04       0.91
+  data required time                                                                0.91
+  -----------------------------------------------------------------------------------------
+  data required time                                                                0.91
+  data arrival time                                                                -0.91
+  -----------------------------------------------------------------------------------------
+  slack (MET)                                                                       0.00
+
+
+  Startpoint: u_dut/u_tree/clear_q1_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_dut/u_tree/clear_o_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                                            Incr       Path
+  -----------------------------------------------------------------------------------
+  clock clk (rise edge)                                            0.00       0.00
+  clock network delay (ideal)                                      0.00       0.00
+  u_dut/u_tree/clear_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)      0.00       0.00 r
+  u_dut/u_tree/clear_q1_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)       0.05       0.05 r
+  u_dut/u_tree/clear_o_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)        0.00       0.05 r
+  data arrival time                                                           0.05
+
+  clock clk (rise edge)                                            0.00       0.00
+  clock network delay (ideal)                                      0.00       0.00
+  clock uncertainty                                                0.05       0.05
+  u_dut/u_tree/clear_o_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)       0.00       0.05 r
+  library hold time                                                0.00       0.05
+  data required time                                                          0.05
+  -----------------------------------------------------------------------------------
+  data required time                                                          0.05
+  data arrival time                                                          -0.05
+  -----------------------------------------------------------------------------------
+  slack (MET)                                                                 0.00
+
+
+    Net: n17306
+
+    max_transition         0.20
+  - Transition Time        0.20
+  ------------------------------
+    Slack                  0.00  (MET)
+
+
+    Net: u_dut/u_tree/G_TREE[3].u_pair01/U1/num_zeros_path1[2]
+
+    max_capacitance        0.04
+  - Capacitance            0.00
+  ------------------------------
+    Slack                  0.03  (MET)
+
+
+    Net: n3643
+
+    Capacitance            0.00
+  - min_capacitance        0.00
+  ------------------------------
+    Slack                  0.00  (MET)
+
+
+    Design: char_top
+
+    max_area               0.00
+  - Current Area        8864.67
+  ------------------------------
+    Slack              -8864.67  (VIOLATED)
+
+
+    Design: char_top
+
+    max_leakage_power          0.00
+  - Current Leakage Power     11.08
+  ----------------------------------
+    Slack                    -11.08  (VIOLATED)
+
+
+Min pulse width constraints
+
+                       Required      Actual
+  Pin                pulse width   pulse width   Slack           Scenario
+--------------------------------------------------------------------------------
+  u_dut/u_tree/pair23_q_reg[3][15]/CK(low)
+                      0.06          0.45          0.39 (MET)
+
+1
+
+supported_constraint_report_end
+checkpoint_path_report_begin
+checkpoint_endpoint_cells_missing=1
+checkpoint_path_report_end

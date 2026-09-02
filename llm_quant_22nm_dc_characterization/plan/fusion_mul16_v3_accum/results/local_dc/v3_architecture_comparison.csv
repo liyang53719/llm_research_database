@@ -1,0 +1,4 @@
+﻿accum_style,full_cluster_group,area_1ghz_um2,wns_1ghz_ns,timing_met_1ghz,synthetic_gate_pass,fp8_k4096_nrmse_pct,fp8_k4096_p99_pct,bf16_k4096_nrmse_pct,bf16_k4096_p99_pct,multicycle_applied,pareto_eligible_synthetic,latency_and_ii,target_model_accuracy
+full_bf16,V3_CLUSTER_FULL_BF16_FULL7,11781.133,1.92523e-05,1,0,4.325051231589395,38.53416804464941,7.520671217181814,38.752231557627965,0,0,BF16 tree 2 stages + BF16 recurrent update; II=1,OPEN
+bf16_tree_fp32_recurrent,V3_CLUSTER_TREE_FP32_REC_FULL7,14043.211,7.98702e-06,1,1,0.23539996212345055,3.1785046096048877,0.17992304600930645,2.0654457560995465,0,1,BF16 tree 2 stages + FP32 recurrent update; II=1 only if recurrence closes,OPEN
+bf16_block64_fp32_checkpoint,V3_CLUSTER_BLOCK64_FP32_CKPT_FULL7,14869.491,2.68221e-06,1,1,0.5793472484639987,7.257771765674794,1.0490328611723183,13.995045547992913,1,1,BF16 tree + BF16 partial; FP32 checkpoint uses 2-cycle multicycle path; stream II=1,OPEN

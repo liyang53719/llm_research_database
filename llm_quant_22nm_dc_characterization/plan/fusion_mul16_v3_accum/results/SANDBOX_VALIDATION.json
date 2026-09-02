@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "python_files_compiled": 16,
+  "unit_tests": 20,
+  "unit_test_failures": 0,
+  "rtl_files_static_checked_by_tests": 7,
+  "numeric_error_rows": 54,
+  "vcs_cases_generated": 15,
+  "dc_groups_1ghz": 12,
+  "dc_runs_1ghz": 12,
+  "synthetic_numeric_gates": [
+    {
+      "accum_style": "bf16_block64_fp32_checkpoint",
+      "synthetic_gate_pass": "1",
+      "failure_count": "0",
+      "failures": "",
+      "gate_scope": "K=4096 synthetic proxy only; not target-model accuracy"
+    },
+    {
+      "accum_style": "bf16_tree_fp32_recurrent",
+      "synthetic_gate_pass": "1",
+      "failure_count": "0",
+      "failures": "",
+      "gate_scope": "K=4096 synthetic proxy only; not target-model accuracy"
+    },
+    {
+      "accum_style": "full_bf16",
+      "synthetic_gate_pass": "0",
+      "failure_count": "6",
+      "failures": "fp8_proxy/gaussian nrmse=4.325 p99=38.534; fp8_proxy/positive nrmse=34.142; fp8_proxy/outlier nrmse=3.873; bf16/gaussian nrmse=7.521 p99=38.752; bf16/positive nrmse=58.622; bf16/outlier nrmse=6.038",
+      "gate_scope": "K=4096 synthetic proxy only; not target-model accuracy"
+    }
+  ],
+  "vcs_execution_in_sandbox": "NOT_AVAILABLE",
+  "dc_execution_in_sandbox": "NOT_AVAILABLE",
+  "key_hashes": {
+    "accum_error_comparison.csv": "4cd69b40d73a22e7a00dd5e7c5778fc24549bd6ee006c5bd9276d1936fbfc340",
+    "vcs_manifest.csv": "8e083af0064bb34b3bb931152bf3cf11a01c86350316e03fc4cc91dea7b08880",
+    "dc_experiments_1ghz.csv": "b60989310ee841fd630229b19e94709ef78a2f7a0b2500fd47ca3197035952bb"
+  },
+  "commands": [
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 -m unittest discover -s tests -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_bf16_tree_order (test_accum_v3.AccumV3Tests.test_bf16_tree_order) ... ok\ntest_block64_flush_tail (test_accum_v3.AccumV3Tests.test_block64_flush_tail) ... ok\ntest_cycle_models_match_batch_functions (test_accum_v3.AccumV3Tests.test_cycle_models_match_batch_functions) ... ok\ntest_fp32_widen_is_exact (test_accum_v3.AccumV3Tests.test_fp32_widen_is_exact) ... ok\ntest_product_quantization_contract (test_accum_v3.AccumV3Tests.test_product_quantization_contract) ... ok\ntest_three_styles_known_sequence (test_accum_v3.AccumV3Tests.test_three_styles_known_sequence) ... ok\ntest_expected_group_count (test_dc_plan.DCPlanTests.test_expected_group_count) ... ok\ntest_multicycle_only_for_checkpoint (test_dc_plan.DCPlanTests.test_multicycle_only_for_checkpoint) ... ok\ntest_only_one_ghz (test_dc_plan.DCPlanTests.test_only_one_ghz) ... ok\ntest_three_accum_styles_covered (test_dc_plan.DCPlanTests.test_three_accum_styles_covered) ... ok\ntest_fp32_recurrent_tail_reduction (test_error_ordering.ErrorOrderingTests.test_fp32_recurrent_tail_reduction) ... ok\ntest_long_k_nrmse_ordering_bf16 (test_error_ordering.ErrorOrderingTests.test_long_k_nrmse_ordering_bf16) ... ok\ntest_long_k_nrmse_ordering_fp8 (test_error_ordering.ErrorOrderingTests.test_long_k_nrmse_ordering_fp8) ... ok\ntest_balanced_delimiters_and_modules (test_rtl_structure.RTLStructureTests.test_balanced_delimiters_and_modules) ... ok\ntest_block64_has_partial_and_checkpoint_adders (test_rtl_structure.RTLStructureTests.test_block64_has_partial_and_checkpoint_adders) ... ok\ntest_cluster_reuses_v2_product_pipe (test_rtl_structure.RTLStructureTests.test_cluster_reuses_v2_product_pipe) ... ok\ntest_common_tree_has_twelve_bf16_adders (test_rtl_structure.RTLStructureTests.test_common_tree_has_twelve_bf16_adders) ... ok\ntest_fp32_recurrent_has_four_fp32_adders (test_rtl_structure.RTLStructureTests.test_fp32_recurrent_has_four_fp32_adders) ... ok\ntest_full_bf16_has_bf16_recurrent (test_rtl_structure.RTLStructureTests.test_full_bf16_has_bf16_recurrent) ... ok\ntest_no_multiplier_added_by_accumulators (test_rtl_structure.RTLStructureTests.test_no_multiplier_added_by_accumulators) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.194s\n\nOK\n"
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 model/accum_error_study.py --output results/accum_error_comparison.csv",
+      "returncode": 0,
+      "stdout": "wrote 54 rows to results/accum_error_comparison.csv\n",
+      "stderr": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/build_numeric_summary.py",
+      "returncode": 0,
+      "stdout": "wrote <V3_ROOT>/results/gaussian_numeric_summary.csv and <V3_ROOT>/results/synthetic_numeric_gate.csv\n",
+      "stderr": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/gen_vcs_vectors.py",
+      "returncode": 0,
+      "stdout": "wrote 15 VCS cases to <V3_ROOT>/results/vcs_vectors\n",
+      "stderr": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/plot_numeric_results.py",
+      "returncode": 0,
+      "stdout": "numeric plots generated\n",
+      "stderr": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/gen_dc_runs.py --v2-root <LOCAL_PATH> --build-dir <LOCAL_PATH>",
+      "returncode": 0,
+      "stdout": "generated 12 one-GHz DC runs in <LOCAL_PATH>",
+      "stderr": ""
+    }
+  ]
+}

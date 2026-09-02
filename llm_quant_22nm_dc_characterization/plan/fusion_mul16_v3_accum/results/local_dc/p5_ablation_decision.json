@@ -1,0 +1,76 @@
+{
+  "stage": "P5",
+  "status": "PROVISIONAL_SYNTHETIC_SELECTION",
+  "selected_style": "bf16_tree_fp32_recurrent",
+  "selected_group": "V3_CLUSTER_TREE_FP32_REC_FULL7",
+  "selection_rule": "minimum full-cluster mapped-cell area among 1 GHz timing-closed and synthetic-gate-passing candidates",
+  "baseline_tolerance_pct": 5.0,
+  "target_model_accuracy": "OPEN",
+  "rows": [
+    {
+      "p5_case": "v2_accum_full_bf16_baseline",
+      "kind": "v2_baseline",
+      "style": "full_bf16",
+      "group_id": "V2_BF16_ACCUM_ONLY",
+      "area_1ghz_um2": 6270.992,
+      "measured_v3_area_um2": 6118.749,
+      "delta_vs_v2_pct": -2.427733921523112,
+      "timing_met_1ghz": "NA",
+      "synthetic_gate_pass": "NA",
+      "eligible": 0,
+      "note": "v2 reference; reproduction checked against v3 accumulator-only"
+    },
+    {
+      "p5_case": "v2_cluster_full7_baseline",
+      "kind": "v2_baseline",
+      "style": "full_bf16",
+      "group_id": "V2_SHARED_FULL7_FTZ",
+      "area_1ghz_um2": 11995.438,
+      "measured_v3_area_um2": 11781.133,
+      "delta_vs_v2_pct": -1.7865541883506086,
+      "timing_met_1ghz": "NA",
+      "synthetic_gate_pass": "NA",
+      "eligible": 0,
+      "note": "v2 reference; reproduction checked against v3 full cluster"
+    },
+    {
+      "p5_case": "v3_full_bf16_full_cluster",
+      "kind": "v3_candidate",
+      "style": "full_bf16",
+      "group_id": "V3_CLUSTER_FULL_BF16_FULL7",
+      "area_1ghz_um2": 11781.133,
+      "measured_v3_area_um2": 11781.133,
+      "delta_vs_v2_pct": null,
+      "timing_met_1ghz": 1,
+      "synthetic_gate_pass": 0,
+      "eligible": 0,
+      "note": "target-model accuracy remains OPEN"
+    },
+    {
+      "p5_case": "v3_bf16_tree_fp32_recurrent_full_cluster",
+      "kind": "v3_candidate",
+      "style": "bf16_tree_fp32_recurrent",
+      "group_id": "V3_CLUSTER_TREE_FP32_REC_FULL7",
+      "area_1ghz_um2": 14043.211,
+      "measured_v3_area_um2": 14043.211,
+      "delta_vs_v2_pct": null,
+      "timing_met_1ghz": 1,
+      "synthetic_gate_pass": 1,
+      "eligible": 1,
+      "note": "target-model accuracy remains OPEN"
+    },
+    {
+      "p5_case": "v3_bf16_block64_fp32_checkpoint_full_cluster",
+      "kind": "v3_candidate",
+      "style": "bf16_block64_fp32_checkpoint",
+      "group_id": "V3_CLUSTER_BLOCK64_FP32_CKPT_FULL7",
+      "area_1ghz_um2": 14869.491,
+      "measured_v3_area_um2": 14869.491,
+      "delta_vs_v2_pct": null,
+      "timing_met_1ghz": 1,
+      "synthetic_gate_pass": 1,
+      "eligible": 1,
+      "note": "target-model accuracy remains OPEN"
+    }
+  ]
+}
