@@ -1,0 +1,47 @@
+{
+  "project": "FusionMul16 v2 1GHz optimization",
+  "base_commit": "e6d376784b3697f23a68127348460f8d203c9351",
+  "clock_period_ns": 1.0,
+  "library_set_id": "cln22ul_sc6p5mcpp140z_base_svt_c35_r3p0_tt_0p80v_25c",
+  "pvt": "TT typical_max, 0.80 V, 25 C",
+  "compile_mode": "compile_ultra",
+  "expected_runs": 21,
+  "v1_reference": {
+    "shared_full_area_1ghz_um2": 23201.815,
+    "shared_full_wns_1ghz_ns": -0.100014,
+    "separate_full_area_1ghz_um2": 27912.885,
+    "separate_full_wns_1ghz_ns": -0.0086357
+  },
+  "hard_goal": {
+    "group_id": "V2_SHARED_FULL7_FTZ",
+    "timing_met_1ghz": true,
+    "blackbox_count": 0,
+    "brick_count": 16,
+    "additional_multiplier_operations": 0,
+    "required_timing_groups": [
+      "V2_CORE_FULL7_FTZ",
+      "V2_SHARED_FULL7_FTZ",
+      "V2_SEPARATE_FULL_FTZ",
+      "V2_FP8_NATIVE_BF16ACC_FIXED",
+      "V2_BF16_ONLY_BF16ACC_FIXED",
+      "V2_INT_I4I8_FIXED",
+      "V2_INT_I8I8_FIXED"
+    ],
+    "bf16_add_width": {
+      "sig_width": 7,
+      "exp_width": 8
+    },
+    "forbidden_modes": [
+      "I4_I4",
+      "I16_I16",
+      "I8_FP8"
+    ]
+  },
+  "notes": [
+    "Only 1.0 ns is characterized in v2.",
+    "Mode is a tile-level configuration loaded before data, not a per-cycle data input.",
+    "FP products and reduction/accumulation use BF16; no FP32 product register or FP32 adder tree is allowed.",
+    "I4I4, I16I16 and I8FP8 are removed from the default mode set.",
+    "Floating subnormal output is FTZ in the low-area default; special-value support is measured as an ablation."
+  ]
+}

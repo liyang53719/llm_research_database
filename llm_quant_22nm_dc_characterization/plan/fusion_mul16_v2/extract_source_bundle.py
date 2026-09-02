@@ -28,5 +28,5 @@ with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:gz") as archive:
         target = (root / member.name).resolve()
         if root.resolve() not in target.parents and target != root.resolve():
             raise SystemExit(f"Unsafe archive path: {member.name}")
-    archive.extractall(root)
+    archive.extractall(root, filter="data")
 print(f"FusionMul16 v2 extracted; archive SHA256={archive_sha}")

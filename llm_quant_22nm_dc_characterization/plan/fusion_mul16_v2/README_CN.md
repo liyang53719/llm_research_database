@@ -15,19 +15,21 @@
 
 默认支持七种模式：I4×I8、I8×I8、FP8×FP8、BF16×BF16、I4×FP8、I4×BF16、I8×BF16。
 
-沙箱结果：20/20 tests PASS；3584 个向量；向量 SHA-256 `2e83dec633b8b68125f80bcd93408caa7513e0ecdc7c77f4eefbfbcf16497a69`。
+沙箱结果：20/20 tests PASS；3584 个向量；bundle v2 SHA-256 `caf9a13d4bb2e1f58da214276eccf32e1c21cbfbb51788f82f4b25fafb144b65`。
 
 完整源码、测试、脚本和文档位于校验分片包。先执行：
 
 ```bash
 python3 extract_source_bundle.py
-python3 scripts/run_sandbox_validation.py
-python3 scripts/gen_vcs_vectors.py --per-mode 512
 python3 scripts/run_vcs_crosscheck.py --per-mode 512
 python3 scripts/gen_dc_runs.py
-python3 scripts/run_dc.py --lib-setup ../config/library_setup.local.tcl --jobs 1
+bash scripts/run_local_capped.sh /path/to/library_setup.local.tcl
 python3 scripts/collect_dc_results.py
 python3 scripts/validate_dc_results.py
 ```
 
-DC 只运行 1.000 ns。`V2_SHARED_FULL7_FTZ` 与 `V2_SEPARATE_FULL_FTZ` 必须同时过时序，且 Shared 面积更小，才允许 `architecture_accept=true`。
+本机执行约束固定为 CPU 8-23、单 DC run、最多两个 DC 执行核，并通过 cgroup 设置 `MemoryHigh=36G`、`MemoryMax=40G`、`MemorySwapMax=0`。DC 只运行 1.000 ns。
+
+本次本地实测：20/20 Python tests PASS；3584 VCS product vectors 与 config protocol PASS；21/21 DC runs 完成且 `ERRORS=NONE`。Shared full 面积 11995.438 µm²、WNS +0.000069 ns；Separate full 面积 14214.291 µm²、WNS +0.000019 ns；`architecture_accept=true`。
+
+完整结果见 `results/local_dc/LOCAL_EXECUTION_REPORT.md`，脱敏 DC 证据见 `evidence/runs/`。
