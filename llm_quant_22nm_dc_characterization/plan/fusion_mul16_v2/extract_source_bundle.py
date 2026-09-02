@@ -12,9 +12,10 @@ manifest = json.loads((bundle_dir / "manifest.json").read_text(encoding="utf-8")
 chunks = sorted(bundle_dir.glob("chunk_*.b64"))
 if len(chunks) != manifest["chunk_count"]:
     raise SystemExit(f"Expected {manifest['chunk_count']} chunks, found {len(chunks)}")
-encoded = "".join(path.read_text(encoding="ascii").strip() for path in chunks)
+# Whitespace is ignored so Git-hosted chunks may be line wrapped safely.
+encoded = "".join("".join(path.read_text(encoding="ascii").split()) for path in chunks)
 if len(encoded) != manifest["base64_chars"]:
-    raise SystemExit("Base64 length mismatch")
+    raise SystemExit(f"Base64 length mismatch: expected {manifest['base64_chars']}, got {len(encoded)}")
 base64_sha = hashlib.sha256(encoded.encode("ascii")).hexdigest()
 if base64_sha != manifest["base64_sha256"]:
     raise SystemExit(f"Base64 SHA mismatch: {base64_sha}")
