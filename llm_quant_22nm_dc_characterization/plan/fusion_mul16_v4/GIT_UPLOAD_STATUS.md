@@ -10,3 +10,5 @@ path        llm_quant_22nm_dc_characterization/plan/fusion_mul16_v4/
 The target branch is based on the v3 commit. Local SSH git transport is used for the final commit and push. Before publishing, the bundle is rebuilt from the validated local sources and evidence with local absolute paths, hostname, proprietary `.db/.lib/.sldb`, DDC, generated netlists and raw DC logs excluded or sanitized.
 
 The public bundle keeps the complete v4 RTL, scripts, verification vectors, summaries and sanitized DC reports. `V4_FINAL_DYNAMIC_FTZ` is the release inference profile; `V4_FINAL_DYNAMIC_IEEE` remains optional characterization data.
+
+The validated bundle has been pushed to branch `fusion-mul16-v4-final` under the target path.
