@@ -1,0 +1,24 @@
+﻿name,direction,width,clock_domain,function,protocol_notes
+clk,input,1,clk,Rising-edge clock,All synchronous state updates on rising edge
+rst_n,input,1,async,Active-low asynchronous reset,Resets configuration pipeline accumulators status and sidebands
+cfg_valid_i,input,1,clk,Configuration request,Accepted when cfg_ready_o=1; dynamic mode only
+cfg_mode_i,input,3,clk,Mode selector,0 I4I8;1 I8I8;2 FP8FP8;3 BF16BF16;4 I4FP8;5 I4BF16;6 I8BF16
+cfg_ready_o,output,1,clk,Configuration ready,High only when no accepted data/clear event is in flight
+cfg_error_o,output,1,clk,Configuration error pulse,Unsupported mode; in fixed-mode builds cfg_valid_i itself is an error
+valid_i,input,1,clk,Input data valid,Accepted only when in_ready_o=1 and clear_i=0 and a clear is not required
+in_ready_o,output,1,clk,Input/control ready,No downstream backpressure in arithmetic pipeline; deasserts for config priority/unconfigured state
+clear_i,input,1,clk,Standalone accumulator clear,Must be asserted with valid_i=0; required after configuration and after a last beat; data may follow on the next cycle
+last_i,input,1,clk,Last data beat marker,Valid only with valid_i=1; aligned to int_last_o or fp_last_o
+lhs_packed_i,input,128,clk,Packed left operands,Layout depends on active mode; unused bits shall be zero
+rhs_packed_i,input,128,clk,Packed right operands,Layout depends on active mode; unused bits shall be zero
+busy_o,output,1,clk,Pipeline occupancy,Indicates accepted data/clear events are still in the eight-cycle in-flight tracker; does not mean accumulator is nonzero
+protocol_error_o,output,1,clk,Protocol error pulse,valid+clear; last without valid; data before required clear; event during config/unready
+int_valid_o,output,1,clk,Integer accumulator update valid,Pulses for every accepted integer data beat after four registered stages
+int_last_o,output,1,clk,Integer final-result marker,Same cycle as int_valid_o for the input beat carrying last_i
+fp_valid_o,output,1,clk,FP32 accumulator update valid,Pulses for every accepted floating/mixed data beat after seven registered stages
+fp_last_o,output,1,clk,Floating final-result marker,Same cycle as fp_valid_o for the input beat carrying last_i
+clear_done_o,output,1,clk,Clear completion pulse,Uses the longer floating clear path; seven registered stages after accepted clear_i; informational and not a data-start barrier
+int_acc_o,output,4xINT_ACC_W,clk,Four signed integer accumulator states,Default width 48; two's-complement wrap on overflow
+fp_acc_o,output,4x32,clk,Four FP32 recurrent accumulator states,BF16 pair/lane reduction then exact BF16-to-FP32 widening and FP32 recurrent add
+fp_status_o,output,4x8,clk,Four accumulated DW status vectors,OR of BF16 tree and FP32 recurrent-add status for latest accepted update
+active_mode_o,output,3,clk,Current registered mode,Stable while accepted events are in flight

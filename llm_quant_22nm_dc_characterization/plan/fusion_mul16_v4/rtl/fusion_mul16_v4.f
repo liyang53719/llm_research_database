@@ -1,0 +1,10 @@
+fusion_mul16_v4_pkg.sv
+fusion_mul16_v4_mul4x4_brick.sv
+fusion_mul16_v4_raw16_to_bf16_rne.sv
+fusion_mul16_v4_config.sv
+fusion_mul16_v4_product_pipe.sv
+fusion_mul16_v4_int_accum.sv
+fusion_mul16_v4_bf16_tree_dw.sv
+fusion_mul16_v4_fp32_recurrent_accum_dw.sv
+fusion_mul16_v4.sv
+fusion_mul16_v4_flat.sv

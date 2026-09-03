@@ -1,0 +1,8 @@
+﻿mode,code,lhs_layout,rhs_layout,scalar_products_per_cycle,products_per_lane,lane_outputs_per_cycle,result_domain,unused_input_bits
+I4xI8,0,8 signed INT4 in lhs[31:0],8 signed INT8 in rhs[63:0],8,2,4,INT48,lhs[127:32] rhs[127:64]
+I8xI8,1,4 signed INT8 in lhs[31:0],4 signed INT8 in rhs[31:0],4,1,4,INT48,lhs[127:32] rhs[127:32]
+FP8xFP8,2,16 E4M3FN in lhs[127:0],16 E4M3FN in rhs[127:0],16,4,4,FP32,none
+BF16xBF16,3,4 BF16 in lhs[63:0],4 BF16 in rhs[63:0],4,1,4,FP32,lhs[127:64] rhs[127:64]
+I4xFP8,4,16 signed INT4 in lhs[63:0],16 E4M3FN in rhs[127:0],16,4,4,FP32,lhs[127:64]
+I4xBF16,5,8 signed INT4 in lhs[31:0],8 BF16 in rhs[127:0],8,2,4,FP32,lhs[127:32]
+I8xBF16,6,4 signed INT8 in lhs[31:0],4 BF16 in rhs[63:0],4,1,4,FP32,lhs[127:32] rhs[127:64]

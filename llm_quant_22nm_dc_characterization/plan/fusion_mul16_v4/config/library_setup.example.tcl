@@ -1,0 +1,13 @@
+# Copy to library_setup.local.tcl; never commit proprietary paths/libraries.
+set LIBRARY_SET_ID "cln22ul_sc6p5mcpp140z_base_svt_c35_r3p0_tt_0p80v_25c"
+set TARGET_LIBRARIES [list "/ABS/PATH/TO/CLN22UL_BASE_SVT_TT_0P80V_25C.db"]
+set ADDITIONAL_LINK_LIBS [list]
+set SEARCH_PATHS [list "/ABS/PATH/TO/CLN22UL/DB"]
+set OPERATING_CONDITION ""
+set INPUT_TRANSITION 0.05
+set OUTPUT_LOAD 0.005
+set MAX_TRANSITION 0.20
+set CLOCK_UNCERTAINTY_RATIO 0.05
+set INPUT_DELAY_RATIO 0.10
+set OUTPUT_DELAY_RATIO 0.10
+set COMPILE_MODE "ultra"

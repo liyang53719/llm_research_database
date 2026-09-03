@@ -1,0 +1,42 @@
+{
+  "name": "FusionMul16",
+  "version": "4.0.0-rc1",
+  "date": "2026-09-02",
+  "sources": {
+    "v2_commit": "041e6fc472422d57166f3489d3f62794c67fdea8",
+    "v3_commit": "fd43c01dc9ab9fd364c5c1e4c6d99f64970ac130",
+    "v2_product_pipe_blob": "3dc533b71a276a5a48343462fa20a9f507783b56",
+    "v2_pkg_blob": "6767f7956c925e1675ae068b97fc41204a362d2f",
+    "v2_brick_blob": "3b74094bd2940ad654e957b8aa878275488559f5",
+    "v2_normalizer_blob": "27f0317c655e4089df375ae3f3bba68e22a1cb25",
+    "v3_tree_blob": "98d81e429c7575cfa0fc3cfe5b686ab0b9952204",
+    "v3_fp32_recurrent_blob": "3f7f18b8d2f9e48e7388dbfbb2fc51c9827d56e9"
+  },
+  "local_source_sha256": {
+    "rtl/fusion_mul16_v4_pkg.sv": "4a324cd1e0838c0299f83b33384808a4f573cd15f5208d3754ec52a073e37f00",
+    "rtl/fusion_mul16_v4_mul4x4_brick.sv": "a357e9d1b763b081828b786b1896600f80181269d66be518d2897eb3f3fff2de",
+    "rtl/fusion_mul16_v4_raw16_to_bf16_rne.sv": "469839fe3893c91401b0012e4f9d1581d1fd1cf163f76fa439cfb630a275c60d",
+    "rtl/fusion_mul16_v4_product_pipe.sv": "6b6807f21f12b3e765b24d2f41d286560dd6683482bcfb95d21af405cd291ccf",
+    "rtl/fusion_mul16_v4_bf16_tree_dw.sv": "2bc56b3f617431927de52c9e23eef7c432823127418cf44bcadf811a4055d9fe",
+    "rtl/fusion_mul16_v4_fp32_recurrent_accum_dw.sv": "b681c69897208131c5681aac09cf43e62097f1d0eb237022f9868bc64abf740e"
+  },
+  "v4_contract": {
+    "product_pipe": "logic-preserving namespace copy of v2 blob 3dc533b71a276a5a48343462fa20a9f507783b56",
+    "accumulator": "v3 BF16 tree plus four FP32 recurrent adders with IEEE_COMPLIANCE parameter and clear_done sideband",
+    "release_profile": "SUPPORT_SPECIALS=0, IEEE_COMPLIANCE=0, RNE fixed",
+    "optional_profile": "SUPPORT_SPECIALS=1, IEEE_COMPLIANCE=1"
+  },
+  "current_rtl_sha256": {
+    "fusion_mul16_v4.f": "9931325cfd3efc92c071829c02bffe2d2497a7594519527046e2d46397e6c851",
+    "fusion_mul16_v4.sv": "1741144b2787ba8fda6f57971278eb5daa54766b0cb8beb1a5e5316861958f21",
+    "fusion_mul16_v4_bf16_tree_dw.sv": "3e7894c6da7d7f71aa5901928f696d76142e1e68d4084be5f8079eb8f2778db5",
+    "fusion_mul16_v4_config.sv": "dcc78730998b301772533ae1a1615d8b872c7ac35f52a13c1ea51adcba66f21e",
+    "fusion_mul16_v4_flat.sv": "726859241ac0e7d36b29c368f2d6ed71417a7edb837384ec6eb7d9656063f22f",
+    "fusion_mul16_v4_fp32_recurrent_accum_dw.sv": "c58e29e25abf85cc5805db50a0d8a135ae2c37e25086417b1b989ce90e5174cb",
+    "fusion_mul16_v4_int_accum.sv": "ef6e0e30c32f37009990ba290d3ca6c1e41791b253ddc71bb45ff7d2d3c612ae",
+    "fusion_mul16_v4_mul4x4_brick.sv": "a357e9d1b763b081828b786b1896600f80181269d66be518d2897eb3f3fff2de",
+    "fusion_mul16_v4_pkg.sv": "4a324cd1e0838c0299f83b33384808a4f573cd15f5208d3754ec52a073e37f00",
+    "fusion_mul16_v4_product_pipe.sv": "6b6807f21f12b3e765b24d2f41d286560dd6683482bcfb95d21af405cd291ccf",
+    "fusion_mul16_v4_raw16_to_bf16_rne.sv": "469839fe3893c91401b0012e4f9d1581d1fd1cf163f76fa439cfb630a275c60d"
+  }
+}

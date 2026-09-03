@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "pkg",
+      "status": "PASS",
+      "source_sha256": "845476149ffb73e3041465bb4d6c355208b743a491a18488254bde0786cc95ee",
+      "v4_sha256": "4a324cd1e0838c0299f83b33384808a4f573cd15f5208d3754ec52a073e37f00"
+    },
+    {
+      "name": "brick",
+      "status": "PASS",
+      "source_sha256": "aa5e6974e7369f5d2605265a6181700836dd185c3e2af32cecb331e77e43cfe5",
+      "v4_sha256": "a357e9d1b763b081828b786b1896600f80181269d66be518d2897eb3f3fff2de"
+    },
+    {
+      "name": "normalizer",
+      "status": "PASS",
+      "source_sha256": "90ae6791987ca2edec6d4180a6ad1e7f01947b141886ed8681f18c51c5065eff",
+      "v4_sha256": "469839fe3893c91401b0012e4f9d1581d1fd1cf163f76fa439cfb630a275c60d"
+    },
+    {
+      "name": "product_pipe",
+      "status": "PASS",
+      "source_sha256": "75f4d3fb140691251669ed7081eea9be1d4cb20e4b3171ac7b0d40726b58c7bc",
+      "v4_sha256": "df92eb7664c871f02a742cc7e939a2b1bdd24589c23ff7e166dbf4112eba573d"
+    }
+  ],
+  "derived_sources": [
+    {
+      "v4": "fusion_mul16_v4_bf16_tree_dw.sv",
+      "base": "fusion_mul16_v3_accum/rtl/fusion_mul16_v3_bf16_tree_dw.sv",
+      "changes": "namespace + IEEE_COMPLIANCE parameter only"
+    },
+    {
+      "v4": "fusion_mul16_v4_fp32_recurrent_accum_dw.sv",
+      "base": "fusion_mul16_v3_accum/rtl/fusion_mul16_v3_accum_fp32_recurrent_dw.sv",
+      "changes": "namespace + IEEE_COMPLIANCE parameter + clear_done output"
+    }
+  ]
+}

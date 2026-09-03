@@ -1,0 +1,12 @@
+flowchart LR
+  CFG[Config channel\nmode register + one-hot decode] --> ROUTE
+  IN[2 x 128-bit packed operands\nvalid / clear / last] --> ROUTE[S0 unpack and route]
+  ROUTE --> B[ S1: 16 x unsigned 4x4 bricks ]
+  B --> FUSE[S2: integer partial-product fusion\nor FP significand fusion]
+  FUSE -->|integer modes| IACC[4 x signed INT48 recurrent accumulators]
+  FUSE -->|FP/mixed modes| PACK[S3: 16-bit raw product to BF16\nRNE + FTZ]
+  PACK --> TREE[S4/S5: 12 x BF16 add\npair + lane reduction]
+  TREE --> WIDEN[Exact BF16 to FP32 widen]
+  WIDEN --> FACC[S6: 4 x FP32 recurrent accumulators]
+  IACC --> IOUT[4 integer results\nvalid + last]
+  FACC --> FOUT[4 FP32 results\nstatus + valid + last]

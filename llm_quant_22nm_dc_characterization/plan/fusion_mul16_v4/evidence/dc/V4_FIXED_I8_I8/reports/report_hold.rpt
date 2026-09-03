@@ -1,0 +1,1159 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay min
+        -nworst 10
+        -nets
+        -max_paths 30
+Design : char_top
+Version: X-2025.06-SP3
+Date   : Thu Sep  3 10:43:46 2026
+****************************************
+
+Operating Conditions: tt_typical_max_0p80v_25c   Library: sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+Wire Load Model Mode: top
+
+  Startpoint: u_product_pipe/clear_q1_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/clear_q2_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/clear_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/clear_q1_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/clear_q1 (net)                 1         0.00       0.05 r
+  u_product_pipe/clear_q2_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/clear_q2_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/valid_q1_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/valid_q2_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/valid_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/valid_q1_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/valid_q1 (net)                 1         0.00       0.05 r
+  u_product_pipe/valid_q2_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/valid_q2_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/mode_onehot_q0_reg[1]/CK
+              (internal path startpoint clocked by clk)
+  Endpoint: u_product_pipe/mode_onehot_q1_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  input external delay                                    0.00       0.00 r
+  u_product_pipe/mode_onehot_q0_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/mode_onehot_q0_reg[1]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/mode_onehot_q0[1] (net)        1         0.00       0.05 r
+  u_product_pipe/mode_onehot_q1_reg[1]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/mode_onehot_q1_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/clear_q0_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/clear_q1_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/clear_q0_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/clear_q0_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/clear_q0 (net)                 1         0.00       0.05 r
+  u_product_pipe/clear_q1_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/clear_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/valid_q0_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/valid_q1_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/valid_q0_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/valid_q0_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/valid_q0 (net)                 1         0.00       0.05 r
+  u_product_pipe/valid_q1_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/valid_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[3]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[3]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[3]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/product_sign_q0[3] (net)       1         0.00       0.05 r
+  u_product_pipe/product_sign_q1_reg[3]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[3]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[2]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[2]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/product_sign_q0[2] (net)       1         0.00       0.05 r
+  u_product_pipe/product_sign_q1_reg[2]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[2]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[1]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/product_sign_q0[1] (net)       1         0.00       0.05 r
+  u_product_pipe/product_sign_q1_reg[1]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[1]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[0]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[0]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_product_pipe/product_sign_q0[0] (net)       1         0.00       0.05 r
+  u_product_pipe/product_sign_q1_reg[0]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[0]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+  Startpoint: u_config/inflight_q_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[1]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[1] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[2]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[2]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[4]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[3]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[3]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[3] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[4]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[4]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[0]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[0]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[0] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[1]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[3]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[2]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[2]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[2] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[3]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[3]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[4]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[5]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[4]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[4]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[4] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[5]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[5]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                       0.00       0.05
+  data required time                                                 0.05
+  --------------------------------------------------------------------------
+  data required time                                                 0.05
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[3]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[3]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[3]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[3]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/product_sign_q0[3] (net)       1         0.00       0.03 f
+  u_product_pipe/product_sign_q1_reg[3]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[3]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[2]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[2]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/product_sign_q0[2] (net)       1         0.00       0.03 f
+  u_product_pipe/product_sign_q1_reg[2]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[2]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[1]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/product_sign_q0[1] (net)       1         0.00       0.03 f
+  u_product_pipe/product_sign_q1_reg[1]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[1]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/product_sign_q0_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/product_sign_q1_reg[0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/product_sign_q0_reg[0]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/product_sign_q0_reg[0]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/product_sign_q0[0] (net)       1         0.00       0.03 f
+  u_product_pipe/product_sign_q1_reg[0]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/product_sign_q1_reg[0]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/clear_q1_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/clear_q2_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/clear_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/clear_q1_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/clear_q1 (net)                 1         0.00       0.03 f
+  u_product_pipe/clear_q2_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/clear_q2_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/valid_q1_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/valid_q2_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/valid_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/valid_q1_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/valid_q1 (net)                 1         0.00       0.03 f
+  u_product_pipe/valid_q2_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/valid_q2_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/mode_onehot_q0_reg[1]/CK
+              (internal path startpoint clocked by clk)
+  Endpoint: u_product_pipe/mode_onehot_q1_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  input external delay                                    0.00       0.00 r
+  u_product_pipe/mode_onehot_q0_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/mode_onehot_q0_reg[1]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/mode_onehot_q0[1] (net)        1         0.00       0.03 f
+  u_product_pipe/mode_onehot_q1_reg[1]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/mode_onehot_q1_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/clear_q0_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/clear_q1_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/clear_q0_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/clear_q0_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/clear_q0 (net)                 1         0.00       0.03 f
+  u_product_pipe/clear_q1_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/clear_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_product_pipe/valid_q0_reg
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_product_pipe/valid_q1_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_product_pipe/valid_q0_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_product_pipe/valid_q0_reg/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.03       0.03 f
+  u_product_pipe/valid_q0 (net)                 1         0.00       0.03 f
+  u_product_pipe/valid_q1_reg/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.03 f
+  data arrival time                                                  0.03
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_product_pipe/valid_q1_reg/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[6]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[7]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[6]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[6]/Q (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[6] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[7]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[7]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[5]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[5]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[5]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.05       0.05 r
+  u_config/inflight_q[5] (net)                  2         0.00       0.05 r
+  u_config/inflight_q_reg[6]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  data arrival time                                                  0.05
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[6]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.01       0.04
+  data required time                                                 0.04
+  --------------------------------------------------------------------------
+  data required time                                                 0.04
+  data arrival time                                                 -0.05
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[6]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[7]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[6]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[6]/Q (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.04       0.04 f
+  u_config/inflight_q[6] (net)                  2         0.00       0.04 f
+  u_config/inflight_q_reg[7]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.04 f
+  data arrival time                                                  0.04
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[7]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[0]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[0]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[0]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.04       0.04 f
+  u_config/inflight_q[0] (net)                  2         0.00       0.04 f
+  u_config/inflight_q_reg[1]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.04 f
+  data arrival time                                                  0.04
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[1]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[2]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[3]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[2]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[2]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.04       0.04 f
+  u_config/inflight_q[2] (net)                  2         0.00       0.04 f
+  u_config/inflight_q_reg[3]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.04 f
+  data arrival time                                                  0.04
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[3]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[4]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[5]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[4]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[4]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.04       0.04 f
+  u_config/inflight_q[4] (net)                  2         0.00       0.04 f
+  u_config/inflight_q_reg[5]/D (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.04 f
+  data arrival time                                                  0.04
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[5]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+  Startpoint: u_config/inflight_q_reg[5]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_config/inflight_q_reg[6]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: min
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  char_top           Zero                  sc6p5mcpp140z_cln22ul_base_svt_c35_tt_typical_max_0p80v_25c
+
+  Point                                       Fanout      Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_config/inflight_q_reg[5]/CK (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.00       0.00 r
+  u_config/inflight_q_reg[5]/Q (DFFRPQA_X1M_A6P5PP140ZTS_C35)
+                                                          0.04       0.04 f
+  u_config/inflight_q[5] (net)                  2         0.00       0.04 f
+  u_config/inflight_q_reg[6]/D (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.04 f
+  data arrival time                                                  0.04
+
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.05       0.05
+  u_config/inflight_q_reg[6]/CK (DFFRPQA_X2M_A6P5PP140ZTS_C35)
+                                                          0.00       0.05 r
+  library hold time                                      -0.02       0.03
+  data required time                                                 0.03
+  --------------------------------------------------------------------------
+  data required time                                                 0.03
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.01
+
+
+1

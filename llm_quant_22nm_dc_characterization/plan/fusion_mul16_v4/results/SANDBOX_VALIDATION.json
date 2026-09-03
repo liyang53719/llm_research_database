@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "python_files_compiled": 16,
+  "unit_tests": 19,
+  "rtl_files": 10,
+  "full_domain_checks": 30200504,
+  "raw_pair_space_covered": 4312932352,
+  "full_domain_mismatches": 0,
+  "precision_rows": 100,
+  "precision_gate": "PASS",
+  "generated_vcs_cases": 28,
+  "generated_dc_groups": 12,
+  "dc_clock_period_ns": 1.0,
+  "limitations": [
+    "No SystemVerilog simulator in sandbox; VCS execution is a local-agent gate.",
+    "No DC/DW/CLN22UL in sandbox; area/timing is a local-agent gate.",
+    "Target-model accuracy remains open."
+  ],
+  "steps": [
+    {
+      "step": "py_compile",
+      "files": 16,
+      "status": "PASS"
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/run_full_domain_scan.py",
+      "returncode": 0,
+      "seconds": 0.9710350036621094,
+      "stdout_tail": "checks=30200504 raw_pair_space=4312932352 mismatches=0\n<V4_ROOT>/results/full_input_domain_report.json",
+      "stderr_tail": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 model/precision_sweep.py --output-dir results",
+      "returncode": 0,
+      "seconds": 2.175175666809082,
+      "stdout_tail": "{\n  \"status\": \"PASS\",\n  \"seed\": 20260902,\n  \"rows\": 100,\n  \"gates\": {\n    \"gaussian_nrmse_pct_max\": 0.5,\n    \"gaussian_p99_relative_pct_max\": 5.0,\n    \"positive_nrmse_pct_max\": 0.5,\n    \"outlier_nrmse_pct_max\": 0.75,\n    \"cancellation_nrmse_pct_max\": 0.75\n  },\n  \"failures\": [],\n  \"boundary\": \"Synthetic arithmetic proxy only; target-model layer/logit/perplexity/task accuracy remains a separate gate.\"\n}",
+      "stderr_tail": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/gen_vcs_vectors.py",
+      "returncode": 0,
+      "seconds": 0.13992524147033691,
+      "stdout_tail": "generated 28 VCS transaction cases",
+      "stderr_tail": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/gen_dc_runs.py",
+      "returncode": 0,
+      "seconds": 0.027341127395629883,
+      "stdout_tail": "generated 12 DC runs",
+      "stderr_tail": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 scripts/static_rtl_check.py",
+      "returncode": 0,
+      "seconds": 0.019378662109375,
+      "stdout_tail": "{\n  \"status\": \"PASS\",\n  \"checks\": {\n    \"rtl_files\": 10,\n    \"single_brick_generate\": true,\n    \"no_dw_fp_mult\": true,\n    \"bf16_add_source_instances\": 3,\n    \"fp32_add_source_instances\": 1,\n    \"packed_128bit_inputs\": true,\n    \"fixed_rne\": true,\n    \"no_direct_int16_mode\": true,\n    \"latency_constants\": true\n  },\n  \"errors\": []\n}",
+      "stderr_tail": ""
+    },
+    {
+      "command": "<LOCAL_HOME>/anaconda3/bin/python3 -m unittest discover -s tests -v",
+      "returncode": 0,
+      "seconds": 0.08502936363220215,
+      "stdout_tail": "",
+      "stderr_tail": "test_i8_i8_lane_mapping (test_functional_model.FunctionalModelTests.test_i8_i8_lane_mapping) ... ok\ntest_integer_accumulation (test_functional_model.FunctionalModelTests.test_integer_accumulation) ... ok\ntest_mode_throughputs (test_functional_model.FunctionalModelTests.test_mode_throughputs) ... ok\ntest_pipeline_latencies (test_functional_model.FunctionalModelTests.test_pipeline_latencies) ... ok\ntest_rne_tie_even (test_functional_model.FunctionalModelTests.test_rne_tie_even) ... ok\ntest_full_domain_report (test_functional_model.GeneratedEvidenceTests.test_full_domain_report) ... ok\ntest_precision_proxy (test_functional_model.GeneratedEvidenceTests.test_precision_proxy) ... ok\ntest_exactly_one_brick_generate (test_rtl_structure.RTLStructureTests.test_exactly_one_brick_generate) ... ok\ntest_filelist_complete (test_rtl_structure.RTLStructureTests.test_filelist_complete) ... ok\ntest_last_latency_constants (test_rtl_structure.RTLStructureTests.test_last_latency_constants) ... ok\ntest_no_direct_int16_mode (test_rtl_structure.RTLStructureTests.test_no_direct_int16_mode) ... ok\ntest_no_fp_multiplier (test_rtl_structure.RTLStructureTests.test_no_fp_multiplier) ... ok\ntest_packed_interface (test_rtl_structure.RTLStructureTests.test_packed_interface) ... ok\ntest_rne_is_fixed (test_rtl_structure.RTLStructureTests.test_rne_is_fixed) ... ok\ntest_selected_accumulator_shape (test_rtl_structure.RTLStructureTests.test_selected_accumulator_shape) ... ok\n\n----------------------------------------------------------------------\nRan 19 tests in 0.002s\n\nOK"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+﻿group_id,top_kind,fixed_mode,support_specials,ieee_compliance,keep_hierarchy,expected_bricks,expected_bf16_adders,expected_fp32_adders,hard_timing_gate,notes
+V4_BRICK16_PROOF,brick_proof,-1,0,0,1,16,0,0,0,Structural proof of exactly sixteen 4x4 multipliers
+V4_PRODUCT_PIPE_FULL7_FTZ,product_pipe,-1,0,0,1,16,0,0,1,v2-locked product pipe only
+V4_ACCUM_BF16TREE_FP32REC,accum_only,-1,0,0,1,0,12,4,1,v3-selected accumulator only
+V4_FINAL_DYNAMIC_FTZ,final,-1,0,0,0,16,12,4,1,Release inference profile
+V4_FINAL_DYNAMIC_IEEE,final,-1,1,1,0,16,12,4,0,Optional special/IEEE profile; area and timing characterization
+V4_FIXED_I4_I8,final,0,0,0,0,16,0,0,1,Fixed integer mode
+V4_FIXED_I8_I8,final,1,0,0,0,16,0,0,1,Fixed integer mode
+V4_FIXED_FP8_FP8,final,2,0,0,0,16,12,4,1,Fixed FP8 mode
+V4_FIXED_BF16_BF16,final,3,0,0,0,16,12,4,1,Fixed BF16 mode
+V4_FIXED_I4_FP8,final,4,0,0,0,16,12,4,1,Fixed mixed mode
+V4_FIXED_I4_BF16,final,5,0,0,0,16,12,4,1,Fixed mixed mode
+V4_FIXED_I8_BF16,final,6,0,0,0,16,12,4,1,Fixed mixed mode

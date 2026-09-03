@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "literal_or_equivalence_checks": 30200504,
+  "raw_pair_space_covered": 4312932352,
+  "mismatches": 0,
+  "bf16_raw_pair_space": 4294967296,
+  "bf16_finite_equivalence_families": [
+    {"family":"normal_normal","unique_significand_products":7102,"scale_sums":507,"product_signs":2,"checks":7201428},
+    {"family":"subnormal_normal","unique_significand_products":9891,"scale_sums":254,"product_signs":2,"checks":5024628},
+    {"family":"subnormal_subnormal","unique_significand_products":4646,"scale_sums":1,"product_signs":2,"checks":9292}
+  ],
+  "bf16_proof": "Every finite nonzero BF16 raw pair is classified by sign XOR, 8-bit significand product, and scale-exponent sum. Significand and exponent fields are independent; the scanned normal-normal, subnormal-normal, and subnormal-subnormal families cover every reachable finite class. Zero, Inf, and NaN category/sign combinations are separately enumerated.",
+  "sequence_space_note": "All scalar input pairs are covered. Arbitrary accumulator sequences are unbounded and are verified separately with bounded exhaustive and adversarial long-K tests."
+}
